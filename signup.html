@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <style>
+        body {
+           background-image: url(images/techbot.png) no repeat;
+           background-size: cover;
+           background-position: center;
+           font-family: Arial, sans-serif;
+           min-height: 100vh;
+           display: flex;
+           justify-content: center;
+           align-items: flex-start;
+           padding: 40px 15px;
+        }
+
+        .signup-card {
+            width: 100%;
+            max-width: fit-content;
+            background: antiquewhite;
+            border-radius: 15px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo h5 {
+            margin-top: 15px;
+            font-weight: 700;
+            color: #6c3cf0;
+        }
+
+        .logo p {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 0;
+        }
+
+        .social-btn {
+            width: 100%;
+            border: 1px solid #ddd;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .social-btn:hover {
+            background: #f8f8f8;
+        }
+
+        .divider {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper i {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+        }
+
+        .signup-btn {
+            width: 100%;
+            background: #6c3cf0;
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .signup-btn:hover {
+            background: #582bd6;
+        }
+
+        .bottom-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .bottom-text a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #6c3cf0;
+        }
+
+/* media queries. adjusts button sizes, typography, card padding and spacing on mobile phones */
+        @media (max-width: 576px) {
+
+    .signup-card {
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    .logo h5 {
+        font-size: 30px;
+    }
+
+    .social-btn,
+    .signup-btn {
+        font-size: 13px;
+        padding: 9px;
+    }
+
+    .form-control {
+        font-size: 13px;
+    }
+
+    .bottom-text {
+        font-size: 12px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="signup-card">
+
+        <!-- Logo -->
+        <div class="logo">
+            <i class="bi bi-mortarboard-fill fs-2 text-primary"></i>
+            <h5>AlumniConnect</h5>
+            <p>Join the alumni community today.</p>
+        </div>
+
+        <!-- Social Buttons -->
+        <button class="social-btn">
+            <i class="bi bi-google me-2"></i>
+            Sign up with Google
+        </button>
+
+        <button class="social-btn">
+            <i class="bi bi-linkedin me-2 text-primary"></i>
+            Sign up with LinkedIn
+        </button>
+
+        <button class="social-btn">
+            <i class="bi bi-envelope me-2"></i>
+            Sign up with Email
+        </button>
+
+        <!-- Divider -->
+        <div class="divider">or</div>
+
+        <!-- Form -->
+        <form id="signupForm">
+
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter your full name"
+                    required
+                />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input
+                    type="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    required
+                />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        placeholder="Create a password"
+                        required
+                    />
+
+                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        placeholder="Re-write password"
+                        required
+                    />
+
+                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="signup-btn">
+                Sign Up
+            </button>
+
+        </form>
+
+        <!-- Bottom Text -->
+        <div class="bottom-text">
+            Already have an account?
+            <a href="login.html">Log in</a>
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Show/Hide Password
+        const togglePassword = document.getElementById("togglePassword");
+        const password = document.getElementById("password");
+
+        togglePassword.addEventListener("click", function () {
+
+            const type =
+                password.getAttribute("type") === "password"
+                    ? "text"
+                    : "password";
+
+            password.setAttribute("type", type);
+
+            this.classList.toggle("bi-eye");
+            this.classList.toggle("bi-eye-slash");
+        });
+
+        // Form Submit
+        document
+            .getElementById("signupForm")
+            .addEventListener("submit", function (e) {
+
+                e.preventDefault();
+
+                alert("Signup successful!");
+            });
+    </script>
+
+</body>
+</html>
