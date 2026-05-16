@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AlumniConnect</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#f5f5f7;
+      display:flex;
+      justify-content:center;
+      padding:30px 15px;
+      color:#1f1f1f;
+    }
+
+    /* NAVBAR */
+    .top-nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 20px;
+      border-bottom:1px solid #f0f0f0;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:700;
+      color:#5b34ff;
+      font-size:15px;
+    }
+
+    /* HERO */
+    .hero{
+      padding:30px 24px;
+    }
+
+    .hero-content{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .hero-text h1{
+      font-size:42px;
+      font-weight:700;
+      line-height:1.1;
+      margin-bottom:18px;
+    }
+
+    .hero-text h1 span{
+      color:#5b34ff;
+    }
+
+    .hero-text p{
+      font-size:14px;
+      color:#666;
+      line-height:1.8;
+      margin-bottom:24px;
+    }
+
+    .hero-buttons{
+      display:flex;
+      gap:12px;
+    }
+
+    .btn-primary-custom{
+      background:#5b34ff;
+      color:#fff;
+      border:none;
+      border-radius:12px;
+      padding:12px 18px;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .btn-light-custom{
+      background:#f3f3f7;
+      color:#333;
+      border:none;
+      border-radius:12px;
+      padding:12px 18px;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    /* HERO IMAGES */
+    .hero-images{
+      position:relative;
+      width:230px;
+      height:240px;
+    }
+
+    .circle-img{
+      position:absolute;
+      border-radius:50%;
+      object-fit:cover;
+      border:6px solid #fff;
+      box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .img1{
+      width:90px;
+      height:90px;
+      top:0;
+      left:70px;
+    }
+
+    .img2{
+      width:95px;
+      height:95px;
+      right:0;
+      top:75px;
+    }
+
+    .img3{
+      width:90px;
+      height:90px;
+      bottom:0;
+      left:50px;
+    }
+
+    .floating-icon{
+      position:absolute;
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      box-shadow:0 5px 15px rgba(0,0,0,0.08);
+      color:#5b34ff;
+    }
+
+    .icon1{
+      top:70px;
+      left:0;
+    }
+
+    .icon2{
+      top:25px;
+      right:10px;
+    }
+
+    /* CTA */
+    .cta-section{
+      background:#f5f2ff;
+      margin:24px;
+      border-radius:20px;
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .cta-left{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+
+    .cta-icon{
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      background:#5b34ff;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:28px;
+    }
+
+    .cta-text h6{
+      font-weight:700;
+      margin-bottom:5px;
+    }
+
+    .cta-text p{
+      font-size:12px;
+      color:#666;
+      margin:0;
+    }
+
+    .join-btn{
+      background:#5b34ff;
+      color:#fff;
+      border:none;
+      padding:12px 16px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    @media(max-width:480px){
+
+      .hero-content{
+        flex-direction:column;
+        text-align:center;
+      }
+
+      .hero-buttons{
+        justify-content:center;
+      }
+
+      .event-grid{
+        grid-template-columns:1fr;
+      }
+
+      .cta-section{
+        flex-direction:column;
+        text-align:center;
+      }
+
+      .cta-left{
+        flex-direction:column;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+<div>
+
+  <!-- NAVBAR -->
+  <div class="top-nav">
+    <div class="logo">
+      <i class="bi bi-mortarboard-fill"></i>
+      AlumniConnect
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <!-- TEXT -->
+      <div class="hero-text">
+        <h1>
+          Stronger <br>
+          Together, <br>
+          <span>Always.</span>
+        </h1>
+
+        <p>
+          Connect with alumni, expand your network,
+          attend exclusive events and create opportunities.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="btn-primary-custom">
+            Get Started
+          </button>
+
+          <button class="btn-light-custom">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      <!-- IMAGES -->
+      <div class="hero-images">
+
+        <img
+          src="images/pride.jpeg"
+          class="circle-img img1"
+        />
+
+        <img
+          src="https://randomuser.me/api/portraits/men/32.jpg"
+          class="circle-img img2"
+        />
+
+        <img
+          src="https://randomuser.me/api/portraits/women/65.jpg"
+          class="circle-img img3"
+        />
+
+        <div class="floating-icon icon1">
+          <i class="bi bi-calendar-event"></i>
+        </div>
+
+        <div class="floating-icon icon2">
+          <i class="bi bi-chat-dots"></i>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+
+    <div class="cta-left">
+
+      <div class="cta-icon">
+        <i class="bi bi-mortarboard-fill"></i>
+      </div>
+
+      <div class="cta-text">
+        <h6>Be a part of a thriving alumni community</h6>
+
+        <p>
+          Join thousands of alumni worldwide
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- About us -->
+   <section>
+    <h2>About Us</h2>
+
+   </section>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // RSVP interaction
+  const rsvpButtons = document.querySelectorAll('.rsvp-btn');
+
+  rsvpButtons.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      if(button.innerHTML === "RSVP"){
+        button.innerHTML = "Going ✓";
+        button.style.color = "green";
+      } else {
+        button.innerHTML = "RSVP";
+        button.style.color = "#5b34ff";
+      }
+
+    });
+
+  });
+
+  // Join button interaction
+  const joinBtn = document.querySelector('.join-btn');
+
+  joinBtn.addEventListener('click', () => {
+    alert("Welcome to AlumniConnect 🎉");
+  });
+</script>
+
+</body>
+</html>

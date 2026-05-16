@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodeQueen Alumni Platform</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="bi bi-stars"></i>
+      </div>
+
+      <div>
+        <h3>CodeQueen</h3>
+        <p>ALUMNI CONNECT</p>
+      </div>
+    </div>
+
+    <ul class="menu">
+      <li>
+        <a href="#" class="active">
+          <i class="bi bi-grid"></i>
+          Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-people"></i>
+          Community
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-person-heart"></i>
+          Mentorship
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-calendar-event"></i>
+          Events
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-briefcase"></i>
+          Opportunities
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-chat-dots"></i>
+          Messages
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-bell"></i>
+          Notifications
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-person"></i>
+          Profile
+        </a>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class="bi bi-gear"></i>
+          Settings
+        </a>
+      </li>
+    </ul>
+
+    <div class="theme-box d-flex justify-content-between align-items-center">
+      <span><i class="bi bi-sun"></i> Light Mode</span>
+
+      <div class="form-check form-switch m-0">
+        <input class="form-check-input" type="checkbox" id="themeSwitch">
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+      <div>
+        <h2 class="fw-bold">Good morning, Queen! 👑</h2>
+        <p class="text-muted mb-0">
+          Welcome back! Let’s grow together.
+        </p>
+      </div>
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search for people, events, opportunities...">
+      </div>
+
+      <div class="profile-box">
+
+        <div class="notification">
+          <i class="bi bi-bell"></i>
+          <div class="badge-dot">5</div>
+        </div>
+
+        <img
+          class="avatar"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330"
+          alt=""
+        />
+
+      </div>
+
+    </div>
+
+    <!-- GRID -->
+    <div class="dashboard-grid">
+
+      <!-- LEFT -->
+      <div>
+
+        <!-- STAT CARDS -->
+        <div class="cards-grid">
+
+          <div class="stat-card purple">
+            <div class="stat-icon">
+              <i class="bi bi-people"></i>
+            </div>
+
+            <h6>Community Members</h6>
+            <h2>1,245+</h2>
+            <small>Across 15+ cohorts</small>
+          </div>
+
+          <div class="stat-card pink">
+            <div class="stat-icon">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+
+            <h6>Upcoming Events</h6>
+            <h2>8</h2>
+            <small>This month</small>
+          </div>
+
+          <div class="stat-card purple">
+            <div class="stat-icon">
+              <i class="bi bi-person-heart"></i>
+            </div>
+
+            <h6>Mentorship Matches</h6>
+            <h2>12</h2>
+            <small>New matches</small>
+          </div>
+
+          <div class="stat-card orange">
+            <div class="stat-icon">
+              <i class="bi bi-briefcase"></i>
+            </div>
+
+            <h6>Opportunities</h6>
+            <h2>24</h2>
+            <small>New this week</small>
+          </div>
+
+        </div>
+
+        <!-- FEED -->
+        <div class="feed-card mb-4">
+
+          <div class="section-title">
+            <h5 class="fw-bold">Community Feed</h5>
+            <a href="#">View all</a>
+          </div>
+
+          <div class="post-user">
+
+            <div class="user-left">
+              <img
+                class="avatar"
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2"
+              />
+
+              <div>
+                <h6 class="mb-0 fw-semibold">Fatima Yusuf</h6>
+                <small class="text-muted">
+                  Cohort 5 • Software Developer
+                </small>
+              </div>
+            </div>
+
+            <small class="text-muted">2h ago</small>
+
+          </div>
+
+          <p>
+            Just landed my first role as a Frontend Developer at
+            TechNova! Grateful for this community 💜
+          </p>
+
+          <img
+            class="post-img"
+            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d"
+            alt=""
+          />
+
+          <div class="post-actions">
+            <span><i class="bi bi-heart-fill text-danger"></i> 128</span>
+            <span><i class="bi bi-chat"></i> 32</span>
+            <span><i class="bi bi-share"></i> Share</span>
+          </div>
+
+        </div>
+
+        <!-- EVENTS -->
+        <div class="event-card">
+
+          <div class="section-title">
+            <h5 class="fw-bold">Upcoming Events</h5>
+            <a href="#">View all</a>
+          </div>
+
+          <div class="event-item">
+
+            <div class="event-left">
+
+              <div class="event-icon bg-pink">
+                <i class="bi bi-stars"></i>
+              </div>
+
+              <div>
+                <h6 class="mb-1">Sisterhood Friday</h6>
+                <small class="text-muted">
+                  Fri, May 24 • 6:00 PM
+                </small>
+              </div>
+
+            </div>
+
+            <button class="btn-rsvp">RSVP</button>
+
+          </div>
+
+          <div class="event-item">
+
+            <div class="event-left">
+
+              <div class="event-icon bg-purple">
+                <i class="bi bi-briefcase"></i>
+              </div>
+
+              <div>
+                <h6 class="mb-1">Career Growth Workshop</h6>
+                <small class="text-muted">
+                  Sat, May 25 • 11:00 AM
+                </small>
+              </div>
+
+            </div>
+
+            <button class="btn-rsvp">RSVP</button>
+
+          </div>
+
+          <div class="event-item">
+
+            <div class="event-left">
+
+              <div class="event-icon bg-green">
+                <i class="bi bi-lightbulb"></i>
+              </div>
+
+              <div>
+                <h6 class="mb-1">Design Thinking Masterclass</h6>
+                <small class="text-muted">
+                  Sun, May 26 • 4:00 PM
+                </small>
+              </div>
+
+            </div>
+
+            <button class="btn-rsvp">RSVP</button>
+
+          </div>
+
+          <!-- BANNER -->
+          <div class="community-banner">
+
+            <div>
+              <h2>
+                You belong here.<br>
+                You matter here.<br>
+                You can be here.
+              </h2>
+
+              <p class="text-muted mt-2">
+                Together, we rise.
+              </p>
+            </div>
+
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/6997/6997662.png"
+              width="240"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div>
+
+        <div class="side-panel mb-4">
+
+          <div class="section-title">
+            <h5 class="fw-bold">Recommended</h5>
+            <a href="#">View all</a>
+          </div>
+
+          <div class="mini-card">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-person-heart fs-4 text-primary"></i>
+
+              <div>
+                <h6 class="mb-1">Find a Mentor</h6>
+                <small class="text-muted">
+                  Connect with experienced alumni
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-people fs-4 text-danger"></i>
+
+              <div>
+                <h6 class="mb-1">Join a Circle</h6>
+                <small class="text-muted">
+                  Be part of a sisterhood circle
+                </small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="side-panel mb-4">
+
+          <div class="section-title">
+            <h5 class="fw-bold">Quick Connect</h5>
+            <a href="#">Directory</a>
+          </div>
+
+          <div class="mentor-list">
+            <img src="https://randomuser.me/api/portraits/women/10.jpg">
+            <img src="https://randomuser.me/api/portraits/women/20.jpg">
+            <img src="https://randomuser.me/api/portraits/women/30.jpg">
+            <img src="https://randomuser.me/api/portraits/women/40.jpg">
+          </div>
+
+        </div>
+
+        <div class="side-panel">
+
+          <div class="section-title">
+            <h5 class="fw-bold">Recent Opportunities</h5>
+            <a href="#">View all</a>
+          </div>
+
+          <div class="job-item">
+            <div>
+              <h6 class="mb-1">Frontend Developer</h6>
+              <small class="text-muted">
+                TechNova • Remote
+              </small>
+            </div>
+
+            <span class="tag-new">New</span>
+          </div>
+
+          <div class="job-item">
+            <div>
+              <h6 class="mb-1">UI/UX Design Intern</h6>
+              <small class="text-muted">
+                BrightLabs • Internship
+              </small>
+            </div>
+
+            <span class="tag-new">New</span>
+          </div>
+
+          <div class="job-item">
+            <div>
+              <h6 class="mb-1">Product Manager</h6>
+              <small class="text-muted">
+                Paystack • Full-time
+              </small>
+            </div>
+
+            <span class="tag-new">New</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+
+  <a href="#" class="active">
+    <i class="bi bi-house"></i>
+  </a>
+
+  <a href="#">
+    <i class="bi bi-people"></i>
+  </a>
+
+  <a href="#">
+    <i class="bi bi-calendar-event"></i>
+  </a>
+
+  <a href="#">
+    <i class="bi bi-chat-dots"></i>
+  </a>
+
+  <a href="#">
+    <i class="bi bi-person"></i>
+  </a>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Theme Toggle
+  const themeSwitch = document.getElementById('themeSwitch');
+
+  themeSwitch.addEventListener('change', () => {
+
+    if(themeSwitch.checked){
+      document.body.style.background = "#17141f";
+      document.body.style.color = "#fff";
+    } else {
+      document.body.style.background = "#f6f4fb";
+      document.body.style.color = "#2d2541";
+    }
+
+  });
+
+  // RSVP Buttons
+  document.querySelectorAll('.btn-rsvp').forEach(btn => {
+
+    btn.addEventListener('click', () => {
+
+      if(btn.innerText === "RSVP"){
+        btn.innerText = "Going ✓";
+        btn.style.background = "#6f35ff";
+        btn.style.color = "#fff";
+      } else {
+        btn.innerText = "RSVP";
+        btn.style.background = "#efe6ff";
+        btn.style.color = "#6f35ff";
+      }
+
+    });
+
+  });
+</script>
+
+</body>
+</html>
