@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login Page</title>
+
+  <!-- FONT AWESOME -->
+
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#f4f0f8;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      padding:20px;
+    }
+
+    .login-container{
+      width:100%;
+      max-width:420px;
+      background:white;
+      padding:35px;
+      border-radius:20px;
+      box-shadow:0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .logo{
+      text-align:center;
+      margin-bottom:25px;
+    }
+
+    .logo h1{
+      color:#7b2cbf;
+      font-size:32px;
+    }
+
+    .logo p{
+      color:gray;
+      margin-top:5px;
+    }
+
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .input-group label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:bold;
+    }
+
+    .input-box{
+      display:flex;
+      align-items:center;
+      border:1px solid #ccc;
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .input-box i{
+      color:#7b2cbf;
+      margin-right:10px;
+    }
+
+    .input-box input{
+      width:100%;
+      border:none;
+      outline:none;
+      font-size:16px;
+    }
+
+    .forgot-password{
+      text-align:right;
+      margin-bottom:20px;
+    }
+
+    .forgot-password a{
+      text-decoration:none;
+      color:#7b2cbf;
+      font-size:14px;
+      font-weight:bold;
+    }
+
+    .login-btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#7b2cbf;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .login-btn:hover{
+      background:#6411ad;
+    }
+
+    .message{
+      margin-top:18px;
+      text-align:center;
+      font-weight:bold;
+    }
+
+    .signup{
+      text-align:center;
+      margin-top:20px;
+      color:gray;
+    }
+
+    .signup a{
+      color:#7b2cbf;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    /* FORGOT PASSWORD MODAL */
+
+    .modal{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.5);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .modal-content{
+      background:white;
+      width:100%;
+      max-width:400px;
+      padding:30px;
+      border-radius:20px;
+    }
+
+    .modal-content h2{
+      color:#7b2cbf;
+      margin-bottom:15px;
+    }
+
+    .modal-content p{
+      margin-bottom:20px;
+      color:gray;
+    }
+
+    .modal-content input{
+      width:100%;
+      padding:14px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      margin-bottom:20px;
+      outline:none;
+    }
+
+    .modal-buttons{
+      display:flex;
+      gap:10px;
+    }
+
+    .modal-buttons button{
+      flex:1;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+    }
+
+    .send-btn{
+      background:#7b2cbf;
+      color:white;
+    }
+
+    .cancel-btn{
+      background:#ddd;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="login-container">
+
+    <div class="logo">
+      <h1>CodeQueen</h1>
+      <p>Welcome back 👑</p>
+    </div>
+
+    <!-- EMAIL OR USERNAME -->
+
+    <div class="input-group">
+
+      <label>Email or Username</label>
+
+      <div class="input-box">
+        <i class="fa-solid fa-user"></i>
+
+        <input
+          type="text"
+          id="loginInput"
+          placeholder="Enter email or username"
+        >
+      </div>
+
+    </div>
+
+    <!-- PASSWORD -->
+
+    <div class="input-group">
+
+      <label>Password</label>
+
+      <div class="input-box">
+        <i class="fa-solid fa-lock"></i>
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter password"
+        >
+      </div>
+
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+
+    <div class="forgot-password">
+      <a href="#" onclick="openModal()">
+        Forgot Password?
+      </a>
+    </div>
+
+    <!-- LOGIN BUTTON -->
+
+    <button class="login-btn" onclick="loginUser()">
+      Login
+    </button>
+
+    <div class="message" id="message"></div>
+
+  <!-- FORGOT PASSWORD MODAL -->
+
+  <div class="modal" id="forgotModal">
+
+    <div class="modal-content">
+
+      <h2>Reset Password</h2>
+
+      <p>
+        Enter your email address or username
+        to receive a password reset link.
+      </p>
+
+      <input
+        type="text"
+        id="resetInput"
+        placeholder="Enter email or username"
+      >
+
+      <div class="modal-buttons">
+
+        <button class="send-btn" onclick="sendResetLink()">
+          Send Link
+        </button>
+
+        <button class="cancel-btn" onclick="closeModal()">
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // LOGIN FUNCTION
+
+    function loginUser(){
+
+      const loginInput =
+        document.getElementById("loginInput").value;
+
+      const password =
+        document.getElementById("password").value;
+
+      const message =
+        document.getElementById("message");
+
+      if(loginInput === "" || password === ""){
+
+        message.style.color = "red";
+        message.innerHTML =
+          "Please fill in all fields";
+
+        return;
+      }
+
+      // CHECK EMAIL OR USERNAME
+
+      if(loginInput.includes("@")){
+
+        message.style.color = "green";
+
+        message.innerHTML =
+          "Logging in with Email: " + loginInput;
+      }
+
+      else{
+
+        message.style.color = "green";
+
+        message.innerHTML =
+          "Logging in with Username: " + loginInput;
+      }
+
+    }
+
+    // OPEN MODAL
+
+    function openModal(){
+
+      document.getElementById("forgotModal")
+      .style.display = "flex";
+    }
+
+    // CLOSE MODAL
+
+    function closeModal(){
+
+      document.getElementById("forgotModal")
+      .style.display = "none";
+    }
+
+    // SEND RESET LINK
+
+    function sendResetLink(){
+
+      const resetInput =
+        document.getElementById("resetInput").value;
+
+      if(resetInput === ""){
+
+        alert("Please enter your email or username");
+
+        return;
+      }
+
+      alert(
+        "Password reset link sent to: " + resetInput
+      );
+
+      closeModal();
+    }
+
+  </script>
+
+</body>
+</html>
