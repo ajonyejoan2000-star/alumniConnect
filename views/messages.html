@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages — AlumniConnect</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .messages-wrapper {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Conversation list panel */
+    .conv-panel {
+      width: 300px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .conv-panel-header {
+      padding: 20px 18px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .conv-panel-header h5 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+    .conv-list { flex: 1; overflow-y: auto; }
+    .conv-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .conv-item:hover { background: var(--purple-pale); }
+    .conv-item.active {
+      background: var(--purple-pale);
+      border-left: 3px solid var(--purple);
+    }
+    .conv-av {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px;
+      flex-shrink: 0;
+    }
+    .conv-info { flex: 1; overflow: hidden; }
+    .conv-name { font-weight: 700; font-size: 14px; color: var(--text-dark); }
+    .conv-preview {
+      font-size: 12px; color: var(--text-light);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .conv-empty {
+      padding: 32px 18px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    /* Chat area */
+    .chat-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+    .chat-header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .chat-header .chat-av {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px;
+    }
+    .chat-header-info .chat-name { font-weight: 700; font-size: 15px; }
+    .chat-header-info .chat-status { font-size: 12px; color: var(--text-light); }
+    .chat-empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      gap: 12px;
+    }
+    .chat-empty-state i { font-size: 48px; color: var(--purple-mid); }
+    .chat-empty-state p { font-size: 15px; font-weight: 600; }
+
+    /* Messages */
+    .messages-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .msg-row { display: flex; }
+    .msg-row.sent { justify-content: flex-end; }
+    .msg-row.received { justify-content: flex-start; }
+    .msg-bubble {
+      padding: 10px 16px;
+      border-radius: 18px;
+      max-width: 65%;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .msg-row.sent .msg-bubble {
+      background: var(--purple);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-row.received .msg-bubble {
+      background: #fff;
+      color: var(--text-dark);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-time {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 4px;
+      text-align: right;
+    }
+    .msg-row.received .msg-time { text-align: left; }
+
+    /* Input */
+    .message-input {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .message-input input {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      color: var(--text-dark);
+      transition: border-color var(--transition);
+    }
+    .message-input input:focus { border-color: var(--purple); }
+    .send-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+    .send-btn:hover { background: var(--purple-dark); }
+
+    @media (max-width: 768px) {
+      .conv-panel { width: 100%; display: none; }
+      .conv-panel.mobile-open { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="messages-wrapper">
+
+  <!-- Conversation list -->
+  <div class="conv-panel" id="convPanel">
+    <div class="conv-panel-header">
+      <h5><i class="bi bi-chat-dots-fill" style="color:var(--purple);"></i> Messages</h5>
+      <div class="search-bar" style="border-radius:100px;">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search conversations…" id="convSearch"
+          style="border:none;background:transparent;outline:none;font-size:13px;font-family:inherit;color:var(--text-dark);"/>
+      </div>
+    </div>
+    <div class="conv-list" id="conversationsList">
+      <div class="conv-empty">Loading conversations…</div>
+    </div>
+  </div>
+
+  <!-- Chat area -->
+  <div class="chat-panel">
+
+    <!-- Empty state (before a convo is selected) -->
+    <div class="chat-empty-state" id="chatEmptyState">
+      <i class="bi bi-chat-square-dots"></i>
+      <p>Select a conversation to start messaging</p>
+    </div>
+
+    <!-- Active chat (hidden until convo selected) -->
+    <div id="activeChat" style="display:none; flex:1; flex-direction:column; display:none;">
+      <div class="chat-header" id="chatHeader">
+        <div class="chat-av" id="chatAv">?</div>
+        <div class="chat-header-info">
+          <div class="chat-name" id="chatName">Name</div>
+          <div class="chat-status">Alumni Member</div>
+        </div>
+      </div>
+      <div class="messages-box" id="messagesBox"></div>
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Type a message…"
+          onkeydown="if(event.key==='Enter') sendMessage()"/>
+        <button class="send-btn" onclick="sendMessage()">
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  let token = localStorage.getItem('token');
+  let currentUserId = localStorage.getItem('userId');
+  let currentConversationId = null;
+  let currentRecipientId = null;
+
+  // Decode token safely
+  function getTokenPayload() {
+    try { return JSON.parse(atob(token.split('.')[1])); }
+    catch { return {}; }
+  }
+
+  // ── LOAD CONVERSATIONS ──
+  async function loadConversations() {
+    if (!token) { window.location.href = '/login'; return; }
+    try {
+      const res = await fetch(`${API_BASE}/messages`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const list = document.getElementById('conversationsList');
+
+      if (!data.conversations || data.conversations.length === 0) {
+        list.innerHTML = '<div class="conv-empty">No conversations yet.</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      data.conversations.forEach(conv => {
+        const myId = getTokenPayload().id;
+        const other = conv.participants?.find(p => p._id !== myId) || {};
+        const name  = other.name || 'Alumni';
+        const initial = name.charAt(0).toUpperCase();
+        const preview = conv.lastMessage?.content || 'No messages yet';
+
+        const item = document.createElement('div');
+        item.className = 'conv-item';
+        item.dataset.id = conv._id;
+        item.dataset.recipientId = other._id || '';
+        item.dataset.recipientName = name;
+        item.innerHTML = `
+          <div class="conv-av">${initial}</div>
+          <div class="conv-info">
+            <div class="conv-name">${name}</div>
+            <div class="conv-preview">${preview}</div>
+          </div>
+        `;
+        item.onclick = () => openConversation(conv._id, other._id, name, initial);
+        list.appendChild(item);
+      });
+    } catch (err) {
+      console.error('loadConversations error:', err);
+      document.getElementById('conversationsList').innerHTML =
+        '<div class="conv-empty">Could not load conversations.</div>';
+    }
+  }
+
+  // ── OPEN CONVERSATION ──
+  async function openConversation(convId, recipientId, name, initial) {
+    currentConversationId = convId;
+    currentRecipientId = recipientId;
+
+    // Mark active
+    document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
+    document.querySelector(`[data-id="${convId}"]`)?.classList.add('active');
+
+    // Show chat panel
+    document.getElementById('chatEmptyState').style.display = 'none';
+    const activeChat = document.getElementById('activeChat');
+    activeChat.style.display  = 'flex';
+    activeChat.style.flexDirection = 'column';
+    activeChat.style.flex = '1';
+
+    document.getElementById('chatAv').textContent   = initial;
+    document.getElementById('chatName').textContent = name;
+
+    await loadMessages(convId);
+  }
+
+  // ── LOAD MESSAGES ──
+  async function loadMessages(convId) {
+    try {
+      const res = await fetch(`${API_BASE}/messages/conversation/${convId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const box  = document.getElementById('messagesBox');
+      box.innerHTML = '';
+
+      const myId = getTokenPayload().id;
+      (data.messages || []).forEach(msg => {
+        const isSent = msg.sender === myId || msg.sender?._id === myId;
+        const time = new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+
+        const row = document.createElement('div');
+        row.className = `msg-row ${isSent ? 'sent' : 'received'}`;
+        row.innerHTML = `
+          <div>
+            <div class="msg-bubble">${msg.content}</div>
+            <div class="msg-time">${time}</div>
+          </div>
+        `;
+        box.appendChild(row);
+      });
+
+      box.scrollTop = box.scrollHeight;
+    } catch (err) {
+      console.error('loadMessages error:', err);
+    }
+  }
+
+  // ── SEND MESSAGE ──
+  async function sendMessage() {
+    const input   = document.getElementById('messageInput');
+    const content = input.value.trim();
+    if (!content || !currentConversationId) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/messages/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ recipientId: currentRecipientId, content })
+      });
+      if (res.ok) {
+        input.value = '';
+        await loadMessages(currentConversationId);
+      }
+    } catch (err) {
+      console.error('sendMessage error:', err);
+    }
+  }
+
+  loadConversations();
+</script>
+</body>
+</html>

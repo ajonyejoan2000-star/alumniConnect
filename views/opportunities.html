@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opportunities — AlumniConnect</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .page-wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px;
+    }
+    .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; }
+    .page-header p  { font-size: 14px; color: var(--text-light); margin-top: 4px; }
+
+    /* Filters */
+    .filter-bar {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .filter-bar input,
+    .filter-bar select {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color var(--transition);
+      flex: 1; min-width: 140px;
+    }
+    .filter-bar input:focus,
+    .filter-bar select:focus { border-color: var(--purple); }
+
+    /* Type badges */
+    .opp-type { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+    .type-job        { background: #dbeafe; color: #1d4ed8; }
+    .type-internship { background: #dcfce7; color: #16a34a; }
+    .type-scholarship{ background: #fef9c3; color: #a16207; }
+    .type-hackathon  { background: var(--purple-pale); color: var(--purple); }
+
+    /* Opportunity cards */
+    .opp-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+      transition: box-shadow var(--transition);
+    }
+    .opp-card:hover { box-shadow: var(--shadow); }
+    .opp-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+    .opp-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .opp-company { font-size: 14px; color: var(--text-light); margin-bottom: 10px; }
+    .opp-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 14px; }
+    .opp-meta {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--text-light);
+      margin-bottom: 16px;
+    }
+    .opp-meta span { display: flex; align-items: center; gap: 5px; }
+    .opp-actions { display: flex; gap: 10px; }
+
+    .save-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text-light);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 17px;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .save-btn:hover, .save-btn.saved {
+      border-color: var(--purple);
+      color: var(--purple);
+      background: var(--purple-pale);
+    }
+
+    .empty-state {
+      text-align: center; padding: 60px 24px;
+      color: var(--text-light);
+    }
+    .empty-state i { font-size: 48px; color: var(--purple-mid); display: block; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Opportunities Board</h1>
+      <p>Jobs, internships, scholarships &amp; more</p>
+    </div>
+    <button class="btn-purple" onclick="location.href='/post-opportunity'">
+      <i class="bi bi-plus-circle"></i> Post Opportunity
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <input type="text" id="searchOpp" placeholder="Search opportunities…"/>
+    <select id="typeFilter">
+      <option value="">All Types</option>
+      <option value="Job">Job</option>
+      <option value="Internship">Internship</option>
+      <option value="Scholarship">Scholarship</option>
+      <option value="Hackathon">Hackathon</option>
+    </select>
+    <select id="locationFilter">
+      <option value="">All Locations</option>
+      <option value="Remote">Remote</option>
+      <option value="On-site">On-site</option>
+    </select>
+    <input type="text" id="skillFilter" placeholder="Skill (e.g. Python)…"/>
+    <button class="btn-purple" onclick="filterOpportunities()" style="flex:none;">
+      <i class="bi bi-funnel"></i> Filter
+    </button>
+  </div>
+
+  <!-- List -->
+  <div id="opportunitiesList">
+    <div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading opportunities…</div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  let token = localStorage.getItem('token');
+
+  function getTypeClass(type) {
+    return { Job:'type-job', Internship:'type-internship', Scholarship:'type-scholarship', Hackathon:'type-hackathon' }[type] || 'type-job';
+  }
+
+  async function filterOpportunities() {
+    const search   = document.getElementById('searchOpp').value;
+    const type     = document.getElementById('typeFilter').value;
+    const location = document.getElementById('locationFilter').value;
+    const skill    = document.getElementById('skillFilter').value;
+
+    let url = `${API_BASE}/opportunities?`;
+    if (search)   url += `search=${encodeURIComponent(search)}&`;
+    if (type)     url += `type=${encodeURIComponent(type)}&`;
+    if (location) url += `location=${encodeURIComponent(location)}&`;
+    if (skill)    url += `skill=${encodeURIComponent(skill)}&`;
+
+    const list = document.getElementById('opportunitiesList');
+    list.innerHTML = '<div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading…</div>';
+
+    try {
+      const res  = await fetch(url);
+      const data = await res.json();
+      list.innerHTML = '';
+
+      const opps = data.opportunities || data || [];
+      if (!opps.length) {
+        list.innerHTML = '<div class="empty-state"><i class="bi bi-inbox"></i> No opportunities found.</div>';
+        return;
+      }
+
+      opps.forEach(opp => {
+        const card = document.createElement('div');
+        card.className = 'opp-card';
+        card.innerHTML = `
+          <div class="opp-card-top">
+            <div>
+              <div class="opp-title">${opp.title}</div>
+              <div class="opp-company">${opp.company || 'Organisation'}</div>
+              <span class="opp-type ${getTypeClass(opp.type)}">${opp.type}</span>
+            </div>
+            <button class="save-btn" title="Save" onclick="saveOpportunity('${opp._id}', this)">
+              <i class="bi bi-bookmark"></i>
+            </button>
+          </div>
+          <div class="opp-desc">${(opp.description || '').substring(0, 180)}…</div>
+          <div class="opp-meta">
+            <span><i class="bi bi-geo-alt"></i> ${opp.location || 'Remote'}</span>
+            ${opp.salary   ? `<span><i class="bi bi-cash"></i> ${opp.salary}</span>` : ''}
+            ${opp.deadline ? `<span><i class="bi bi-calendar"></i> Deadline: ${new Date(opp.deadline).toLocaleDateString()}</span>` : ''}
+          </div>
+          <div class="opp-actions">
+            <button class="btn-purple" style="padding:9px 20px;font-size:14px;" onclick="applyOpportunity('${opp._id}')">
+              <i class="bi bi-send"></i> Apply
+            </button>
+            <button class="btn-outline" style="padding:9px 20px;font-size:14px;" onclick="viewOpportunity('${opp._id}')">
+              View Details
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    } catch (err) {
+      console.error('filterOpportunities error:', err);
+      list.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i> Could not load opportunities. Is the server running?</div>';
+    }
+  }
+
+  async function applyOpportunity(oppId) {
+    try {
+      const res = await fetch(`${API_BASE}/opportunities/${oppId}/apply`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      alert(res.ok ? 'Application submitted!' : 'Could not apply. Please try again.');
+    } catch (err) { console.error(err); }
+  }
+
+  async function saveOpportunity(oppId, btn) {
+    try {
+      const res = await fetch(`${API_BASE}/opportunities/${oppId}/save`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        btn.classList.toggle('saved');
+        btn.innerHTML = btn.classList.contains('saved')
+          ? '<i class="bi bi-bookmark-fill"></i>'
+          : '<i class="bi bi-bookmark"></i>';
+      }
+    } catch (err) { console.error(err); }
+  }
+
+  function viewOpportunity(id) {
+    window.location.href = `/opportunity?id=${id}`;
+  }
+
+  filterOpportunities();
+</script>
+</body>
+</html>

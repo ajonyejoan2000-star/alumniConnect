@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events — AlumniConnect</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .page-wrap { max-width: 1060px; margin: 0 auto; padding: 40px 24px; }
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px;
+    }
+    .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; }
+    .page-header p  { font-size: 14px; color: var(--text-light); margin-top: 4px; }
+
+    /* Filter bar */
+    .filter-bar {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 28px;
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+    }
+    .filter-bar input,
+    .filter-bar select {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-dark);
+      outline: none;
+      flex: 1; min-width: 160px;
+      transition: border-color var(--transition);
+    }
+    .filter-bar input:focus,
+    .filter-bar select:focus { border-color: var(--purple); }
+
+    /* Event grid */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .event-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: box-shadow var(--transition);
+    }
+    .event-card:hover { box-shadow: var(--shadow); }
+
+    .event-banner {
+      height: 140px;
+      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-light) 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 48px;
+    }
+    .event-body { padding: 20px; }
+    .event-date-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--purple-pale);
+      color: var(--purple);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 12px; font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .event-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .event-location { font-size: 13px; color: var(--text-light); margin-bottom: 10px; }
+    .event-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; margin-bottom: 14px; }
+    .event-attendees { font-size: 13px; color: var(--text-light); margin-bottom: 14px; }
+
+    .rsvp-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .rsvp-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-size: 12px; font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .rsvp-btn.going     { border-color: #16a34a; color: #16a34a; }
+    .rsvp-btn.going:hover, .rsvp-btn.going.active     { background: #16a34a; color: #fff; }
+    .rsvp-btn.interested{ border-color: var(--purple); color: var(--purple); }
+    .rsvp-btn.interested:hover, .rsvp-btn.interested.active { background: var(--purple); color: #fff; }
+    .rsvp-btn.not-going { border-color: #dc2626; color: #dc2626; }
+    .rsvp-btn.not-going:hover, .rsvp-btn.not-going.active   { background: #dc2626; color: #fff; }
+
+    .empty-state {
+      text-align: center; padding: 60px 24px; color: var(--text-light);
+      grid-column: 1 / -1;
+    }
+    .empty-state i { font-size: 48px; display: block; margin-bottom: 12px; color: var(--purple-mid); }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div>
+      <h1>Events</h1>
+      <p>Networking, workshops &amp; community events</p>
+    </div>
+    <button class="btn-purple" onclick="location.href='/create-event'">
+      <i class="bi bi-calendar-plus"></i> Create Event
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <input type="text" id="eventSearch" placeholder="Search events…"/>
+    <select id="eventTypeFilter">
+      <option value="">All Types</option>
+      <option value="Networking">Networking</option>
+      <option value="Workshop">Workshop</option>
+      <option value="Seminar">Seminar</option>
+      <option value="Social">Social</option>
+      <option value="Sisterhood Friday">Sisterhood Friday</option>
+    </select>
+    <button class="btn-purple" onclick="filterEvents()" style="flex:none;">
+      <i class="bi bi-funnel"></i> Filter
+    </button>
+  </div>
+
+  <!-- Grid -->
+  <div class="events-grid" id="eventsList">
+    <div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading events…</div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  let token = localStorage.getItem('token');
+
+  async function filterEvents() {
+    const search = document.getElementById('eventSearch').value;
+    const type   = document.getElementById('eventTypeFilter').value;
+
+    let url = `${API_BASE}/events?`;
+    if (search) url += `search=${encodeURIComponent(search)}&`;
+    if (type)   url += `type=${encodeURIComponent(type)}&`;
+
+    const grid = document.getElementById('eventsList');
+    grid.innerHTML = '<div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading…</div>';
+
+    try {
+      const res  = await fetch(url);
+      const data = await res.json();
+      const events = data.events || data || [];
+      grid.innerHTML = '';
+
+      if (!events.length) {
+        grid.innerHTML = '<div class="empty-state"><i class="bi bi-calendar-x"></i> No events found.</div>';
+        return;
+      }
+
+      events.forEach(ev => {
+        const d    = new Date(ev.date);
+        const dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+        const timeStr = ev.time || d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+        const desc = ev.description ? ev.description.substring(0, 100) + '…' : 'Details coming soon.';
+        const attendCount = Array.isArray(ev.attendees) ? ev.attendees.length : 0;
+
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.innerHTML = `
+          <div class="event-banner"><i class="bi bi-calendar-event"></i></div>
+          <div class="event-body">
+            <div class="event-date-pill">
+              <i class="bi bi-clock"></i> ${dateStr} · ${timeStr}
+            </div>
+            <div class="event-title">${ev.title}</div>
+            <div class="event-location"><i class="bi bi-geo-alt"></i> ${ev.location || 'Online'}</div>
+            <div class="event-desc">${desc}</div>
+            <div class="event-attendees"><i class="bi bi-people"></i> ${attendCount} attending</div>
+            <div class="rsvp-bar">
+              <button class="rsvp-btn going"      onclick="rsvpEvent('${ev._id}', 'going',      this)"><i class="bi bi-check-circle"></i> Going</button>
+              <button class="rsvp-btn interested" onclick="rsvpEvent('${ev._id}', 'interested', this)"><i class="bi bi-star"></i> Interested</button>
+              <button class="rsvp-btn not-going"  onclick="rsvpEvent('${ev._id}', 'not_going',  this)"><i class="bi bi-x-circle"></i> Can't go</button>
+            </div>
+            <button class="btn-outline" style="width:100%;justify-content:center;"
+              onclick="viewEvent('${ev._id}')">View Details</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error('filterEvents error:', err);
+      grid.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i> Could not load events. Is the server running?</div>';
+    }
+  }
+
+  async function rsvpEvent(eventId, status, btn) {
+    const bar     = btn.closest('.rsvp-bar');
+    const buttons = bar.querySelectorAll('.rsvp-btn');
+    try {
+      const res = await fetch(`${API_BASE}/events/${eventId}/rsvp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    } catch (err) { console.error(err); }
+  }
+
+  function viewEvent(id) { window.location.href = `/event?id=${id}`; }
+
+  filterEvents();
+</script>
+</body>
+</html>

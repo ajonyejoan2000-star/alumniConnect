@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discussions — AlumniConnect</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px;
+    }
+    .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; }
+    .page-header p  { font-size: 14px; color: var(--text-light); margin-top: 4px; }
+
+    /* Category filter chips */
+    .cat-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .cat-chip {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-size: 13px; font-weight: 600;
+      font-family: inherit;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .cat-chip:hover, .cat-chip.active {
+      background: var(--purple-pale);
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+
+    /* Discussion cards */
+    .disc-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: box-shadow var(--transition);
+    }
+    .disc-card:hover { box-shadow: var(--shadow); }
+    .disc-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .disc-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .disc-cat {
+      display: inline-block;
+      background: var(--purple);
+      color: #fff;
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-size: 11px; font-weight: 700;
+    }
+    .disc-excerpt { font-size: 14px; color: var(--text-mid); line-height: 1.65; margin-bottom: 12px; }
+    .disc-meta { display: flex; gap: 18px; font-size: 13px; color: var(--text-light); }
+    .disc-meta span { display: flex; align-items: center; gap: 5px; }
+    .disc-author { font-size: 13px; color: var(--text-light); margin-bottom: 10px; }
+
+    .pin-icon { color: #f59e0b; font-size: 16px; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,5,20,0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center; align-items: center;
+      z-index: 999; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 32px;
+      width: 100%; max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .modal-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .modal-box p  { font-size: 14px; color: var(--text-light); margin-bottom: 20px; }
+    .modal-field { margin-bottom: 16px; }
+    .modal-field label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+    .modal-field input,
+    .modal-field textarea,
+    .modal-field select {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color var(--transition);
+      resize: vertical;
+    }
+    .modal-field input:focus,
+    .modal-field textarea:focus,
+    .modal-field select:focus { border-color: var(--purple); }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-actions button { flex: 1; padding: 12px; justify-content: center; }
+
+    .empty-state { text-align: center; padding: 60px 24px; color: var(--text-light); }
+    .empty-state i { font-size: 48px; display: block; margin-bottom: 12px; color: var(--purple-mid); }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div>
+      <h1>Community Discussions</h1>
+      <p>Ask questions, share insights, spark conversations</p>
+    </div>
+    <button class="btn-purple" onclick="openModal()">
+      <i class="bi bi-pencil-square"></i> Start Discussion
+    </button>
+  </div>
+
+  <!-- Category filter -->
+  <div class="cat-bar">
+    <button class="cat-chip active" data-cat="" onclick="setCategory(this, '')">All</button>
+    <button class="cat-chip" data-cat="General"    onclick="setCategory(this, 'General')">General</button>
+    <button class="cat-chip" data-cat="Careers"    onclick="setCategory(this, 'Careers')">Careers</button>
+    <button class="cat-chip" data-cat="Mentorship" onclick="setCategory(this, 'Mentorship')">Mentorship</button>
+    <button class="cat-chip" data-cat="Events"     onclick="setCategory(this, 'Events')">Events</button>
+  </div>
+
+  <!-- List -->
+  <div id="discussionsList">
+    <div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading discussions…</div>
+  </div>
+</div>
+
+<!-- New Discussion Modal -->
+<div class="modal-overlay" id="newDiscModal">
+  <div class="modal-box">
+    <h3>Start a Discussion</h3>
+    <p>Share something with the community</p>
+    <div class="modal-field">
+      <label>Title</label>
+      <input type="text" id="discTitle" placeholder="What's on your mind?"/>
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <textarea id="discDesc" rows="4" placeholder="Add more context…"></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Category</label>
+      <select id="discCategory">
+        <option value="General">General</option>
+        <option value="Careers">Careers</option>
+        <option value="Mentorship">Mentorship</option>
+        <option value="Events">Events</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn-purple" onclick="createDiscussion()">
+        <i class="bi bi-send"></i> Post
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  let token = localStorage.getItem('token');
+  let activeCategory = '';
+
+  function setCategory(btn, cat) {
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = cat;
+    loadDiscussions();
+  }
+
+  function openModal()  { document.getElementById('newDiscModal').classList.add('open'); }
+  function closeModal() { document.getElementById('newDiscModal').classList.remove('open'); }
+
+  // ── LOAD DISCUSSIONS ──
+  async function loadDiscussions() {
+    const list = document.getElementById('discussionsList');
+    list.innerHTML = '<div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading…</div>';
+
+    try {
+      let url = `${API_BASE}/discussions?`;
+      if (activeCategory) url += `category=${encodeURIComponent(activeCategory)}`;
+
+      const res  = await fetch(url);
+      const data = await res.json();
+      const discs = data.discussions || data || [];
+      list.innerHTML = '';
+
+      if (!discs.length) {
+        list.innerHTML = '<div class="empty-state"><i class="bi bi-chat-square"></i> No discussions yet. Be the first!</div>';
+        return;
+      }
+
+      discs.forEach(disc => {
+        const excerpt = (disc.description || '').substring(0, 160);
+        const card = document.createElement('div');
+        card.className = 'disc-card';
+        card.onclick = () => viewDiscussion(disc._id);
+        card.innerHTML = `
+          <div class="disc-card-top">
+            <div>
+              <div class="disc-title">${disc.title}</div>
+              <span class="disc-cat">${disc.category || 'General'}</span>
+            </div>
+            ${disc.isPinned ? '<i class="bi bi-pin-fill pin-icon" title="Pinned"></i>' : ''}
+          </div>
+          <div class="disc-excerpt">${excerpt}${excerpt.length === 160 ? '…' : ''}</div>
+          <div class="disc-author">by <strong>${disc.createdBy?.name || 'Alumni'}</strong></div>
+          <div class="disc-meta">
+            <span><i class="bi bi-chat"></i> ${Array.isArray(disc.comments) ? disc.comments.length : 0} comments</span>
+            <span><i class="bi bi-eye"></i> ${disc.views || 0} views</span>
+            <span><i class="bi bi-heart"></i> ${Array.isArray(disc.likes) ? disc.likes.length : 0}</span>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    } catch (err) {
+      console.error('loadDiscussions error:', err);
+      list.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i> Could not load discussions.</div>';
+    }
+  }
+
+  // ── CREATE DISCUSSION ──
+  async function createDiscussion() {
+    const title       = document.getElementById('discTitle').value.trim();
+    const description = document.getElementById('discDesc').value.trim();
+    const category    = document.getElementById('discCategory').value;
+
+    if (!title || !description) { alert('Please fill in the title and description.'); return; }
+
+    try {
+      const res = await fetch(`${API_BASE}/discussions/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ title, description, category })
+      });
+
+      if (res.ok) {
+        closeModal();
+        document.getElementById('discTitle').value = '';
+        document.getElementById('discDesc').value  = '';
+        loadDiscussions();
+      } else {
+        const err = await res.json();
+        alert(err.message || 'Could not create discussion.');
+      }
+    } catch (err) {
+      console.error('createDiscussion error:', err);
+      alert('Network error. Please try again.');
+    }
+  }
+
+  function viewDiscussion(id) { window.location.href = `/discussion?id=${id}`; }
+
+  loadDiscussions();
+</script>
+</body>
+</html>

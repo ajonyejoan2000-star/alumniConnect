@@ -1,0 +1,90 @@
+const mongoose = require('mongoose');
+const { timeStamp } = require('node:console');
+
+const userSchema = mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+        trim: true
+    },
+    email:{
+        type:String,
+        required:true,
+        unique: true
+    },
+    password:{
+        type:String,
+        required:true
+    },
+    role:{
+        type: String,
+        enum:["student","mentor","alumni","admin"],
+        default:"student"
+    },
+    bio:{
+        type:String,
+        default:""
+    },
+    course:{
+        type:String,
+        default:""
+    },
+    cohort:{
+        type:String,
+        default:""
+    },
+    graduationYear:{
+        type:Number,
+    },
+    profilePicture:{
+        type:String,
+        default:""
+    },
+    isVerified:{
+        type:Boolean,
+        default:false
+    },
+    verificationStatus:{
+        type:String,
+        enum:["pending","verified","rejected"],
+        default:"pending"
+    },
+    skills:[String],
+    location:String,
+    phone:String,
+    linkedinUrl:String,
+    websiteUrl:String,
+    careerHistory:[{
+        company:String,
+        position:String,
+        startDate:Date,
+        endDate:Date,
+        current:Boolean
+    }],
+    connections:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }],
+    followers:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }],
+    following:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }],
+    achievements:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Achievement"
+    }],
+    interests:[String],
+    mentorshipPreference:{
+        type:String,
+        enum:["mentor","mentee","both","none"],
+        default:"none"
+    }
+},
+{
+    timestamps:true
+})
+module.exports = mongoose.model("User", userSchema);

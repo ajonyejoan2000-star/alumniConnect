@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AlumniConnect — Home</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="bi bi-mortarboard-fill"></i>
+      AlumniConnect
+    </div>
+
+    <span class="sidebar-section-label">Main</span>
+    <nav class="sidebar-menu">
+      <a href="/v/directory" class="sidebar-link active">
+        <i class="bi bi-house-fill"></i> Home
+      </a>
+      <a href="/v/community" class="sidebar-link">
+        <i class="bi bi-people-fill"></i> Community
+      </a>
+      <a href="/v/mentorship" class="sidebar-link">
+        <i class="bi bi-person-lines-fill"></i> Mentorship
+      </a>
+      <a href="/v/events" class="sidebar-link">
+        <i class="bi bi-calendar-event-fill"></i> Events
+      </a>
+      <a href="/v/opportunities" class="sidebar-link">
+        <i class="bi bi-briefcase-fill"></i> Opportunities
+      </a>
+      <a href="/v/messages" class="sidebar-link">
+        <i class="bi bi-chat-dots-fill"></i> Messages
+      </a>
+    </nav>
+
+    <span class="sidebar-section-label">Account</span>
+    <nav class="sidebar-menu">
+      <a href="/v/profile" class="sidebar-link">
+        <i class="bi bi-person-fill"></i> Profile
+      </a>
+      <a href="/v/settings" class="sidebar-link">
+        <i class="bi bi-gear-fill"></i> Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="s-avatar" id="sidebarAvatar">S</div>
+        <div class="s-info">
+          <div class="s-name" id="sidebarName">Suzie</div>
+          <div class="s-role">Alumni Member</div>
+        </div>
+        <button class="s-logout" title="Log out" onclick="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- Top bar -->
+    <div class="top-bar">
+      <div class="top-welcome">
+        <h1>Good morning, <span id="welcomeName">Suzie</span>! 👑</h1>
+        <p>Welcome back to your community</p>
+      </div>
+      <div class="top-actions">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search alumni, posts…"/>
+        </div>
+        <button class="notif-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notif-dot"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick bar -->
+    <div class="quick-bar">
+      <div class="quick-chip active">
+        <i class="bi bi-people-fill"></i> Community
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-person-lines-fill"></i> Mentorship
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-calendar-event-fill"></i> Events
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-briefcase-fill"></i> Opportunities
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-trophy-fill"></i> Achievements
+      </div>
+    </div>
+
+    <!-- Feed area -->
+    <div class="feed-area">
+
+      <!-- Left: feed -->
+      <div class="feed-main">
+
+        <!-- Create post -->
+        <div class="create-post">
+          <div class="create-post-top">
+            <div class="create-post-avatar" id="createAvatar">S</div>
+            <textarea id="postText" rows="3"
+              placeholder="Share something with the community…"></textarea>
+          </div>
+          <div class="create-post-actions">
+            <button class="post-action-btn">
+              <i class="bi bi-image"></i> Photo
+            </button>
+            <button class="post-action-btn">
+              <i class="bi bi-link-45deg"></i> Link
+            </button>
+            <input type="text" id="imageUrl"
+              placeholder="Image URL (optional)"
+              style="flex:1; border:1.5px solid var(--border); border-radius:8px;
+                     padding:8px 12px; font-size:13px; font-family:inherit;
+                     color:var(--text-dark); outline:none;"/>
+            <button class="btn-purple post-submit" onclick="createPost()">
+              <i class="bi bi-send-fill"></i> Post
+            </button>
+          </div>
+        </div>
+
+        <!-- Feed -->
+        <div id="feed">
+
+          <!-- Sample post -->
+          <div class="post" id="sample-post">
+            <div class="post-header">
+              <div class="post-user">
+                <div class="avatar">FY</div>
+                <div class="user-info">
+                  <h3>Fatima Yusuf</h3>
+                  <p>Cohort 5 · 2 hrs ago</p>
+                </div>
+              </div>
+              <button class="post-menu-btn">
+                <i class="bi bi-three-dots"></i>
+              </button>
+            </div>
+            <div class="post-content">
+              Just landed my first role as a Frontend Developer! 🎉
+              Grateful to this incredible community 💜
+            </div>
+            <img class="post-image"
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
+              alt="Celebration"
+              onerror="this.style.display='none'"/>
+            <div class="post-actions">
+              <button class="action-btn" onclick="toggleLike(this)">
+                <i class="bi bi-heart"></i> <span>24</span>
+              </button>
+              <button class="action-btn">
+                <i class="bi bi-chat-dots"></i> <span>Comment</span>
+              </button>
+              <button class="action-btn">
+                <i class="bi bi-share"></i> <span>Share</span>
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /#feed -->
+      </div><!-- /.feed-main -->
+
+      <!-- Right sidebar -->
+      <aside class="feed-right">
+
+        <!-- Suggested alumni -->
+        <div class="right-card">
+          <h4>People You May Know</h4>
+          <div class="mini-alumni">
+            <div class="mini-av">AK</div>
+            <div class="mini-info">
+              <div class="mn">Amara Kone</div>
+              <div class="mr">UX Designer · Cohort 3</div>
+            </div>
+            <button class="mini-connect">Connect</button>
+          </div>
+          <div class="mini-alumni">
+            <div class="mini-av">JN</div>
+            <div class="mini-info">
+              <div class="mn">James Nkosi</div>
+              <div class="mr">Backend Dev · Cohort 6</div>
+            </div>
+            <button class="mini-connect">Connect</button>
+          </div>
+          <div class="mini-alumni">
+            <div class="mini-av">PO</div>
+            <div class="mini-info">
+              <div class="mn">Priya Osei</div>
+              <div class="mr">Data Analyst · Cohort 4</div>
+            </div>
+            <button class="mini-connect">Connect</button>
+          </div>
+        </div>
+
+        <!-- Upcoming events -->
+        <div class="right-card">
+          <h4>Upcoming Events</h4>
+          <div class="event-mini">
+            <div class="event-date-box">
+              <div class="ed">28</div>
+              <div class="em">May</div>
+            </div>
+            <div class="event-info">
+              <div class="et">Alumni Networking Night</div>
+              <div class="el"><i class="bi bi-geo-alt"></i> Kampala · 6 PM</div>
+            </div>
+          </div>
+          <div class="event-mini">
+            <div class="event-date-box">
+              <div class="ed">05</div>
+              <div class="em">Jun</div>
+            </div>
+            <div class="event-info">
+              <div class="et">Tech Talk: AI in Africa</div>
+              <div class="el"><i class="bi bi-camera-video"></i> Virtual · 3 PM</div>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div><!-- /.feed-area -->
+
+    <!-- Mobile nav -->
+    <nav class="mobile-nav">
+      <button class="mob-nav-btn active">
+        <i class="bi bi-house-fill"></i> Home
+      </button>
+      <button class="mob-nav-btn">
+        <i class="bi bi-people-fill"></i> Community
+      </button>
+      <button class="mob-nav-btn">
+        <i class="bi bi-plus-circle-fill"></i> Post
+      </button>
+      <button class="mob-nav-btn">
+        <i class="bi bi-chat-dots-fill"></i> Messages
+      </button>
+      <button class="mob-nav-btn">
+        <i class="bi bi-person-fill"></i> Profile
+      </button>
+    </nav>
+
+  </div><!-- /.main -->
+</div><!-- /.app -->
+
+<script src="js/main.js"></script>
+<script>
+  // Populate user info from session
+  const name = localStorage.getItem('userName') || 'Suzie';
+  const initial = name.charAt(0).toUpperCase();
+
+  document.getElementById('welcomeName').textContent  = name;
+  document.getElementById('sidebarName').textContent  = name;
+  document.getElementById('sidebarAvatar').textContent = initial;
+  document.getElementById('createAvatar').textContent  = initial;
+
+  // Logout
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/login';
+  }
+
+  // Load real posts on startup
+  loadFeed();
+</script>
+</body>
+</html>
