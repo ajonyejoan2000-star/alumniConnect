@@ -1,129 +1,286 @@
- function createPost(){
-
-      const postText = document.getElementById("postText").value;
-      const imageUrl = document.getElementById("imageUrl").value;
-
-      if(postText.trim() === ""){
-        alert("Please write something");
-        return;
-      }
-
-      const feed = document.getElementById("feed");
-
-      const post = document.createElement("div");
-      post.classList.add("post");
-
-      post.innerHTML = `
-
-        <div class="post-header">
-
-          <div class="user">
-
-            <div class="avatar">
-              YU
-            </div>
-
-            <div class="user-info">
-              <h3>You</h3>
-              <p>Just now</p>
-            </div>
-
-          </div>
-
-          <i class="fa-solid fa-ellipsis"></i>
-
-        </div>
-
-        <div class="post-content">
-          ${postText}
-        </div>
-
-        ${imageUrl ? `
-          <img class="post-image" src="${imageUrl}">
-        ` : ""}
-
-        <div class="actions">
-
-          <div class="action-btn">
-            <i class="fa-regular fa-heart"></i>
-            <span>Like</span>
-          </div>
-
-          <div class="action-btn">
-            <i class="fa-regular fa-comment"></i>
-            <span>Comment</span>
-          </div>
-
-          <div class="action-btn">
-            <i class="fa-solid fa-share"></i>
-            <span>Share</span>
-          </div>
-
-        </div>
-
-      `;
-
-      feed.prepend(post);
-
-      document.getElementById("postText").value = "";
-      document.getElementById("imageUrl").value = "";
-
+// ==================== STATE ====================
+const AppState = {
+    currentPage: 'landing',
+    dataSaver: false,
+    umojaCredits: 450,
+    selectedFlavours: [],
+    user: {
+        name: 'Amina',
+        cohort: 'Cohort 4',
+        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v'
     }
-// CONFIG
-const API_BASE = 'http://localhost:5000';
+};
 
-let token = localStorage.getItem('token')||null;
-let userName = localStorage.getItem('userName')||null;
-let userId = localStorage.getItem('userId')||null;
-let editingId = null;
-let deletingId = null;
+// Pages that use the authenticated layout
+const AUTHED_PAGES = ['dashboard', 'parlour', 'wall', 'board', 'directory', 'guilds', 'profile'];
+const PUBLIC_PAGES = ['landing', 'partner'];
+const ONBOARDING_PAGES = ['onboarding'];
 
-// SESSIO
-function saveSession(tok, name, email){
-    token = tok;
-    userName = name;
-
-    try {
-        const payload = JSON.parse(atob(tok.split('.')[1]));
-        userId = payload.id;
-        localStorage.setItem('userId', userId);
-    } catch (error) {
-        
-    }
-
-    localStorage.setItem('token', tok);
-    localStorage.setItem('userName', name);
-}
-// SIGN UP
-async function signUp(e) {
-    e.preventDefault();
-    const name = document.getElementById('signup-name').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('password').value;  
-    const confirmPassword = document.getElementById('confirm-password').value;
-    const btn = document.getElementById('signup-btn');
-
-    if (!email || !name || !password || !confirmPassword) {
-    alert("Please fill all fields");
-    return;
+// ==================== ROUTER ====================
+function navigate(page) {
+    // Hide all pages
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+    
+    // Show target page
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
+    
+    // Update state
+    AppState.currentPage = page;
+    window.location.hash = page;
+    
+    // Update layouts and navigation
+    updateLayout(page);
+    updateBottomNav(page);
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
 }
 
-    try {
-        const res = await fetch(`${API_BASE}/users/register`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, name, password, confirmPassword })
+function updateLayout(page) {
+    // Hide all top bars and shared components
+    document.getElementById('topbar-public').style.display = 'none';
+    document.getElementById('topbar-onboarding').style.display = 'none';
+    document.getElementById('topbar-authed').style.display = 'none';
+    document.getElementById('bottom-nav').style.display = 'none';
+    document.getElementById('umoja-tracker').style.display = 'none';
+    document.getElementById('fab-button').style.display = 'none';
+    
+    // Show appropriate layout based on page type
+    if (PUBLIC_PAGES.includes(page)) {
+        document.getElementById('topbar-public').style.display = 'flex';
+    } else if (ONBOARDING_PAGES.includes(page)) {
+        document.getElementById('topbar-onboarding').style.display = 'flex';
+    } else if (AUTHED_PAGES.includes(page)) {
+        document.getElementById('topbar-authed').style.display = 'flex';
+        document.getElementById('bottom-nav').style.display = 'flex';
+        document.getElementById('umoja-tracker').style.display = 'block';
+        document.getElementById('fab-button').style.display = 'flex';
+    }
+}
+
+function updateBottomNav(page) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const linkPage = link.getAttribute('data-page');
+        if (linkPage === page) {
+            link.classList.remove('text-on-surface-variant');
+            link.classList.add('bg-primary-container', 'text-on-primary-container', 'rounded-full', 'translate-y-[-2px]');
+            link.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+        } else {
+            link.classList.add('text-on-surface-variant');
+            link.classList.remove('bg-primary-container', 'text-on-primary-container', 'rounded-full', 'translate-y-[-2px]');
+            link.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
+        }
+    });
+}
+
+// Hash change listener
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.replace('#', '') || 'landing';
+    if (document.getElementById('page-' + hash)) navigate(hash);
+});
+
+// ==================== DATA SAVER TOGGLE ====================
+function toggleDataSaver() {
+    AppState.dataSaver = !AppState.dataSaver;
+    document.body.classList.toggle('data-saver-on', AppState.dataSaver);
+    document.querySelectorAll('.toggle-track').forEach(t => t.classList.toggle('active', AppState.dataSaver));
+    showToast(AppState.dataSaver ? 'Data-Saver Mode: ON' : 'Data-Saver Mode: OFF', 'cloud_download');
+}
+
+// ==================== FLAVOUR CHIP TOGGLE ====================
+function toggleChip(el) { el.classList.toggle('selected'); }
+
+// ==================== PARLOUR TAB TOGGLE ====================
+function toggleParlourTab(tab) {
+    const btnF = document.getElementById('toggle-flavours');
+    const btnA = document.getElementById('toggle-availability');
+    if (tab === 'flavours') {
+        btnF.classList.add('bg-primary','text-on-primary'); btnF.classList.remove('text-on-surface-variant');
+        btnA.classList.remove('bg-primary','text-on-primary'); btnA.classList.add('text-on-surface-variant');
+    } else {
+        btnA.classList.add('bg-primary','text-on-primary'); btnA.classList.remove('text-on-surface-variant');
+        btnF.classList.remove('bg-primary','text-on-primary'); btnF.classList.add('text-on-surface-variant');
+    }
+}
+
+// ==================== CHAT ====================
+function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    
+    const chatBody = document.getElementById('chat-body');
+    const newMsg = document.createElement('div');
+    newMsg.className = 'flex flex-col items-end max-w-[80%] ml-auto';
+    newMsg.innerHTML = `
+        <div class="chat-bubble-sent p-4 rounded-xl rounded-tr-none">
+            <p class="font-body-md">${escapeHtml(msg)}</p>
+        </div>
+        <span class="mt-1 font-label-sm text-[10px] text-on-surface-variant">Just now</span>
+    `;
+    chatBody.appendChild(newMsg);
+    input.value = '';
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// ==================== SHOUTOUT WALL ====================
+function openShoutoutModal() { document.getElementById('shoutout-modal').style.display = 'flex'; }
+function closeShoutoutModal() { document.getElementById('shoutout-modal').style.display = 'none'; }
+
+function submitShoutout() {
+    const text = document.getElementById('shoutout-text').value.trim();
+    if (!text) return;
+    
+    const feed = document.getElementById('wall-feed');
+    const newPost = document.createElement('article');
+    newPost.className = 'wall-post bg-surface border-2 border-primary p-5 md:p-6 hover:bg-surface-container transition-colors group';
+    newPost.innerHTML = `
+        <div class="flex items-start gap-4">
+            <div class="ds-img-placeholder w-12 h-12 rounded-full flex-shrink-0">[P]</div>
+            <div class="flex-1">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-label-md text-label-md"><span class="text-primary">${AppState.user.name}</span> posted</h4>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">Just now</span>
+                </div>
+                <p class="font-body-md text-body-lg text-on-surface border-l-4 border-primary-fixed-dim pl-4 py-1 italic mb-4">"${escapeHtml(text)}"</p>
+                <div class="flex items-center gap-6">
+                    <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-vibrant-pink transition-colors active:scale-90" onclick="likePost(this)">
+                        <span class="material-symbols-outlined text-[20px]">favorite</span>
+                        <span class="font-label-sm text-label-sm like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    feed.insertBefore(newPost, feed.firstChild);
+    
+    updateUmoja(10);
+    document.getElementById('shoutout-text').value = '';
+    closeShoutoutModal();
+    showToast('+10 Umoja Credits earned!', 'payments');
+}
+
+function likePost(btn) {
+    const countEl = btn.querySelector('.like-count');
+    let count = parseInt(countEl.textContent);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    
+    if (btn.classList.contains('liked')) {
+        count--;
+        btn.classList.remove('liked');
+        icon.style.fontVariationSettings = "'FILL' 0";
+        btn.classList.remove('text-vibrant-pink');
+        btn.classList.add('text-on-surface-variant');
+    } else {
+        count++;
+        btn.classList.add('liked');
+        icon.style.fontVariationSettings = "'FILL' 1";
+        btn.classList.add('text-vibrant-pink');
+        btn.classList.remove('text-on-surface-variant');
+    }
+    countEl.textContent = count;
+}
+
+// ==================== OPPORTUNITY BOARD ====================
+function setBoardFilter(btn) {
+    document.querySelectorAll('.board-filter').forEach(b => {
+        b.classList.remove('bg-primary','text-on-primary','brutalist-border');
+        b.classList.add('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
+    });
+    btn.classList.add('bg-primary','text-on-primary','brutalist-border');
+    btn.classList.remove('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
+}
+
+function unlockPremium() {
+    if (AppState.umojaCredits >= 10) {
+        updateUmoja(-10);
+        document.getElementById('premium-gate').style.display = 'none';
+        showToast('Premium details unlocked! -10 UC', 'lock_open');
+    } else {
+        showToast('Not enough Umoja Credits!', 'error');
+    }
+}
+
+// ==================== ASK/OFFER DIRECTORY ====================
+function setDirectoryFilter(btn) {
+    document.querySelectorAll('.dir-filter').forEach(b => {
+        b.classList.remove('bg-primary','text-on-primary','brutalist-border');
+        b.classList.add('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
+    });
+    btn.classList.add('bg-primary','text-on-primary','brutalist-border');
+    btn.classList.remove('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
+    
+    const filter = btn.getAttribute('data-filter');
+    document.querySelectorAll('.dir-card').forEach(c => {
+        if (filter === 'all') c.style.display = 'flex';
+        else if (filter === 'offers') c.style.display = c.getAttribute('data-offers') ? 'flex' : 'none';
+        else if (filter === 'asks') c.style.display = c.getAttribute('data-asks') ? 'flex' : 'none';
+    });
+}
+
+// ==================== UMOJA CREDITS ====================
+function updateUmoja(amount) {
+    AppState.umojaCredits += amount;
+    document.getElementById('umoja-display').textContent = AppState.umojaCredits;
+    const p = document.getElementById('profile-umoja');
+    if(p) p.textContent = AppState.umojaCredits;
+}
+
+// ==================== FAB HANDLER ====================
+function handleFAB() {
+    if (AppState.currentPage === 'wall') openShoutoutModal();
+    else showToast('Create new content', 'add');
+}
+
+// ==================== TOAST NOTIFICATION ====================
+function showToast(message, icon = 'check_circle') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = message;
+    document.getElementById('toast-icon').textContent = icon;
+    
+    toast.style.opacity = '1';
+    toast.style.pointerEvents = 'auto';
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.pointerEvents = 'none';
+    }, 3000);
+}
+
+// ==================== UTILITY ====================
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ==================== EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize page based on URL hash
+    const hash = window.location.hash.replace('#', '') || 'landing';
+    navigate(hash);
+
+    // Chat input listener
+    const chatInput = document.getElementById('chat-input');
+    if(chatInput) chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendChatMessage(); });
+
+    // Wall search listener
+    const wallSearch = document.getElementById('wall-search');
+    if(wallSearch) wallSearch.addEventListener('input', e => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.wall-post').forEach(p => {
+            p.style.display = p.innerText.toLowerCase().includes(term) ? 'block' : 'none';
         });
-        console.log(res);
-        
-        const data = await res.json();
-        console.log("REGISTER RESPONSE:", data);
+    });
 
-        if(!res.ok) throw new Error(data.message || 'Failed to register');
-        saveSession(data.token, data.user.name, data.user.email);
-        alert(data.message || 'Registration successful! Please log in.');
-        document.getElementById('signupForm').reset();
-    } catch (error) {
-        alert(error.message);
-    }
-}
+    // Directory search listener
+    const dirSearch = document.getElementById('directory-search');
+    if(dirSearch) dirSearch.addEventListener('input', e => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.dir-card').forEach(c => {
+            const text = (c.getAttribute('data-offers') + ' ' + c.getAttribute('data-asks')).toLowerCase();
+            c.style.display = text.includes(term) ? 'flex' : 'none';
+        });
+    });
+});
