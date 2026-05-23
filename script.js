@@ -1,9 +1,10 @@
 // ==================== STATE ====================
 const AppState = {
-    currentPage: 'landing',
+    currentPage: null, // MUST BE NULL
     dataSaver: false,
     umojaCredits: 450,
     selectedFlavours: [],
+    guilds: { 'backend': false, 'founders': false }, 
     user: {
         name: 'Amina',
         cohort: 'Cohort 4',
@@ -18,27 +19,21 @@ const ONBOARDING_PAGES = ['onboarding'];
 
 // ==================== ROUTER ====================
 function navigate(page) {
-    // Hide all pages
-    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+    if (AppState.currentPage === page) return;
     
-    // Show target page
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
     const target = document.getElementById('page-' + page);
     if (target) target.classList.add('active');
     
-    // Update state
     AppState.currentPage = page;
     window.location.hash = page;
     
-    // Update layouts and navigation
     updateLayout(page);
     updateBottomNav(page);
-    
-    // Scroll to top
     window.scrollTo(0, 0);
 }
 
 function updateLayout(page) {
-    // Hide all top bars and shared components
     document.getElementById('topbar-public').style.display = 'none';
     document.getElementById('topbar-onboarding').style.display = 'none';
     document.getElementById('topbar-authed').style.display = 'none';
@@ -46,7 +41,6 @@ function updateLayout(page) {
     document.getElementById('umoja-tracker').style.display = 'none';
     document.getElementById('fab-button').style.display = 'none';
     
-    // Show appropriate layout based on page type
     if (PUBLIC_PAGES.includes(page)) {
         document.getElementById('topbar-public').style.display = 'flex';
     } else if (ONBOARDING_PAGES.includes(page)) {
@@ -74,7 +68,6 @@ function updateBottomNav(page) {
     });
 }
 
-// Hash change listener
 window.addEventListener('hashchange', () => {
     const hash = window.location.hash.replace('#', '') || 'landing';
     if (document.getElementById('page-' + hash)) navigate(hash);
@@ -84,23 +77,43 @@ window.addEventListener('hashchange', () => {
 function toggleDataSaver() {
     AppState.dataSaver = !AppState.dataSaver;
     document.body.classList.toggle('data-saver-on', AppState.dataSaver);
-    document.querySelectorAll('.toggle-track').forEach(t => t.classList.toggle('active', AppState.dataSaver));
+    document.querySelectorAll('.toggle-track').forEach(t => {
+        t.classList.toggle('active', AppState.dataSaver);
+        t.setAttribute('aria-checked', AppState.dataSaver);
+    });
     showToast(AppState.dataSaver ? 'Data-Saver Mode: ON' : 'Data-Saver Mode: OFF', 'cloud_download');
 }
 
 // ==================== FLAVOUR CHIP TOGGLE ====================
-function toggleChip(el) { el.classList.toggle('selected'); }
+function toggleChip(el) { 
+    el.classList.toggle('selected');
+    const nameEl = el.querySelector('.font-label-sm, .font-label-md');
+    const flavourName = nameEl ? nameEl.innerText.trim() : '';
+    
+    if (el.classList.contains('selected')) {
+        if (!AppState.selectedFlavours.includes(flavourName)) AppState.selectedFlavours.push(flavourName);
+    } else {
+        AppState.selectedFlavours = AppState.selectedFlavours.filter(f => f !== flavourName);
+    }
+}
 
 // ==================== PARLOUR TAB TOGGLE ====================
 function toggleParlourTab(tab) {
     const btnF = document.getElementById('toggle-flavours');
     const btnA = document.getElementById('toggle-availability');
+    const viewF = document.getElementById('parlour-flavours-view');
+    const viewA = document.getElementById('parlour-availability-view');
+
     if (tab === 'flavours') {
         btnF.classList.add('bg-primary','text-on-primary'); btnF.classList.remove('text-on-surface-variant');
         btnA.classList.remove('bg-primary','text-on-primary'); btnA.classList.add('text-on-surface-variant');
+        viewF.style.display = 'block';
+        viewA.style.display = 'none';
     } else {
         btnA.classList.add('bg-primary','text-on-primary'); btnA.classList.remove('text-on-surface-variant');
         btnF.classList.remove('bg-primary','text-on-primary'); btnF.classList.add('text-on-surface-variant');
+        viewF.style.display = 'none';
+        viewA.style.display = 'block';
     }
 }
 
@@ -202,6 +215,14 @@ function unlockPremium() {
     }
 }
 
+function applyJob(btn) {
+    btn.innerText = "Applied ✓";
+    btn.disabled = true;
+    btn.classList.remove('border-primary', 'text-primary', 'hover:bg-primary-fixed-dim/20');
+    btn.classList.add('border-outline-variant', 'text-on-surface-variant', 'opacity-60');
+    showToast('Application submitted!', 'send');
+}
+
 // ==================== ASK/OFFER DIRECTORY ====================
 function setDirectoryFilter(btn) {
     document.querySelectorAll('.dir-filter').forEach(b => {
@@ -213,10 +234,129 @@ function setDirectoryFilter(btn) {
     
     const filter = btn.getAttribute('data-filter');
     document.querySelectorAll('.dir-card').forEach(c => {
-        if (filter === 'all') c.style.display = 'flex';
-        else if (filter === 'offers') c.style.display = c.getAttribute('data-offers') ? 'flex' : 'none';
-        else if (filter === 'asks') c.style.display = c.getAttribute('data-asks') ? 'flex' : 'none';
+        const offers = c.getAttribute('data-offers') || '';
+        const asks = c.getAttribute('data-asks') || '';
+        
+        if (filter === 'all') {
+            c.style.display = 'flex';
+        } else if (filter === 'offers') {
+            c.style.display = offers.trim() !== '' ? 'flex' : 'none'; 
+        } else if (filter === 'asks') {
+            c.style.display = asks.trim() !== '' ? 'flex' : 'none'; 
+        }
     });
+}
+
+function connectAlumni(btn) {
+    btn.innerText = "Connected";
+    btn.disabled = true;
+    btn.classList.remove('bg-primary');
+    btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+    updateUmoja(5);
+    showToast('+5 Umoja for connecting!', 'handshake');
+}
+
+// ==================== GUILDS & COUNCILS ====================
+function joinGuild(btn, guildKey) {
+    AppState.guilds[guildKey] = !AppState.guilds[guildKey];
+    const isJoining = AppState.guilds[guildKey];
+    
+    if (isJoining) {
+        btn.innerText = "Leave Guild";
+        btn.classList.remove('bg-primary', 'hover:bg-deep-purple', 'border-primary', 'hover:bg-primary/5', 'text-white');
+        btn.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border-outline-variant');
+        showToast('Joined Guild!', 'check_circle');
+    } else {
+        btn.innerText = "Join Guild";
+        btn.classList.add('bg-primary', 'hover:bg-deep-purple', 'border-primary', 'hover:bg-primary/5', 'text-white');
+        btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant', 'border-outline-variant');
+        showToast('Left Guild.', 'remove_circle');
+    }
+}
+
+function nominateSteward(btn) {
+    btn.innerText = "Nominated ✓";
+    btn.disabled = true;
+    btn.classList.add('opacity-60');
+    showToast('Steward nomination submitted!', 'how_to_reg');
+}
+
+function voteNow(btn) {
+    btn.innerText = "Voted ✓";
+    btn.disabled = true;
+    btn.classList.remove('hover:bg-white');
+    btn.classList.add('opacity-60');
+    updateUmoja(5);
+    showToast('+5 Umoja for voting!', 'gavel');
+}
+
+// ==================== USER PROFILE ====================
+function updateOffers() {
+    const textarea = document.getElementById('profile-offers');
+    const text = textarea.value.trim();
+    if (!text) return;
+    
+    const container = document.getElementById('offers-tags');
+    const tags = text.split(',').map(t => t.trim()).filter(t => t);
+    container.innerHTML = tags.map(t => `<span class="bg-primary-fixed-dim text-primary text-[11px] px-3 py-1 rounded">${t}</span>`).join('');
+    textarea.value = '';
+    showToast('Offers updated!', 'handshake');
+}
+
+function updateAsks() {
+    const textarea = document.getElementById('profile-asks');
+    const text = textarea.value.trim();
+    if (!text) return;
+    
+    const container = document.getElementById('asks-tags');
+    const tags = text.split(',').map(t => t.trim()).filter(t => t);
+    container.innerHTML = tags.map(t => `<span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-3 py-1 rounded">${t}</span>`).join('');
+    textarea.value = '';
+    showToast('Asks updated!', 'help_center');
+}
+
+function logout() {
+    AppState.umojaCredits = 450;
+    document.getElementById('umoja-display').textContent = AppState.umojaCredits;
+    const p = document.getElementById('profile-umoja');
+    if(p) p.textContent = AppState.umojaCredits;
+    
+    if(document.getElementById('profile-offers')) document.getElementById('profile-offers').value = '';
+    if(document.getElementById('profile-asks')) document.getElementById('profile-asks').value = '';
+    
+    showToast('Logged out successfully', 'logout');
+    navigate('landing');
+}
+
+// ==================== PARTNER PORTAL ====================
+function subscribePartner(btn) {
+    btn.innerText = "Subscribed ✓";
+    btn.disabled = true;
+    btn.classList.add('opacity-60');
+    showToast('Partner Portal access granted!', 'business_center');
+}
+
+function filterPartnerTalent(role) {
+    document.querySelectorAll('.partner-card').forEach(card => {
+        const cardRole = card.getAttribute('data-role');
+        if (role === 'all' || cardRole === role) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function viewPortfolio() {
+    showToast('Opening portfolio in new tab...', 'open_in_new');
+}
+
+function requestIntro(btn) {
+    btn.innerText = "Requested ✓";
+    btn.disabled = true;
+    btn.classList.remove('bg-primary', 'text-white');
+    btn.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border-outline-variant');
+    showToast('Intro request sent to alumni!', 'send');
 }
 
 // ==================== UMOJA CREDITS ====================
@@ -257,15 +397,12 @@ function escapeHtml(text) {
 
 // ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize page based on URL hash
     const hash = window.location.hash.replace('#', '') || 'landing';
     navigate(hash);
 
-    // Chat input listener
     const chatInput = document.getElementById('chat-input');
     if(chatInput) chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendChatMessage(); });
 
-    // Wall search listener
     const wallSearch = document.getElementById('wall-search');
     if(wallSearch) wallSearch.addEventListener('input', e => {
         const term = e.target.value.toLowerCase();
@@ -274,7 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Directory search listener
     const dirSearch = document.getElementById('directory-search');
     if(dirSearch) dirSearch.addEventListener('input', e => {
         const term = e.target.value.toLowerCase();

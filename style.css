@@ -1,5 +1,6 @@
 /* ========== BASE STYLES ========== */
 body { min-height: 100dvh; }
+html { scroll-padding-top: 88px; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
 /* ========== DATA SAVER GLOBAL ========== */
@@ -34,12 +35,13 @@ body { min-height: 100dvh; }
 }
 .primary-btn {
     background: linear-gradient(90deg, #6a0dad 0%, #FF1493 100%);
-    transition: transform 0.2s ease;
+    color: #FFFFFF !important;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
 }
 .primary-btn:active { transform: scale(0.95); }
 .secondary-btn {
     border: 2px solid #6a0dad;
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
 }
 .secondary-btn:hover { background: rgba(106, 13, 173, 0.1); }
 .vibrant-gradient {
@@ -120,8 +122,11 @@ body { min-height: 100dvh; }
     background-color: #6a0dad !important;
     color: #FFFFFF !important;
     border-color: #6a0dad !important;
+    transform: scale(1.05);
+    box-shadow: 0 4px 14px rgba(106, 13, 173, 0.4);
 }
 .flavour-chip.selected .material-symbols-outlined { color: #FFFFFF !important; }
+.flavour-chip.selected span { color: #FFFFFF !important; }
 
 /* ========== TOGGLE SWITCH ========== */
 .toggle-track {
@@ -147,3 +152,28 @@ body { min-height: 100dvh; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #F4F1F8; }
 ::-webkit-scrollbar-thumb { background: #6a0dad; border-radius: 4px; }
+
+/* ========== GLOBAL BUTTON HOVER EFFECTS ========== */
+button:not(:disabled):not(.toggle-track):not(.flavour-chip) {
+    transition: all 0.2s ease-in-out;
+}
+button:not(:disabled):not(.toggle-track):hover {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 14px rgba(106, 13, 173, 0.25);
+    transform: translateY(-2px);
+}
+button:not(:disabled):not(.toggle-track):active {
+    filter: brightness(0.95);
+    box-shadow: 0 1px 4px rgba(106, 13, 173, 0.15);
+    transform: translateY(0);
+}
+.flavour-chip:not(.selected):hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ========== ACCESSIBILITY ========== */
+@media (prefers-reduced-motion: reduce) {
+    .page-section.active { animation: none; }
+    .brutalist-lift, .primary-btn, .secondary-btn, .lift-effect, .toggle-knob, button, .flavour-chip { transition: none !important; }
+}
