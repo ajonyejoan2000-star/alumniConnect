@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <link rel="stylesheet" href="events.css">
+</head>
+<body>
+ 
+  <!-- Trigger button matching your UI -->
+  <button class="demo-trigger" onclick="openModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    Create Event
+  </button>
+ 
+  <!-- Overlay + Modal -->
+  <div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+    <div class="modal" id="modal">
+ 
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-eyebrow">AlumniConnect</span>
+          <h2 class="modal-title">Create New Event</h2>
+        </div>
+        <button class="close-btn" onclick="closeModal()" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+ 
+      <!-- Form -->
+      <form class="modal-form" id="eventForm" onsubmit="handleSubmit(event)">
+ 
+        <!-- Title -->
+        <div class="form-group">
+          <label for="title">Event Title <span class="req">*</span></label>
+          <input type="text" id="title" name="title" placeholder="e.g. Annual Networking Mixer 2026" required />
+        </div>
+ 
+        <!-- Type + Location -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="eventType">Event Type <span class="req">*</span></label>
+            <select id="eventType" name="eventType" required>
+              <option value="" disabled selected>Select type</option>
+              <option value="Networking">Networking</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Seminar">Seminar</option>
+              <option value="Social">Social</option>
+              <option value="Sisterhood Friday">Sisterhood Friday</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="location">Location <span class="req">*</span></label>
+            <input type="text" id="location" name="location" placeholder="Venue or Online" required />
+          </div>
+        </div>
+ 
+        <!-- Date & Time -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Date & Time <span class="req">*</span></label>
+            <input type="datetime-local" id="date" name="date" required />
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date & Time</label>
+            <input type="datetime-local" id="endDate" name="endDate" />
+          </div>
+        </div>
+ 
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description <span class="req">*</span></label>
+          <textarea id="description" name="description" placeholder="Tell alumni what this event is about…" required></textarea>
+        </div>
+ 
+        <!-- Cover Image -->
+        <div class="form-group">
+          <label>Cover Image</label>
+          <div class="upload-area" onclick="document.getElementById('coverImg').click()">
+            <input type="file" id="coverImg" accept="image/*" onchange="previewImage(event)" />
+            <div class="upload-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p class="upload-label"><strong>Click to upload</strong> or drag & drop</p>
+            <p class="upload-hint">PNG, JPG, WEBP up to 5MB</p>
+            <img id="image-preview" alt="Preview" />
+          </div>
+        </div>
+ 
+        <!-- Visibility -->
+        <div class="form-group">
+          <label>Visibility</label>
+          <div class="toggle-group">
+            <div class="toggle-opt">
+              <input type="radio" name="visibility" id="vis-public" value="public" checked />
+              <label for="vis-public">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Public
+              </label>
+            </div>
+            <div class="toggle-opt">
+              <input type="radio" name="visibility" id="vis-members" value="members" />
+              <label for="vis-members">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Members Only
+              </label>
+            </div>
+            <div class="toggle-opt">
+              <input type="radio" name="visibility" id="vis-private" value="private" />
+              <label for="vis-private">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Private
+              </label>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="divider"></div>
+ 
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <span class="spinner" id="spinner"></span>
+            <svg id="submitIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Create Event
+          </button>
+        </div>
+      </form>
+ 
+      <!-- Success state -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="success-title">Event Created! 🎉</p>
+        <p class="success-msg">Your event has been published and alumni will be notified.</p>
+        <button class="btn btn-primary" onclick="resetModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Create Another
+        </button>
+      </div>
+ 
+    </div>
+  </div>
+
+  <script src="index.js"></script>  
+</body>
+</html>

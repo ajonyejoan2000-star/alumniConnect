@@ -20,6 +20,7 @@ const corsOptions = {
     // removed credentials:true — incompatible with origin:'*'
 };
 
+
 app.use(cors(corsOptions));
 
 // API Routes

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="mentorship.css">
+   
+</head>
+<body>
+    <!-- NAVBAR -->
+<nav>
+  <a class="nav-brand" href="#">AlumniConnect</a>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="opportunities.html">Opportunities</a>
+    <a href="mentorship.html" class="active">Mentorship</a>
+    <a href="community.html">Network</a>
+  </div>
+  <div class="nav-avatar" id="navAvatar">U</div>
+</nav>
+ 
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+ 
+<!-- PAGE -->
+<div class="page">
+  <div class="page-header">
+    <h1>Mentorship</h1>
+    <p>Find a mentor or become one</p>
+  </div>
+ 
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="find">Find a Mentor</button>
+    <button class="tab-btn" data-tab="mine">My Mentorships</button>
+  </div>
+ 
+  <!-- ═══════════════════════════════════════
+       TAB 1: FIND A MENTOR
+  ════════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-find">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="mentorSearch" placeholder="Search mentors by name or skill..."/>
+      </div>
+      <select class="filter-select" id="roleFilter">
+        <option value="">All Roles</option>
+        <option value="mentor">Mentors</option>
+        <option value="alumni">Alumni</option>
+      </select>
+    </div>
+ 
+    <div class="mentor-grid" id="mentorGrid">
+      <!-- skeleton -->
+      <div class="skeleton-card">
+        <div class="card-top">
+          <div class="skeleton sk-avatar"></div>
+          <div style="flex:1">
+            <div class="skeleton sk-line sk-medium"></div>
+            <div class="skeleton sk-line sk-short" style="margin-top:8px"></div>
+          </div>
+        </div>
+        <div class="skeleton sk-line sk-long"></div>
+        <div class="skeleton sk-line sk-medium" style="margin-top:8px"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="card-top">
+          <div class="skeleton sk-avatar"></div>
+          <div style="flex:1">
+            <div class="skeleton sk-line sk-medium"></div>
+            <div class="skeleton sk-line sk-short" style="margin-top:8px"></div>
+          </div>
+        </div>
+        <div class="skeleton sk-line sk-long"></div>
+        <div class="skeleton sk-line sk-medium" style="margin-top:8px"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="card-top">
+          <div class="skeleton sk-avatar"></div>
+          <div style="flex:1">
+            <div class="skeleton sk-line sk-medium"></div>
+            <div class="skeleton sk-line sk-short" style="margin-top:8px"></div>
+          </div>
+        </div>
+        <div class="skeleton sk-line sk-long"></div>
+        <div class="skeleton sk-line sk-medium" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ═══════════════════════════════════════
+       TAB 2: MY MENTORSHIPS
+  ════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-mine">
+ 
+    <!-- As Mentor -->
+    <div class="section-title">
+      As a Mentor <span class="count-badge" id="asMentorCount">0</span>
+    </div>
+    <div class="mentorship-list" id="asMentorList">
+      <div class="empty-state">
+        <div class="empty-icon">🎓</div>
+        <h3>No mentees yet</h3>
+        <p>When students request your mentorship, they'll appear here.</p>
+      </div>
+    </div>
+ 
+    <!-- As Mentee -->
+    <div class="section-title">
+      As a Mentee <span class="count-badge" id="asMenteeCount">0</span>
+    </div>
+    <div class="mentorship-list" id="asMenteeList">
+      <div class="empty-state">
+        <div class="empty-icon">🌱</div>
+        <h3>No mentors yet</h3>
+        <p>Find a mentor and request mentorship to get started.</p>
+        <button class="btn btn-primary" onclick="switchTab('find')">Find a Mentor</button>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     MODAL: REQUEST MENTORSHIP
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="requestModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2>Request Mentorship</h2>
+        <p id="requestModalSubtitle">Send a mentorship request</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('requestModal')">×</button>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Your Goals</label>
+      <div class="tag-input-wrap" id="goalsWrap">
+        <input class="tag-input" id="goalsInput" placeholder="Type a goal and press Enter..."/>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Expertise You're Seeking</label>
+      <div class="tag-input-wrap" id="expertiseWrap">
+        <input class="tag-input" id="expertiseInput" placeholder="e.g. React, Leadership, Finance..."/>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Message (optional)</label>
+      <textarea class="form-control" id="requestMessage" placeholder="Introduce yourself and explain why you'd like to work with this mentor..."></textarea>
+    </div>
+ 
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('requestModal')">Cancel</button>
+      <button class="btn btn-primary" id="submitRequestBtn" onclick="submitRequest()">
+        Send Request
+      </button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     MODAL: LOG SESSION
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="sessionModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2>Log Session</h2>
+        <p>Record a mentorship session</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('sessionModal')">×</button>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Topic</label>
+      <input type="text" class="form-control" id="sessionTopic" placeholder="What did you cover?"/>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Duration (minutes)</label>
+      <input type="number" class="form-control" id="sessionDuration" placeholder="e.g. 60" min="1"/>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea class="form-control" id="sessionNotes" placeholder="Key takeaways, next steps..."></textarea>
+    </div>
+ 
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('sessionModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitSession()">Log Session</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     MODAL: COMPLETE MENTORSHIP
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="completeModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2>Complete Mentorship</h2>
+        <p>Leave a rating and feedback</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('completeModal')">×</button>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Rating</label>
+      <div class="star-rating" id="starRating">
+        <span class="star" data-val="1">★</span>
+        <span class="star" data-val="2">★</span>
+        <span class="star" data-val="3">★</span>
+        <span class="star" data-val="4">★</span>
+        <span class="star" data-val="5">★</span>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+      <label class="form-label">Feedback</label>
+      <textarea class="form-control" id="completeFeedback" placeholder="Share your experience with this mentorship..."></textarea>
+    </div>
+ 
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('completeModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitComplete()">Complete</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     MODAL: VIEW SESSIONS
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="sessionsModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <div>
+        <h2>Session History</h2>
+        <p id="sessionsModalSubtitle">All logged sessions</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('sessionsModal')">×</button>
+    </div>
+    <div id="sessionsModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('sessionsModal')">Close</button>
+    </div>
+  </div>
+</div>
+   
+<script src="mentorship.js"></script>
+</body>
+</html>

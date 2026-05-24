@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="opportunity.css">
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Alumni<span>Connect</span></a>
+  <div class="header-right">
+    <span id="userGreeting" style="font-size:0.85rem;color:var(--text-muted);display:none"></span>
+    <button class="btn btn-primary btn-sm" id="postBtn" onclick="openPostModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Post Opportunity
+    </button>
+  </div>
+</header>   
+
+
+  <!-- MAIN CONTENT -->
+    <!-- Page Title -->
+    <div class="page-header">
+      <div class="page-title">
+        <h1>Opportunities <span class="highlight">Board</span></h1>
+        <p>Jobs, internships, scholarships &amp; more</p>
+      </div>
+    </div>
+
+
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <div class="tab-item active" id="tab-all" onclick="switchTab('all')">All Opportunities</div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" id="filterBar">
+    <input type="text" class="filter-search" id="searchInput" placeholder="Search opportunities..." />
+    <select id="typeFilter">
+      <option value="">All Types</option>
+      <option value="Job">Job</option>
+      <option value="Internship">Internship</option>
+      <option value="Scholarship">Scholarship</option>
+      <option value="Hackathon">Hackathon</option>
+    </select>
+    <select id="locationFilter">
+      <option value="">All Locations</option>
+      <option value="remote">Remote</option>
+      <option value="onsite">On-site</option>
+    </select>
+    <input type="text" id="skillFilter" placeholder="Skill (e.g. Python)..." style="max-width:180px" />
+    <div class="filter-actions">
+      <button class="btn btn-primary btn-sm" onclick="applyFilters()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filter
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear</button>
+    </div>
+  </div> 
+
+  <!-- Stats -->
+   <div class="stats-row">
+    <div class="results-count" id="resultsCount">Loading...</div>
+  </div> 
+
+  <!-- Cards Container -->
+ <div class="cards-grid" id="cardsContainer"></div> 
+
+  <!-- Pagination -->
+  <!-- <div class="pagination" id="pagination"></div>
+</main> -->
+
+<!-- ===== POST OPPORTUNITY MODAL ===== -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✨ Post an Opportunity</h2>
+      <button class="close-btn" onclick="closePostModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Title *</label>
+          <input type="text" id="f_title" placeholder="e.g. Frontend Developer Intern" />
+        </div>
+        <div class="form-group">
+          <label>Type *</label>
+          <select id="f_type">
+            <option value="">Select type</option>
+            <option value="Job">Job</option>
+            <option value="Internship">Internship</option>
+            <option value="Scholarship">Scholarship</option>
+            <option value="Hackathon">Hackathon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" id="f_category" placeholder="e.g. Technology, Finance" />
+        </div>
+        <div class="form-group form-full">
+          <label>Description *</label>
+          <textarea id="f_description" placeholder="Describe the opportunity, requirements, and what's expected..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Company / Organization</label>
+          <input type="text" id="f_company" placeholder="e.g. Google, UN" />
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="f_location" placeholder="e.g. Nairobi, Kenya" />
+        </div>
+        <div class="form-group">
+          <label>Salary / Stipend</label>
+          <input type="text" id="f_salary" placeholder="e.g. $500/month or Unpaid" />
+        </div>
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" id="f_deadline" />
+        </div>
+        <div class="form-group form-full">
+          <label>Skills Required</label>
+          <input type="text" id="f_skills" placeholder="Comma-separated: JavaScript, React, MongoDB" />
+        </div>
+        <div class="form-group form-full">
+          <label>Application Link</label>
+          <input type="url" id="f_link" placeholder="https://..." />
+        </div>
+        <div class="form-group form-full">
+          <label>Remote Work</label>
+          <div class="toggle-row">
+            <span class="toggle-label">Is this a remote opportunity?</span>
+            <label class="toggle">
+              <input type="checkbox" id="f_remote">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closePostModal()">Cancel</button>
+        <button class="btn btn-primary" id="submitPostBtn" onclick="submitOpportunity()">
+          Post Opportunity
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW OPPORTUNITY MODAL ===== -->
+<div class="modal-overlay" id="viewModal">
+  <div class="modal view-modal">
+    <div class="modal-header">
+      <h2 id="viewModalTitle">Opportunity Details</h2>
+      <button class="close-btn" onclick="closeViewModal()">✕</button>
+    </div>
+    <div class="modal-body" id="viewModalBody"></div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="opportunity.js"></script>
+</body>
+</html>
+  
