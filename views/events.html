@@ -111,9 +111,9 @@
       <h1>Events</h1>
       <p>Networking, workshops &amp; community events</p>
     </div>
-    <button class="btn-purple" onclick="location.href='/create-event'">
+      <button class="btn-purple" onclick="createEvents()">
       <i class="bi bi-calendar-plus"></i> Create Event
-    </button>
+
   </div>
 
   <!-- Filters -->
@@ -216,9 +216,10 @@
     } catch (err) { console.error(err); }
   }
 
-  function viewEvent(id) { window.location.href = `/event?id=${id}`; }
+  function viewEvent(id) { window.location.href = `/v/events?id=${id}`; }
 
   filterEvents();
 </script>
+</div>
 </body>
 </html>

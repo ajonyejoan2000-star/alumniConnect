@@ -139,10 +139,13 @@
         </div>
 
         <!-- Submit -->
-        <button type="submit" class="btn-purple" id="signup-btn"
+        <a href="/v/home.html">
+          <button type="submit" class="btn-purple" id="signup-btn"
           style="width:100%; padding:14px; font-size:16px; justify-content:center;">
           Create Account <i class="bi bi-arrow-right"></i>
         </button>
+
+        </a>
 
       </form>
 
@@ -228,7 +231,7 @@
 
       showMessage('Account created! Redirecting to your dashboard...', 'success');
       document.getElementById('signupForm').reset();
-      setTimeout(() => { window.location.href = '/home'; }, 1400);
+      setTimeout(() => { window.location.href = '/v/home'; }, 1400);
 
     } catch (err) {
       showMessage(err.message || 'Network error. Please try again.', 'error');
