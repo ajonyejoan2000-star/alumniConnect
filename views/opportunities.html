@@ -1,244 +1,1333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Opportunities — AlumniConnect</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/style.css"/>
-  <style>
-    .page-wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
-    .page-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 28px;
-    }
-    .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; }
-    .page-header p  { font-size: 14px; color: var(--text-light); margin-top: 4px; }
-
-    /* Filters */
-    .filter-bar {
-      background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: flex-end;
-    }
-    .filter-bar input,
-    .filter-bar select {
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 14px;
-      font-family: inherit;
-      color: var(--text-dark);
-      outline: none;
-      transition: border-color var(--transition);
-      flex: 1; min-width: 140px;
-    }
-    .filter-bar input:focus,
-    .filter-bar select:focus { border-color: var(--purple); }
-
-    /* Type badges */
-    .opp-type { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; }
-    .type-job        { background: #dbeafe; color: #1d4ed8; }
-    .type-internship { background: #dcfce7; color: #16a34a; }
-    .type-scholarship{ background: #fef9c3; color: #a16207; }
-    .type-hackathon  { background: var(--purple-pale); color: var(--purple); }
-
-    /* Opportunity cards */
-    .opp-card {
-      background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 16px;
-      transition: box-shadow var(--transition);
-    }
-    .opp-card:hover { box-shadow: var(--shadow); }
-    .opp-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
-    .opp-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
-    .opp-company { font-size: 14px; color: var(--text-light); margin-bottom: 10px; }
-    .opp-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 14px; }
-    .opp-meta {
-      display: flex; flex-wrap: wrap; gap: 16px;
-      font-size: 13px; color: var(--text-light);
-      margin-bottom: 16px;
-    }
-    .opp-meta span { display: flex; align-items: center; gap: 5px; }
-    .opp-actions { display: flex; gap: 10px; }
-
-    .save-btn {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      border: 1.5px solid var(--border);
-      background: #fff;
-      color: var(--text-light);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-size: 17px;
-      transition: all var(--transition);
-      flex-shrink: 0;
-    }
-    .save-btn:hover, .save-btn.saved {
-      border-color: var(--purple);
-      color: var(--purple);
-      background: var(--purple-pale);
-    }
-
-    .empty-state {
-      text-align: center; padding: 60px 24px;
-      color: var(--text-light);
-    }
-    .empty-state i { font-size: 48px; color: var(--purple-mid); display: block; margin-bottom: 12px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect · Opportunities Board</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <style>
+        /* Additional opportunities styles that work with your existing CSS */
+        .opportunities-feed {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+        
+        .page-header p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* TABS */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .tab-item {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            margin-bottom: -2px;
+        }
+        
+        .tab-item.active {
+            color: var(--purple);
+            border-bottom-color: var(--purple);
+        }
+        
+        .tab-item:hover {
+            color: var(--purple);
+        }
+        
+        /* FILTER BAR */
+        .filter-bar {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .filter-bar input,
+        .filter-bar select {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-dark);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.875rem;
+            padding: 0.6rem 1rem;
+            outline: none;
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            border-color: var(--purple);
+        }
+        
+        .filter-search {
+            min-width: 220px;
+            flex: 2;
+        }
+        
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* STATS ROW */
+        .stats-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .results-count {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+        
+        .results-count strong {
+            color: var(--text-dark);
+        }
+        
+        /* CARDS GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .opp-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            animation: fadeInUp 0.4s ease both;
+        }
+        
+        .opp-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: var(--purple-light);
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--purple-light), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .card-badges {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-job { background: var(--purple-pale); color: var(--purple); }
+        .badge-internship { background: #e0f2e9; color: #2e7d32; }
+        .badge-scholarship { background: #fff3e0; color: #c9a03d; }
+        .badge-hackathon { background: #e8e0f5; color: var(--purple-dark); }
+        .badge-remote { background: var(--purple-pale); color: var(--purple); }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+        
+        .card-company {
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            margin-bottom: 0.6rem;
+        }
+        
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        .meta-item i {
+            font-size: 12px;
+        }
+        
+        .card-description {
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .card-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .skill-tag {
+            background: var(--purple-pale);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--purple);
+        }
+        
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        
+        .save-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-light);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .save-btn:hover,
+        .save-btn.saved {
+            color: #c9a03d;
+            border-color: rgba(201, 160, 61, 0.4);
+            background: rgba(201, 160, 61, 0.08);
+        }
+        .save-btn i {
+            font-size: 16px;
+        }
+        
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            grid-column: 1 / -1;
+        }
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .empty-state p {
+            color: var(--text-light);
+        }
+        
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--white);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+        .modal-overlay.open .modal {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 1.75rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+        }
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .modal-body {
+            padding: 1.5rem 1.75rem;
+        }
+        
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-full {
+            grid-column: 1 / -1;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-mid);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--purple);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+        }
+        .toggle-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--border);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .toggle input:checked + .toggle-slider {
+            background: var(--purple);
+        }
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(20px);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+        
+        /* VIEW MODAL */
+        .view-modal {
+            max-width: 700px;
+        }
+        .view-header-banner {
+            background: var(--purple-pale);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .view-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .view-company {
+            color: var(--purple);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .view-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .view-section-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        .view-description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .view-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .view-skill {
+            background: var(--purple-pale);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--purple);
+        }
+        .deadline-warning {
+            background: #fff3e0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            color: #c9a03d;
+            margin-bottom: 1rem;
+        }
+        
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: var(--white);
+            border-left: 4px solid var(--purple);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            font-size: 0.85rem;
+            animation: slideIn 0.3s ease;
+        }
+        .toast.success {
+            border-left-color: #2e7d32;
+        }
+        .toast.error {
+            border-left-color: #c62828;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .page-btn {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .page-btn:hover {
+            border-color: var(--purple);
+            color: var(--purple);
+        }
+        .page-btn.active {
+            background: var(--purple);
+            border-color: var(--purple);
+            color: white;
+        }
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        /* Header adjustments for sidebar layout */
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+        }
+        
+        /* Top bar to match home page */
+        .top-bar {
+            background: white;
+            padding: 18px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        
+        .top-welcome h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 2px;
+        }
+        
+        .top-welcome p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+        
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 100px;
+            padding: 10px 18px;
+        }
+        
+        .search-bar i {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            width: 200px;
+            font-family: inherit;
+        }
+        
+        .notif-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--purple-pale);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple);
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notif-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e74c3c;
+            border: 2px solid #fff;
+        }
+        
+        .opportunities-feed {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+        }
+        
+        .mobile-nav {
+            display: none;
+            background: #fff;
+            border-top: 1px solid var(--border);
+            padding: 12px 0 8px;
+            justify-content: space-around;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .mob-nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: color var(--transition);
+        }
+        
+        .mob-nav-btn i {
+            font-size: 20px;
+        }
+        
+        .mob-nav-btn.active,
+        .mob-nav-btn:hover {
+            color: var(--purple);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .mobile-nav { display: flex; }
+            .opportunities-feed { padding: 16px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; }
+            .filter-search { min-width: auto; width: 100%; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
+<div class="app">
+    <!-- SIDEBAR - Same as home page -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="bi bi-mortarboard-fill"></i>
+            AlumniConnect
+        </div>
+        <span class="sidebar-section-label">Main</span>
+        <nav class="sidebar-menu">
+            <a href="/v/home" class="sidebar-link">
+                <i class="bi bi-house-fill"></i> Home
+            </a>
+            <a href="/v/mentorship" class="sidebar-link">
+                <i class="bi bi-person-lines-fill"></i> Mentorship
+            </a>
+            <a href="/v/events" class="sidebar-link">
+                <i class="bi bi-calendar-event-fill"></i> Events
+            </a>
+            <a href="/v/opportunities" class="sidebar-link active">
+                <i class="bi bi-briefcase-fill"></i> Opportunities
+            </a>
+            <a href="/v/messages" class="sidebar-link">
+                <i class="bi bi-chat-dots-fill"></i> Messages
+            </a>
+        </nav>
+        <span class="sidebar-section-label">Account</span>
+        <nav class="sidebar-menu">
+            <a href="/v/profile" class="sidebar-link">
+                <i class="bi bi-person-fill"></i> Profile
+            </a>
+            <a href="/v/settings" class="sidebar-link">
+                <i class="bi bi-gear-fill"></i> Settings
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="s-avatar" id="sidebarAvatar">S</div>
+                <div class="s-info">
+                    <div class="s-name" id="sidebarName">Suzie</div>
+                    <div class="s-role">Alumni Member</div>
+                </div>
+                <button class="s-logout" title="Log out" onclick="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
 
-<div class="page-wrap">
-  <!-- Header -->
-  <div class="page-header">
-    <div>
-      <h1>Opportunities Board</h1>
-      <p>Jobs, internships, scholarships &amp; more</p>
+    <!-- MAIN CONTENT -->
+    <div class="main">
+        <!-- Top bar - Same as home page -->
+        <div class="top-bar">
+            <div class="top-welcome">
+                <h1>Good morning, <span id="welcomeName">Suzie</span>! 👑</h1>
+                <p>Discover exciting opportunities</p>
+            </div>
+            <div class="top-actions">
+                <div class="search-bar">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search alumni, posts…"/>
+                </div>
+                <button class="notif-btn">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notif-dot"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Opportunities Content -->
+        <div class="opportunities-feed">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Opportunities <span style="color: var(--purple);">Board</span></h1>
+                <p>Jobs, internships, scholarships &amp; more from our community</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tab-bar">
+                <div class="tab-item active" id="tab-all" onclick="switchTab('all')">All Opportunities</div>
+                <div class="tab-item" id="tab-saved" onclick="switchTab('saved')">Saved Opportunities</div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar" id="filterBar">
+                <input type="text" class="filter-search" id="searchInput" placeholder="Search opportunities..." />
+                <select id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="Job">💼 Job</option>
+                    <option value="Internship">📚 Internship</option>
+                    <option value="Scholarship">🎓 Scholarship</option>
+                    <option value="Hackathon">💻 Hackathon</option>
+                </select>
+                <select id="locationFilter">
+                    <option value="">All Locations</option>
+                    <option value="remote">🌐 Remote</option>
+                    <option value="onsite">🏢 On-site</option>
+                </select>
+                <input type="text" id="skillFilter" placeholder="Skill (e.g. Python)..." />
+                <div class="filter-actions">
+                    <button class="btn-purple" style="padding: 0.6rem 1.2rem;" onclick="applyFilters()">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+                    <button class="btn-outline" style="padding: 0.6rem 1.2rem;" onclick="clearFilters()">Clear</button>
+                    <button class="btn-purple" style="padding: 0.6rem 1.2rem;" onclick="openPostModal()">
+                        <i class="bi bi-plus-lg"></i> Post
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="results-count" id="resultsCount">Loading...</div>
+            </div>
+
+            <!-- Cards Container -->
+            <div class="cards-grid" id="cardsContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">📌</div>
+                    <h3>Loading opportunities...</h3>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+        <!-- Mobile Navigation - Same as home page -->
+        <nav class="mobile-nav">
+            <button class="mob-nav-btn" onclick="window.location.href='/v/home'">
+                <i class="bi bi-house-fill"></i> Home
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/community'">
+                <i class="bi bi-people-fill"></i> Community
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/opportunities'">
+                <i class="bi bi-briefcase-fill"></i> Jobs
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/messages'">
+                <i class="bi bi-chat-dots-fill"></i> Messages
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/profile'">
+                <i class="bi bi-person-fill"></i> Profile
+            </button>
+        </nav>
     </div>
-    <button class="btn-purple" onclick="location.href='/post-opportunity'">
-      <i class="bi bi-plus-circle"></i> Post Opportunity
-    </button>
-  </div>
-
-  <!-- Filters -->
-  <div class="filter-bar">
-    <input type="text" id="searchOpp" placeholder="Search opportunities…"/>
-    <select id="typeFilter">
-      <option value="">All Types</option>
-      <option value="Job">Job</option>
-      <option value="Internship">Internship</option>
-      <option value="Scholarship">Scholarship</option>
-      <option value="Hackathon">Hackathon</option>
-    </select>
-    <select id="locationFilter">
-      <option value="">All Locations</option>
-      <option value="Remote">Remote</option>
-      <option value="On-site">On-site</option>
-    </select>
-    <input type="text" id="skillFilter" placeholder="Skill (e.g. Python)…"/>
-    <button class="btn-purple" onclick="filterOpportunities()" style="flex:none;">
-      <i class="bi bi-funnel"></i> Filter
-    </button>
-  </div>
-
-  <!-- List -->
-  <div id="opportunitiesList">
-    <div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading opportunities…</div>
-  </div>
 </div>
 
-<script src="js/main.js"></script>
-<script>
-  let token = localStorage.getItem('token');
-
-  function getTypeClass(type) {
-    return { Job:'type-job', Internship:'type-internship', Scholarship:'type-scholarship', Hackathon:'type-hackathon' }[type] || 'type-job';
-  }
-
-  async function filterOpportunities() {
-    const search   = document.getElementById('searchOpp').value;
-    const type     = document.getElementById('typeFilter').value;
-    const location = document.getElementById('locationFilter').value;
-    const skill    = document.getElementById('skillFilter').value;
-
-    let url = `${API_BASE}/opportunities?`;
-    if (search)   url += `search=${encodeURIComponent(search)}&`;
-    if (type)     url += `type=${encodeURIComponent(type)}&`;
-    if (location) url += `location=${encodeURIComponent(location)}&`;
-    if (skill)    url += `skill=${encodeURIComponent(skill)}&`;
-
-    const list = document.getElementById('opportunitiesList');
-    list.innerHTML = '<div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading…</div>';
-
-    try {
-      const res  = await fetch(url);
-      const data = await res.json();
-      list.innerHTML = '';
-
-      const opps = data.opportunities || data || [];
-      if (!opps.length) {
-        list.innerHTML = '<div class="empty-state"><i class="bi bi-inbox"></i> No opportunities found.</div>';
-        return;
-      }
-
-      opps.forEach(opp => {
-        const card = document.createElement('div');
-        card.className = 'opp-card';
-        card.innerHTML = `
-          <div class="opp-card-top">
-            <div>
-              <div class="opp-title">${opp.title}</div>
-              <div class="opp-company">${opp.company || 'Organisation'}</div>
-              <span class="opp-type ${getTypeClass(opp.type)}">${opp.type}</span>
+<!-- POST OPPORTUNITY MODAL -->
+<div class="modal-overlay" id="postModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>✨ Post an Opportunity</h2>
+            <button class="close-btn" onclick="closePostModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="form-group form-full">
+                    <label>Title *</label>
+                    <input type="text" id="f_title" placeholder="e.g. Frontend Developer Intern" />
+                </div>
+                <div class="form-group">
+                    <label>Type *</label>
+                    <select id="f_type">
+                        <option value="">Select type</option>
+                        <option value="Job">Job</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Scholarship">Scholarship</option>
+                        <option value="Hackathon">Hackathon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="f_category" placeholder="e.g. Technology, Finance" />
+                </div>
+                <div class="form-group form-full">
+                    <label>Description *</label>
+                    <textarea id="f_description" placeholder="Describe the opportunity..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" id="f_company" placeholder="e.g. Google" />
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="f_location" placeholder="e.g. Nairobi, Kenya" />
+                </div>
+                <div class="form-group">
+                    <label>Salary / Stipend</label>
+                    <input type="text" id="f_salary" placeholder="e.g. $500/month" />
+                </div>
+                <div class="form-group">
+                    <label>Deadline</label>
+                    <input type="date" id="f_deadline" />
+                </div>
+                <div class="form-group form-full">
+                    <label>Skills Required</label>
+                    <input type="text" id="f_skills" placeholder="JavaScript, React, Python" />
+                </div>
+                <div class="form-group form-full">
+                    <label>Application Link</label>
+                    <input type="url" id="f_link" placeholder="https://..." />
+                </div>
+                <div class="form-group form-full">
+                    <label>Remote Work</label>
+                    <div class="toggle-row">
+                        <span class="toggle-label">Is this a remote opportunity?</span>
+                        <label class="toggle">
+                            <input type="checkbox" id="f_remote">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <button class="save-btn" title="Save" onclick="saveOpportunity('${opp._id}', this)">
-              <i class="bi bi-bookmark"></i>
-            </button>
-          </div>
-          <div class="opp-desc">${(opp.description || '').substring(0, 180)}…</div>
-          <div class="opp-meta">
-            <span><i class="bi bi-geo-alt"></i> ${opp.location || 'Remote'}</span>
-            ${opp.salary   ? `<span><i class="bi bi-cash"></i> ${opp.salary}</span>` : ''}
-            ${opp.deadline ? `<span><i class="bi bi-calendar"></i> Deadline: ${new Date(opp.deadline).toLocaleDateString()}</span>` : ''}
-          </div>
-          <div class="opp-actions">
-            <button class="btn-purple" style="padding:9px 20px;font-size:14px;" onclick="applyOpportunity('${opp._id}')">
-              <i class="bi bi-send"></i> Apply
-            </button>
-            <button class="btn-outline" style="padding:9px 20px;font-size:14px;" onclick="viewOpportunity('${opp._id}')">
-              View Details
-            </button>
-          </div>
-        `;
-        list.appendChild(card);
-      });
-    } catch (err) {
-      console.error('filterOpportunities error:', err);
-      list.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i> Could not load opportunities. Is the server running?</div>';
+            <div class="form-actions">
+                <button class="btn-outline" onclick="closePostModal()">Cancel</button>
+                <button class="btn-purple" id="submitPostBtn" onclick="submitOpportunity()">
+                    Post Opportunity
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VIEW OPPORTUNITY MODAL -->
+<div class="modal-overlay" id="viewModal">
+    <div class="modal view-modal">
+        <div class="modal-header">
+            <h2 id="viewModalTitle">Opportunity Details</h2>
+            <button class="close-btn" onclick="closeViewModal()">✕</button>
+        </div>
+        <div class="modal-body" id="viewModalBody"></div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    // Populate user info from session
+    const userName = localStorage.getItem('userName') || 'Suzie';
+    const initial = userName.charAt(0).toUpperCase();
+    document.getElementById('welcomeName').textContent = userName;
+    document.getElementById('sidebarName').textContent = userName;
+    document.getElementById('sidebarAvatar').textContent = initial;
+    
+    // Logout function
+    function logout() {
+        localStorage.clear();
+        window.location.href = '/login';
     }
-  }
-
-  async function applyOpportunity(oppId) {
-    try {
-      const res = await fetch(`${API_BASE}/opportunities/${oppId}/apply`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      alert(res.ok ? 'Application submitted!' : 'Could not apply. Please try again.');
-    } catch (err) { console.error(err); }
-  }
-
-  async function saveOpportunity(oppId, btn) {
-    try {
-      const res = await fetch(`${API_BASE}/opportunities/${oppId}/save`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        btn.classList.toggle('saved');
-        btn.innerHTML = btn.classList.contains('saved')
-          ? '<i class="bi bi-bookmark-fill"></i>'
-          : '<i class="bi bi-bookmark"></i>';
-      }
-    } catch (err) { console.error(err); }
-  }
-
-  function viewOpportunity(id) {
-    window.location.href = `/opportunity?id=${id}`;
-  }
-
-  filterOpportunities();
+    
+    // ============================================================
+    // OPPORTUNITIES FUNCTIONALITY
+    // ============================================================
+    
+    let allOpportunities = [];
+    let currentTab = 'all';
+    let currentPage = 1;
+    let totalPages = 1;
+    let savedIds = new Set();
+    
+    // Demo data
+    const demoOpportunities = [
+        {
+            _id: '1',
+            title: 'Senior Frontend Developer',
+            type: 'Job',
+            company: 'Tech Corp Inc.',
+            location: 'Remote',
+            salary: '$80k - $120k',
+            description: 'We are looking for an experienced Frontend Developer with React expertise to join our team. You will be building amazing products that impact millions of users.',
+            skills: ['React', 'TypeScript', 'Tailwind'],
+            deadline: new Date(Date.now() + 14 * 86400000).toISOString(),
+            remote: true,
+            postedBy: { name: 'Sarah Johnson' }
+        },
+        {
+            _id: '2',
+            title: 'UX Design Internship',
+            type: 'Internship',
+            company: 'Creative Studio',
+            location: 'Nairobi, Kenya',
+            salary: 'Stipend provided',
+            description: 'Great opportunity for design students to gain real-world experience working with senior designers on actual client projects.',
+            skills: ['Figma', 'UI/UX', 'Prototyping'],
+            deadline: new Date(Date.now() + 7 * 86400000).toISOString(),
+            remote: false,
+            postedBy: { name: 'Michael Chen' }
+        },
+        {
+            _id: '3',
+            title: 'Google Africa Scholarship',
+            type: 'Scholarship',
+            company: 'Google',
+            location: 'Remote',
+            salary: 'Full coverage',
+            description: 'Scholarship for African students in tech fields. Covers tuition, mentorship, and access to Google resources.',
+            skills: ['Computer Science', 'Programming'],
+            deadline: new Date(Date.now() + 21 * 86400000).toISOString(),
+            remote: true,
+            postedBy: { name: 'Google Team' }
+        },
+        {
+            _id: '4',
+            title: 'AI Hackathon 2024',
+            type: 'Hackathon',
+            company: 'AI Community',
+            location: 'Virtual',
+            salary: '$10,000 in prizes',
+            description: 'Build innovative AI solutions and win amazing prizes. Open to all students and professionals.',
+            skills: ['Python', 'Machine Learning', 'LLMs'],
+            deadline: new Date(Date.now() + 5 * 86400000).toISOString(),
+            remote: true,
+            postedBy: { name: 'AI Org' }
+        },
+        {
+            _id: '5',
+            title: 'Backend Engineer',
+            type: 'Job',
+            company: 'FinTech Startup',
+            location: 'Lagos, Nigeria',
+            salary: '$60k - $90k',
+            description: 'Join our growing team to build scalable backend systems that process millions of transactions.',
+            skills: ['Node.js', 'MongoDB', 'AWS'],
+            deadline: new Date(Date.now() + 30 * 86400000).toISOString(),
+            remote: false,
+            postedBy: { name: 'David Okafor' }
+        }
+    ];
+    
+    function showToast(msg, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = msg;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    function openPostModal() {
+        document.getElementById('postModal').classList.add('open');
+    }
+    
+    function closePostModal() {
+        document.getElementById('postModal').classList.remove('open');
+    }
+    
+    function closeViewModal() {
+        document.getElementById('viewModal').classList.remove('open');
+    }
+    
+    async function submitOpportunity() {
+        const title = document.getElementById('f_title').value.trim();
+        const type = document.getElementById('f_type').value;
+        const description = document.getElementById('f_description').value.trim();
+        
+        if (!title || !type || !description) {
+            showToast('Please fill in title, type, and description', 'error');
+            return;
+        }
+        
+        const skillsRaw = document.getElementById('f_skills').value;
+        const skills = skillsRaw ? skillsRaw.split(',').map(s => s.trim()) : [];
+        
+        const newOpp = {
+            _id: Date.now().toString(),
+            title,
+            type,
+            description,
+            company: document.getElementById('f_company').value.trim(),
+            location: document.getElementById('f_location').value.trim(),
+            salary: document.getElementById('f_salary').value.trim(),
+            deadline: document.getElementById('f_deadline').value,
+            skills,
+            remote: document.getElementById('f_remote').checked,
+            postedBy: { name: userName },
+            createdAt: new Date().toISOString()
+        };
+        
+        allOpportunities.unshift(newOpp);
+        showToast('Opportunity posted successfully! 🎉', 'success');
+        closePostModal();
+        
+        document.getElementById('f_title').value = '';
+        document.getElementById('f_type').value = '';
+        document.getElementById('f_description').value = '';
+        document.getElementById('f_company').value = '';
+        document.getElementById('f_location').value = '';
+        document.getElementById('f_salary').value = '';
+        document.getElementById('f_deadline').value = '';
+        document.getElementById('f_skills').value = '';
+        document.getElementById('f_link').value = '';
+        document.getElementById('f_remote').checked = false;
+        
+        renderOpportunities();
+    }
+    
+    function switchTab(tab) {
+        currentTab = tab;
+        document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+        document.getElementById('tab-saved').classList.toggle('active', tab === 'saved');
+        document.getElementById('filterBar').style.display = tab === 'all' ? 'flex' : 'none';
+        currentPage = 1;
+        renderOpportunities();
+    }
+    
+    function applyFilters() {
+        currentPage = 1;
+        renderOpportunities();
+    }
+    
+    function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('locationFilter').value = '';
+        document.getElementById('skillFilter').value = '';
+        applyFilters();
+    }
+    
+    function getFilteredOpportunities() {
+        let opps = currentTab === 'all' ? [...allOpportunities] : 
+                   allOpportunities.filter(opp => savedIds.has(opp._id));
+        
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const type = document.getElementById('typeFilter').value;
+        const location = document.getElementById('locationFilter').value;
+        const skill = document.getElementById('skillFilter').value.toLowerCase();
+        
+        return opps.filter(opp => {
+            if (search && !opp.title.toLowerCase().includes(search) && 
+                !opp.company?.toLowerCase().includes(search)) return false;
+            if (type && opp.type !== type) return false;
+            if (location === 'remote' && !opp.remote) return false;
+            if (location === 'onsite' && opp.remote) return false;
+            if (skill && !opp.skills?.some(s => s.toLowerCase().includes(skill))) return false;
+            return true;
+        });
+    }
+    
+    function renderOpportunities() {
+        const filtered = getFilteredOpportunities();
+        totalPages = Math.ceil(filtered.length / 12);
+        const start = (currentPage - 1) * 12;
+        const paginated = filtered.slice(start, start + 12);
+        
+        document.getElementById('resultsCount').innerHTML = `Showing <strong>${paginated.length}</strong> of <strong>${filtered.length}</strong> opportunities`;
+        
+        const container = document.getElementById('cardsContainer');
+        if (paginated.length === 0) {
+            container.innerHTML = `<div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>No opportunities found</h3>
+                <p>${currentTab === 'saved' ? "You haven't saved any opportunities yet." : 'Try adjusting your filters or post a new opportunity!'}</p>
+                ${currentTab !== 'saved' ? '<button class="btn-purple" style="margin-top: 1rem;" onclick="openPostModal()">📌 Post an Opportunity</button>' : ''}
+            </div>`;
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+        
+        container.innerHTML = paginated.map(opp => `
+            <div class="opp-card" onclick="viewOpportunity('${opp._id}')">
+                <div class="card-top">
+                    <div class="card-avatar">${opp.company?.charAt(0) || 'O'}</div>
+                    <div class="card-badges">
+                        <span class="badge badge-${opp.type?.toLowerCase()}">${opp.type}</span>
+                        ${opp.remote ? '<span class="badge badge-remote">🌐 Remote</span>' : ''}
+                    </div>
+                </div>
+                <div class="card-title">${opp.title}</div>
+                <div class="card-company">${opp.company || 'Individual'}</div>
+                <div class="card-meta">
+                    ${opp.location ? `<span class="meta-item"><i class="bi bi-geo-alt"></i> ${opp.location}</span>` : ''}
+                    ${opp.salary ? `<span class="meta-item"><i class="bi bi-currency-dollar"></i> ${opp.salary}</span>` : ''}
+                </div>
+                <p class="card-description">${opp.description.substring(0, 100)}${opp.description.length > 100 ? '...' : ''}</p>
+                <div class="card-skills">
+                    ${(opp.skills || []).slice(0, 3).map(s => `<span class="skill-tag">${s}</span>`).join('')}
+                </div>
+                <div class="card-footer">
+                    <button class="btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;" onclick="event.stopPropagation(); viewOpportunity('${opp._id}')">View Details</button>
+                    <button class="save-btn ${savedIds.has(opp._id) ? 'saved' : ''}" onclick="event.stopPropagation(); toggleSave('${opp._id}')">
+                        <i class="bi ${savedIds.has(opp._id) ? 'bi-star-fill' : 'bi-star'}"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        
+        renderPagination();
+    }
+    
+    function renderPagination() {
+        if (totalPages <= 1) {
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+        
+        let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>‹</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            } else if (Math.abs(i - currentPage) === 2) {
+                html += `<span style="padding:0 4px">…</span>`;
+            }
+        }
+        html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>›</button>`;
+        document.getElementById('pagination').innerHTML = html;
+    }
+    
+    function goToPage(page) {
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderOpportunities();
+        document.querySelector('.opportunities-feed').scrollTop = 0;
+    }
+    
+    function toggleSave(id) {
+        if (savedIds.has(id)) {
+            savedIds.delete(id);
+            showToast('Removed from saved', 'info');
+        } else {
+            savedIds.add(id);
+            showToast('Saved! ⭐', 'success');
+        }
+        if (currentTab === 'saved') {
+            renderOpportunities();
+        } else {
+            const btns = document.querySelectorAll(`.save-btn[data-id="${id}"]`);
+            const card = document.querySelector(`.opp-card[data-id="${id}"] .save-btn`);
+            if (card) {
+                const icon = card.querySelector('i');
+                if (savedIds.has(id)) {
+                    card.classList.add('saved');
+                    icon.classList.remove('bi-star');
+                    icon.classList.add('bi-star-fill');
+                } else {
+                    card.classList.remove('saved');
+                    icon.classList.remove('bi-star-fill');
+                    icon.classList.add('bi-star');
+                }
+            }
+        }
+        localStorage.setItem('savedOpportunities', JSON.stringify([...savedIds]));
+    }
+    
+    function viewOpportunity(id) {
+        const opp = allOpportunities.find(o => o._id === id);
+        if (!opp) return;
+        
+        document.getElementById('viewModalTitle').textContent = opp.title;
+        const isExpired = opp.deadline && new Date(opp.deadline) < new Date();
+        const isSaved = savedIds.has(id);
+        
+        document.getElementById('viewModalBody').innerHTML = `
+            <div class="view-header-banner">
+                <div class="card-badges" style="margin-bottom:0.75rem">
+                    <span class="badge badge-${opp.type?.toLowerCase()}">${opp.type}</span>
+                    ${opp.remote ? '<span class="badge badge-remote">🌐 Remote</span>' : ''}
+                </div>
+                <div class="view-title">${opp.title}</div>
+                ${opp.company ? `<div class="view-company">🏢 ${opp.company}</div>` : ''}
+                <div class="view-meta-row">
+                    ${opp.location ? `<span class="meta-item"><i class="bi bi-geo-alt"></i> ${opp.location}</span>` : ''}
+                    ${opp.salary ? `<span class="meta-item"><i class="bi bi-currency-dollar"></i> ${opp.salary}</span>` : ''}
+                </div>
+            </div>
+            ${isExpired ? `<div class="deadline-warning"><i class="bi bi-exclamation-triangle"></i> Application deadline has passed</div>` : ''}
+            <div class="view-section-title">About this opportunity</div>
+            <div class="view-description">${opp.description}</div>
+            ${opp.skills?.length ? `
+                <div class="view-section-title">Skills Required</div>
+                <div class="view-skills">${opp.skills.map(s => `<span class="view-skill">${s}</span>`).join('')}</div>
+            ` : ''}
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem">
+                ${!isExpired ? `<button class="btn-purple" onclick="showToast('Application submitted! 🎉', 'success'); closeViewModal()">🚀 Apply Now</button>` : ''}
+                <button class="btn-outline" onclick="toggleSave('${id}'); closeViewModal(); renderOpportunities()">
+                    <i class="bi ${isSaved ? 'bi-star-fill' : 'bi-star'}"></i> ${isSaved ? 'Unsave' : 'Save'}
+                </button>
+            </div>
+        `;
+        
+        document.getElementById('viewModal').classList.add('open');
+    }
+    
+    // Load saved IDs from localStorage
+    const saved = localStorage.getItem('savedOpportunities');
+    if (saved) {
+        JSON.parse(saved).forEach(id => savedIds.add(id));
+    }
+    
+    // Initialize
+    allOpportunities = [...demoOpportunities];
+    renderOpportunities();
+    
+    // Modal close on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) {
+                overlay.classList.remove('open');
+            }
+        });
+    });
+    
+    // Escape key closes modals
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+        }
+    });
 </script>
 </body>
 </html>
