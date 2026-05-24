@@ -48,50 +48,51 @@ tailwind.config = {
 
 <body class="bg-lavender-base text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
 
-<!-- TOP APP BAR - PUBLIC -->
-<header id="topbar-public" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit bg-surface border-b-2 border-primary" style="display:none;">
+<!-- ==================== TOP APP BARS ==================== -->
+
+<header id="topbar-public" class="topbar fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit bg-surface border-b-2 border-primary" style="display:none;">
   <div class="flex items-center gap-4"><span class="font-headline-md text-headline-md font-bold text-primary cursor-pointer" onclick="navigate('landing')">Tech Village</span></div>
   <div class="flex items-center gap-4">
     <button onclick="toggleDataSaver()" class="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full hover:bg-primary-fixed-dim/20 transition-all active:scale-95">
-      <span class="font-label-md text-label-md text-primary">Data-Saver</span>
-      <div class="toggle-track" id="toggle-track-public" role="switch" aria-checked="false" aria-label="Toggle Data Saver Mode"><div class="toggle-knob"></div></div>
+      <span class="font-label-sm text-label-sm text-primary">Data-Saver</span>
+      <div class="toggle-track" data-toggle="data-saver"><div class="toggle-knob"></div></div>
     </button>
     <div class="hidden md:flex items-center gap-6 ml-4"><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary cursor-pointer" onclick="navigate('partner')">Partners</a></div>
   </div>
 </header>
 
-<!-- TOP APP BAR - ONBOARDING -->
-<header id="topbar-onboarding" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit bg-surface border-b-2 border-primary" style="display:none;">
+<header id="topbar-onboarding" class="topbar fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit bg-surface border-b-2 border-primary" style="display:none;">
   <div class="flex items-center gap-2"><span class="font-headline-md text-headline-md font-bold text-primary cursor-pointer" onclick="navigate('landing')">Tech Village</span></div>
-  <button onclick="toggleDataSaver()" class="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-primary text-primary font-label-md text-label-md hover:bg-primary-fixed-dim/20 transition-all"><span class="material-symbols-outlined" style="font-size:18px;">cloud_download</span><span>Data-Saver</span></button>
+  <div class="flex items-center gap-3">
+    <button onclick="goBack()" class="flex items-center gap-1 text-primary font-label-md text-label-md px-3 py-1 border-2 border-primary rounded-full hover:bg-primary-fixed-dim/20 transition-all"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span class="hidden md:inline">Back</span></button>
+    <button onclick="toggleDataSaver()" class="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-primary text-primary font-label-sm text-label-sm hover:bg-primary-fixed-dim/20 transition-all"><span class="material-symbols-outlined" style="font-size:18px;">cloud_download</span><span class="hidden md:inline">Data-Saver</span><div class="toggle-track" data-toggle="data-saver"><div class="toggle-knob"></div></div></button>
+  </div>
 </header>
 
-<!-- TOP APP BAR - AUTHED -->
-<header id="topbar-authed" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface border-b-2 border-primary" style="display:none;">
+<header id="topbar-authed" class="topbar fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface border-b-2 border-primary" style="display:none;">
   <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('dashboard')">
-    <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container border-2 border-primary overflow-hidden"><img alt="User" class="w-full h-full object-cover ds-hide" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v"/></div>
+    <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container border-2 border-primary overflow-hidden"><img alt="User" class="w-full h-full object-cover ds-hide" id="header-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v"/></div>
     <h1 class="font-headline-md text-headline-md font-bold text-primary">Tech Village</h1>
   </div>
-  <div class="flex items-center gap-4">
-    <button onclick="navigate('profile')" class="flex items-center gap-2 px-3 py-1.5 border-2 border-primary rounded-lg text-primary hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined text-[20px]">account_circle</span><span class="font-label-md text-label-md hidden md:block">Profile</span></button>
-    <button onclick="toggleDataSaver()" class="flex items-center gap-2 px-3 py-1.5 border-2 border-primary rounded-lg text-primary hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined text-[20px]">cloud_download</span><span class="font-label-md text-label-md hidden md:block">Data-Saver</span></button>
+  <div class="flex items-center gap-2 md:gap-4">
+    <button onclick="goBack()" class="flex items-center gap-1 text-primary font-label-sm text-label-sm px-2 md:px-3 py-1.5 border-2 border-primary rounded-lg hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span class="hidden md:inline">Back</span></button>
+    <button onclick="navigate('profile')" class="flex items-center gap-1 text-primary font-label-sm text-label-sm px-2 md:px-3 py-1.5 border-2 border-primary rounded-lg hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined text-[18px]">account_circle</span><span class="hidden md:inline">Profile</span></button>
+    <button onclick="toggleDataSaver()" class="flex items-center gap-2 px-2 md:px-3 py-1.5 border-2 border-primary rounded-lg text-primary hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined text-[18px]">cloud_download</span><span class="hidden md:inline font-label-sm text-label-sm">Data-Saver</span><div class="toggle-track" data-toggle="data-saver"><div class="toggle-knob"></div></div></button>
   </div>
 </header>
 
-<!-- PAGE SECTIONS CONTAINER -->
+<!-- ==================== PAGE SECTIONS ==================== -->
 <div id="app-container">
 
   <!-- LANDING PAGE -->
-  <section id="page-landing" class="page-section">
+  <section id="page-landing" class="page-section" style="display:none;">
     <main class="pt-16 pb-24">
       <div class="gradient-hero ds-gradient-hero px-margin-mobile md:px-margin-desktop py-20 md:py-32 flex flex-col items-center text-center text-white relative overflow-hidden">
         <div class="relative z-10 max-w-container-max">
           <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-6 tracking-tight">The Village Where Tech Sisters Thrive Together.</h1>
           <p class="font-body-lg text-body-lg mb-10 max-w-2xl mx-auto opacity-90">Welcome to the official digital ecosystem for CodeQueens alumni. Connect across cohorts, share opportunities, step into leadership, and grow your tech career without draining your data bundle.</p>
-          
-          <!-- Sign In / Sign Up Buttons -->
           <div class="flex flex-col md:flex-row gap-4 justify-center mb-4">
-            <button onclick="navigate('onboarding')" class="primary-btn ds-btn-primary px-8 py-4 rounded-xl font-label-md text-label-md shadow-lg">Sign Up</button>
+            <button onclick="navigate('register')" class="primary-btn ds-btn-primary px-8 py-4 rounded-xl font-label-md text-label-md shadow-lg">Sign Up</button>
             <button onclick="navigate('dashboard')" class="secondary-btn ds-btn-secondary bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-label-md text-label-md text-white border-white/40 hover:bg-white/20">Sign In</button>
           </div>
           <button onclick="navigate('partner')" class="text-white/80 hover:text-white font-label-md text-label-md underline underline-offset-4 transition-colors mt-2">Hire Vetted Tech Talent (Partner Portal) →</button>
@@ -101,23 +102,22 @@ tailwind.config = {
 
       <section class="px-margin-mobile md:px-margin-desktop -mt-10 relative z-20">
         <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          <div class="pulse-card ds-card p-8 rounded-lg text-center lift-effect bg-yellow-50 border-yellow-400"><span class="material-symbols-outlined text-yellow-600 text-4xl mb-2">groups</span><h3 class="font-headline-md text-headline-md text-yellow-700 mb-1">1,200+</h3><p class="font-label-md text-label-md text-yellow-900/70">Active Alumni</p></div>
-          <div class="pulse-card ds-card p-8 rounded-lg text-center lift-effect bg-pink-50 border-pink-400"><span class="material-symbols-outlined text-vibrant-pink text-4xl mb-2">campaign</span><h3 class="font-headline-md text-headline-md text-pink-600 mb-1">450+</h3><p class="font-label-md text-label-md text-pink-900/70">Scoops Shared</p></div>
-          <div class="pulse-card ds-card p-8 rounded-lg text-center lift-effect bg-green-50 border-green-400"><span class="material-symbols-outlined text-green-600 text-4xl mb-2">payments</span><h3 class="font-headline-md text-headline-md text-green-700 mb-1">8,200+</h3><p class="font-label-md text-label-md text-green-900/70">Umoja Credits</p></div>
+          <div class="pulse-card ds-card p-8 rounded-lg text-center lift-effect bg-yellow-50 border-2 border-yellow-400"><span class="material-symbols-outlined text-yellow-600 text-4xl mb-2">groups</span><h3 class="font-headline-md text-headline-md text-yellow-700 mb-1">1,200+</h3><p class="font-label-md text-label-md text-yellow-900/70">Active Alumni</p></div>
+          <div class="pulse-card ds-card p-8 rounded-lg text-center lift-effect bg-pink-50 border-2 border-pink-400"><span class="material-symbols-outlined text-vibrant-pink text-4xl mb-2">campaign</span><h3 class="font-headline-md text-headline-md text-pink-600 mb-1">450+</h3><p class="font-label-md text-label-md text-pink-900/70">Scoops Shared</p></div>
+          <div class="pulse-card ds-card p-8 rounded-lg text-center lift-effect bg-green-50 border-2 border-green-400"><span class="material-symbols-outlined text-green-600 text-4xl mb-2">payments</span><h3 class="font-headline-md text-headline-md text-green-700 mb-1">8,200+</h3><p class="font-label-md text-label-md text-green-900/70">Umoja Credits</p></div>
         </div>
       </section>
 
       <section class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto">
         <div class="text-center mb-16"><h2 class="font-headline-lg text-headline-lg text-on-background mb-4">How We Strengthen Our Community</h2><div class="w-24 h-1 bg-gradient-to-r from-primary to-vibrant-pink mx-auto rounded-full"></div></div>
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[240px]">
-          <div class="md:col-span-8 bg-yellow-50 rounded-xl p-8 relative overflow-hidden group border border-yellow-400 hover:border-yellow-600 transition-all"><div class="relative z-10"><span class="material-symbols-outlined text-yellow-600 mb-4 text-3xl">icecream</span><h3 class="font-headline-md text-headline-md mb-2">🍨 Step into the Icecream Parlour</h3><p class="font-body-md text-body-md text-yellow-900/80 max-w-md"><strong class="text-yellow-700">Networking Without the Pressure.</strong> Every two weeks, get automatically paired based on your favorite conversation 'flavours'.</p></div></div>
+          <div class="md:col-span-8 bg-yellow-50 rounded-xl p-8 relative overflow-hidden group border border-yellow-400 hover:border-yellow-600 transition-all"><div class="relative z-10"><span class="material-symbols-outlined text-yellow-600 mb-4 text-3xl">icecream</span><h3 class="font-headline-md text-headline-md mb-2">🍨 Step into the Icecream Parlour</h3><p class="font-body-md text-body-md text-yellow-900/80 max-w-md"><strong class="text-yellow-700">Networking Without the Pressure.</strong> Every two weeks, get automatically paired based on your favourite conversation flavours.</p></div></div>
           <div class="md:col-span-4 bg-pink-50 rounded-xl p-8 border-2 border-transparent hover:border-pink-500 transition-all"><span class="material-symbols-outlined text-vibrant-pink mb-4 text-3xl">campaign</span><h3 class="font-headline-md text-headline-md mb-2">📣 The Shoutout Wall</h3><p class="font-body-md text-body-md text-pink-900/80"><strong class="text-vibrant-pink">Your Wins are Our Wins.</strong> Celebrate milestones together.</p></div>
           <div class="md:col-span-4 bg-primary text-white rounded-xl p-8 flex flex-col justify-between hover:scale-[1.02] transition-transform"><div><span class="material-symbols-outlined text-primary-fixed mb-4 text-3xl">payments</span><h3 class="font-headline-md text-headline-md mb-2">🌍 Umoja Credit System</h3><p class="font-body-md text-body-md opacity-80"><strong>Communal Support, Rewarded.</strong> Earn credits by helping sisters.</p></div><div class="mt-4 font-label-md text-primary-fixed underline cursor-pointer" onclick="navigate('dashboard')">Learn about Credits →</div></div>
           <div class="md:col-span-8 bg-green-50 rounded-xl p-8 flex flex-col md:flex-row gap-6 border border-green-400 hover:border-green-600 transition-all"><div class="flex-1"><span class="material-symbols-outlined text-green-600 mb-4 text-3xl">work</span><h3 class="font-headline-md text-headline-md mb-2">💼 Vetted Opportunities</h3><p class="font-body-md text-body-md text-green-900/80"><strong class="text-green-700">Centralized Resources.</strong> Curated jobs and autonomous Guilds.</p></div></div>
         </div>
       </section>
 
-      <!-- LANDING FLAVOUR CHIPS -->
       <section class="px-margin-mobile md:px-margin-desktop py-12 max-w-container-max mx-auto">
         <div class="ds-card bg-white border-2 border-primary rounded-xl p-8 md:p-12">
           <h2 class="font-headline-lg text-headline-lg text-primary mb-2 text-center">Choose Your Conversation Flavours</h2>
@@ -128,28 +128,97 @@ tailwind.config = {
             <button class="flavour-chip flex flex-col items-center p-4 bg-orange-200 border-2 border-orange-400 rounded-xl hover:bg-orange-300 transition-all cursor-pointer shadow-md"><span class="text-2xl mb-2">🍦</span><span class="font-label-sm text-label-sm font-bold text-orange-800">Vanilla</span><span class="text-xs text-orange-900/70">Entrepreneurship</span></button>
             <button class="flavour-chip flex flex-col items-center p-4 bg-green-400 border-2 border-green-600 rounded-xl hover:bg-green-500 transition-all cursor-pointer shadow-md"><span class="text-2xl mb-2">🍃</span><span class="font-label-sm text-label-sm font-bold text-green-900">Mint</span><span class="text-xs text-green-900/80">Workplace Dynamics</span></button>
           </div>
-          <div class="text-center"><button onclick="navigate('onboarding')" class="primary-btn ds-btn-primary px-8 py-3 rounded-xl font-label-md text-label-md">Next Step: Select your Offers and Asks →</button></div>
+          <div class="text-center"><button onclick="navigate('register')" class="primary-btn ds-btn-primary px-8 py-3 rounded-xl font-label-md text-label-md">Sign Up to Join the Village →</button></div>
         </div>
       </section>
+
       <footer class="bg-surface-container-highest px-margin-mobile md:px-margin-desktop py-16 border-t-2 border-primary"><div class="max-w-container-max mx-auto text-center"><p class="font-body-md text-on-surface-variant mb-2"><strong>For Alumni:</strong> Always free, always community-first.</p><p class="font-body-md text-on-surface-variant mb-2"><strong>For Partners:</strong> Subscribe to our Partner Portal.</p><p class="font-label-sm text-label-sm text-on-surface-variant">🔒 Lightweight, secure, and compliant.</p><p class="font-label-sm text-label-sm text-on-surface-variant mt-8">© 2024 Tech Village. Built with Inclusive Efficiency.</p></div></footer>
     </main>
   </section>
 
-  <!-- ONBOARDING PAGE -->
-  <section id="page-onboarding" class="page-section">
+  <!-- ==================== REGISTRATION PAGE ==================== -->
+  <section id="page-register" class="page-section" style="display:none;">
+    <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop min-h-screen flex items-start justify-center">
+      <div class="w-full max-w-lg">
+        <div class="text-center mb-8">
+          <span class="material-symbols-outlined text-primary text-5xl mb-2">person_add</span>
+          <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-primary mb-2">Join the Village</h1>
+          <p class="font-body-md text-on-surface-variant">Create your account and receive your unique Alumni ID.</p>
+        </div>
+
+        <form id="register-form" class="ds-card bg-white border-2 border-primary rounded-xl p-8 space-y-5" onsubmit="handleRegister(event)">
+          <div>
+            <label class="block font-label-md text-label-md text-high-contrast-text mb-2">Full Name *</label>
+            <input type="text" id="reg-name" required class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none font-body-md text-body-md transition-all" placeholder="e.g. Amina Koroma"/>
+          </div>
+          <div>
+            <label class="block font-label-md text-label-md text-high-contrast-text mb-2">Email Address *</label>
+            <input type="email" id="reg-email" required class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none font-body-md text-body-md transition-all" placeholder="e.g. amina@codequeens.org"/>
+          </div>
+          <div>
+            <label class="block font-label-md text-label-md text-high-contrast-text mb-2">Cohort Number *</label>
+            <select id="reg-cohort" required class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none font-body-md text-body-md transition-all cursor-pointer">
+              <option value="">Select your cohort</option>
+              <option value="1">Cohort 1</option><option value="2">Cohort 2</option><option value="3">Cohort 3</option>
+              <option value="4">Cohort 4</option><option value="5">Cohort 5</option><option value="6">Cohort 6</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-label-md text-label-md text-high-contrast-text mb-2">Specialization *</label>
+            <select id="reg-role" required class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none font-body-md text-body-md transition-all cursor-pointer">
+              <option value="">Select your specialization</option>
+              <option value="Fullstack Developer">Fullstack Developer</option>
+              <option value="Frontend Developer">Frontend Developer</option>
+              <option value="Backend Developer">Backend Developer</option>
+              <option value="UI/UX Designer">UI/UX Designer</option>
+              <option value="Data Scientist">Data Scientist</option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Mobile Developer">Mobile Developer</option>
+              <option value="Product Manager">Product Manager</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-label-md text-label-md text-high-contrast-text mb-2">Password *</label>
+            <input type="password" id="reg-password" required minlength="6" class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none font-body-md text-body-md transition-all" placeholder="Minimum 6 characters"/>
+          </div>
+          <div>
+            <label class="block font-label-md text-label-md text-high-contrast-text mb-2">Confirm Password *</label>
+            <input type="password" id="reg-confirm" required minlength="6" class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none font-body-md text-body-md transition-all" placeholder="Re-enter your password"/>
+          </div>
+          <div id="reg-error" class="hidden text-error font-label-md text-label-md bg-error-container p-3 rounded-lg"></div>
+          <button type="submit" class="w-full primary-btn ds-btn-primary py-4 rounded-xl font-label-md text-label-md shadow-lg">Create Account & Get My ID</button>
+        </form>
+
+        <!-- ID SUCCESS CARD (hidden until registration) -->
+        <div id="reg-success" class="ds-card bg-white border-2 border-primary rounded-xl p-8 text-center" style="display:none;">
+          <span class="material-symbols-outlined text-green-600 text-6xl mb-4">check_circle</span>
+          <h2 class="font-headline-lg text-headline-lg text-primary mb-2">Welcome to the Village!</h2>
+          <p class="font-body-md text-on-surface-variant mb-6">Your unique Alumni ID has been generated. Save it — you'll need it to sign in.</p>
+          <div class="bg-surface-container border-2 border-dashed border-primary rounded-xl p-6 mb-6">
+            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Your Alumni ID</p>
+            <p id="generated-id" class="font-headline-xl text-headline-xl text-primary font-bold tracking-wider"></p>
+          </div>
+          <p class="font-label-sm text-label-sm text-on-surface-variant mb-4">A confirmation has been sent to your email.</p>
+          <button onclick="navigate('onboarding')" class="primary-btn ds-btn-primary px-8 py-3 rounded-xl font-label-md text-label-md">Continue to Onboarding →</button>
+        </div>
+
+        <p class="text-center mt-6 font-body-md text-on-surface-variant">Already a member? <a class="text-primary underline cursor-pointer font-bold" onclick="navigate('dashboard')">Sign In</a></p>
+      </div>
+    </main>
+  </section>
+
+  <!-- ==================== ONBOARDING PAGE ==================== -->
+  <section id="page-onboarding" class="page-section" style="display:none;">
     <main class="flex-grow pt-24 pb-32 px-margin-mobile md:px-0">
       <div class="max-w-[1120px] mx-auto md:px-margin-desktop">
         <div class="mb-10 flex flex-col items-center"><div class="w-full max-w-md bg-surface-container-highest h-2 mb-4 overflow-hidden"><div class="bg-primary h-full" style="width:50%"></div></div><p class="font-label-md text-label-md text-on-surface-variant">Step 2 of 2: Your Pulse</p></div>
         <div class="mb-12"><h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-high-contrast-text mb-4">Choose Your Conversation Flavours</h1><p class="text-on-surface-variant max-w-2xl font-body-lg text-body-lg">Select the topics that excite you the most.</p></div>
-        
-        <!-- ONBOARDING FLAVOUR CARDS -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-16">
           <button class="flavour-chip group flex flex-col items-start p-6 bg-yellow-300 border-2 border-yellow-500 text-left hover:bg-yellow-400 transition-all cursor-pointer shadow-md"><span class="material-symbols-outlined mb-4 text-yellow-800 group-hover:text-yellow-900">school</span><span class="font-label-md text-label-md block mb-1 text-yellow-900 group-hover:text-yellow-950">Pinacolada</span><span class="font-headline-md text-headline-md leading-tight text-yellow-900 group-hover:text-yellow-950">Career Fundamentals</span></button>
           <button class="flavour-chip group flex flex-col items-start p-6 bg-amber-700 border-2 border-amber-900 text-left hover:bg-amber-800 transition-all cursor-pointer shadow-md"><span class="material-symbols-outlined mb-4 text-amber-200 group-hover:text-white">terminal</span><span class="font-label-md text-label-md block mb-1 text-amber-100 group-hover:text-white">Chocolate</span><span class="font-headline-md text-headline-md leading-tight text-amber-100 group-hover:text-white">Code Stacks</span></button>
           <button class="flavour-chip group flex flex-col items-start p-6 bg-orange-200 border-2 border-orange-400 text-left hover:bg-orange-300 transition-all cursor-pointer shadow-md"><span class="material-symbols-outlined mb-4 text-orange-700 group-hover:text-orange-800">rocket_launch</span><span class="font-label-md text-label-md block mb-1 text-orange-800 group-hover:text-orange-900">Vanilla</span><span class="font-headline-md text-headline-md leading-tight text-orange-800 group-hover:text-orange-900">Entrepreneurship</span></button>
           <button class="flavour-chip group flex flex-col items-start p-6 bg-green-400 border-2 border-green-600 text-left hover:bg-green-500 transition-all cursor-pointer shadow-md"><span class="material-symbols-outlined mb-4 text-green-900 group-hover:text-green-950">diversity_3</span><span class="font-label-md text-label-md block mb-1 text-green-900 group-hover:text-green-950">Mint</span><span class="font-headline-md text-headline-md leading-tight text-green-900 group-hover:text-green-950">Workplace Dynamics</span></button>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           <div class="space-y-4"><label class="block font-label-md text-label-md text-high-contrast-text" style="font-family:'Tahoma Bold'">WHAT CAN YOU OFFER?</label><textarea class="w-full bg-white border-2 border-data-saver-border p-4 focus:ring-0 focus:border-primary outline-none min-h-[160px] font-body-md text-body-md transition-all" placeholder="e.g. Mentor junior devs..."></textarea><p class="text-label-sm text-label-sm text-on-surface-variant">Your contribution strengthens the Village.</p></div>
           <div class="space-y-4"><label class="block font-label-md text-label-md text-high-contrast-text" style="font-family:'Tahoma Bold'">WHAT ARE YOU ASKING FOR?</label><textarea class="w-full bg-white border-2 border-data-saver-border p-4 focus:ring-0 focus:border-primary outline-none min-h-[160px] font-body-md text-body-md transition-all" placeholder="e.g. Job referrals..."></textarea><p class="text-label-sm text-label-sm text-on-surface-variant">Don't be shy. The Village exists to lift you up.</p></div>
@@ -158,18 +227,18 @@ tailwind.config = {
     </main>
     <footer class="fixed bottom-0 left-0 w-full z-50 bg-surface-container border-t-2 border-primary py-6 px-margin-mobile md:px-margin-desktop">
       <div class="max-w-[1120px] mx-auto flex justify-between items-center">
-        <button onclick="navigate('landing')" class="flex items-center gap-2 text-primary font-label-md text-label-md px-6 py-3 border-2 border-primary hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined">arrow_back</span><span>Back</span></button>
+        <button onclick="goBack()" class="flex items-center gap-2 text-primary font-label-md text-label-md px-6 py-3 border-2 border-primary hover:bg-primary-fixed-dim/20 transition-all active:scale-95"><span class="material-symbols-outlined">arrow_back</span><span>Back</span></button>
         <button onclick="navigate('dashboard')" class="primary-btn ds-btn-primary flex items-center gap-2 font-label-md text-label-md px-10 py-3 border-2 border-data-saver-border active:translate-y-[2px]"><span>Next Step</span><span class="material-symbols-outlined">arrow_forward</span></button>
       </div>
     </footer>
   </section>
 
-  <!-- DASHBOARD PAGE -->
-  <section id="page-dashboard" class="page-section">
+  <!-- ==================== DASHBOARD PAGE ==================== -->
+  <section id="page-dashboard" class="page-section" style="display:none;">
     <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-[1120px] mx-auto min-h-screen">
-      <section class="mb-8"><div class="flex flex-col md:flex-row md:items-end justify-between gap-4"><div><p class="text-secondary font-label-md text-label-md mb-1">Village Resident</p><h2 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-background">Welcome back, Amina!</h2></div><div class="ds-card bg-surface-container-highest border-2 border-primary rounded-xl p-4 flex items-center gap-4 brutalist-lift cursor-pointer" onclick="navigate('profile')"><div class="w-12 h-12 rounded-full bg-vibrant-pink flex items-center justify-center text-white"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">payments</span></div><div><p class="font-label-sm text-label-sm text-on-surface-variant">Umoja Credits</p><p class="font-headline-md text-headline-md text-primary">450 Credits</p></div></div></div></section>
+      <section class="mb-8"><div class="flex flex-col md:flex-row md:items-end justify-between gap-4"><div><p class="text-secondary font-label-md text-label-md mb-1">Village Resident</p><h2 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-background" id="dashboard-welcome">Welcome back!</h2></div><div class="ds-card bg-surface-container-highest border-2 border-primary rounded-xl p-4 flex items-center gap-4 brutalist-lift cursor-pointer" onclick="navigate('profile')"><div class="w-12 h-12 rounded-full bg-vibrant-pink flex items-center justify-center text-white"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">payments</span></div><div><p class="font-label-sm text-label-sm text-on-surface-variant">Umoja Credits</p><p class="font-headline-md text-headline-md text-primary">450 Credits</p></div></div></div></section>
       <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
-        <div class="ds-card bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6 brutalist-lift"><div class="flex justify-between items-start mb-6"><div class="p-2 bg-yellow-200 rounded-lg text-yellow-700"><span class="material-symbols-outlined">icecream</span></div><span class="bg-yellow-200 text-yellow-800 font-label-sm text-label-sm px-2 py-1 rounded">2h Left</span></div><h3 class="font-headline-md text-headline-md mb-2">Next Parlour Match</h3><p class="text-on-surface-variant mb-4">Matched with Sarah M. about Cloud Architecture.</p><button onclick="navigate('parlour')" class="w-full py-3 vibrant-gradient text-white font-bold rounded-lg brutalist-lift active:scale-95 transition-transform">View Profile</button></div>
+        <div class="ds-card bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6 brutalist-lift"><div class="flex justify-between items-start mb-6"><div class="p-2 bg-yellow-200 rounded-lg text-yellow-700"><span class="material-symbols-outlined">icecream</span></div><span class="bg-yellow-200 text-yellow-800 font-label-sm text-label-sm px-2 py-1 rounded">2h Left</span></div><h3 class="font-headline-md text-headline-md mb-2">Next Parlour Match</h3><p class="text-on-surface-variant mb-4">Matched with Sarah M. about Cloud Architecture.</p><button onclick="navigate('parlour')" class="w-full py-3 vibrant-gradient text-white font-bold rounded-lg brutalist-lift active:scale-95 transition-transform">View Match</button></div>
         <div class="ds-card bg-pink-50 border-2 border-pink-400 rounded-xl p-6 brutalist-lift"><div class="flex justify-between items-start mb-6"><div class="p-2 bg-pink-200 rounded-lg text-vibrant-pink"><span class="material-symbols-outlined">campaign</span></div><span class="bg-pink-200 text-pink-800 font-label-sm text-label-sm px-2 py-1 rounded">+12 New</span></div><h3 class="font-headline-md text-headline-md mb-2">New Shoutouts</h3><p class="text-on-surface-variant mb-4">Celebrate wins on the Wall today.</p><button onclick="navigate('wall')" class="w-full mt-6 py-3 border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary-fixed-dim/20 active:scale-95 transition-transform">See Wall</button></div>
         <div class="ds-card bg-green-50 border-2 border-green-400 rounded-xl p-6 brutalist-lift"><div class="flex justify-between items-start mb-6"><div class="p-2 bg-green-200 rounded-lg text-green-700"><span class="material-symbols-outlined">work</span></div><span class="bg-green-200 text-green-800 font-label-sm text-label-sm px-2 py-1 rounded">Hot</span></div><h3 class="font-headline-md text-headline-md mb-2">Opportunities</h3><p class="text-on-surface-variant mb-4">3 Senior Frontend positions posted today.</p><button onclick="navigate('board')" class="w-full mt-4 py-3 bg-tertiary text-white font-bold rounded-lg brutalist-lift active:scale-95 transition-transform">Explore Board</button></div>
       </section>
@@ -177,48 +246,43 @@ tailwind.config = {
     </main>
   </section>
 
-  <!-- ICECREAM PARLOUR PAGE -->
-  <section id="page-parlour" class="page-section">
+  <!-- ==================== ICECREAM PARLOUR ==================== -->
+  <section id="page-parlour" class="page-section" style="display:none;">
     <main class="mt-20 mb-24 px-margin-mobile md:px-margin-desktop max-w-[1120px] mx-auto">
-      <section class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"><div><h2 class="font-headline-lg text-headline-lg text-primary">🍨 Parlour</h2><p class="font-body-md text-on-surface-variant">Networking Without the Pressure.</p></div><div class="flex bg-surface-container p-1 rounded-lg border-2 border-primary"><button class="px-4 py-2 font-label-md text-label-md bg-primary text-on-primary rounded transition-all" id="toggle-flavours" onclick="toggleParlourTab('flavours')">Flavours</button><button class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-primary-fixed-dim/20 transition-all" id="toggle-availability" onclick="toggleParlourTab('availability')">Availability</button></div></section>
+      <section class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"><div><h2 class="font-headline-lg text-headline-lg text-primary">🍨 Parlour</h2><p class="font-body-md text-on-surface-variant">Networking Without the Pressure.</p></div><div class="flex bg-surface-container p-1 rounded-lg border-2 border-primary"><button class="parlour-tab px-4 py-2 font-label-md text-label-md bg-primary text-on-primary rounded transition-all" id="tab-flavours" onclick="toggleParlourTab('flavours')">Flavours</button><button class="parlour-tab px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-primary-fixed-dim/20 transition-all" id="tab-availability" onclick="toggleParlourTab('availability')">Availability</button></div></section>
       <div class="flex flex-col lg:flex-row gap-6">
         <div class="w-full lg:w-1/3 flex flex-col gap-6">
-          
-          <!-- Flavours View (Default) -->
           <div id="parlour-flavours-view">
             <div class="ds-card bg-gradient-to-br from-yellow-50 to-green-50 p-6 rounded-xl flex flex-col items-center text-center border-2 border-yellow-400 mb-6 shadow-md"><div class="relative mb-4"><div class="w-24 h-24 rounded-full border-4 border-yellow-500 overflow-hidden bg-lavender-base"><img class="w-full h-full object-cover ds-hide" alt="Chipo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqV3feiBTWB6R4q4g6y8gIvOblW5GFjaR8Wz8ow1e3X30hqtbsow1uCuEYp7PDvWHnQ6dVYhjIuwV2m6ZFvJ7E1HKugEWLN49FORKIHZ_CZH9rf6wxPbmh-05hP5qoYJpG3Ff_ESTq4cYdq-q14yutfEQrB5P48nAOHH-EMMsdUbXBfFTq1fDCN2KOjBD0BvjykGTZ-yyj3HRLhfuN50da0HMpGb0zVFb0g4l2qZPKQ8iL2Q1nON6ZOhkcbjbGgGYokpQm37q9w1Qa"/></div><div class="ds-img-placeholder w-24 h-24 rounded-full">[ PHOTO ]</div><div class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white bg-green-500"></div></div><h3 class="font-headline-md text-headline-md text-on-surface">Chipo Muzondo</h3><p class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-4">Bi-Weekly Match</p><div class="w-full space-y-2 text-left"><p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Current Flavours:</p><div class="flex flex-wrap gap-2"><span class="bg-amber-200 text-amber-900 font-label-sm text-xs px-3 py-1 rounded-full border border-amber-400">🍫 Chocolate</span><span class="bg-green-200 text-green-900 font-label-sm text-xs px-3 py-1 rounded-full border border-green-400">🍃 Mint</span></div></div></div>
             <div class="bg-gradient-to-r from-yellow-400 to-green-400 p-6 rounded-xl border-2 border-yellow-500 shadow-md"><div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-gray-900">tips_and_updates</span><h4 class="font-label-md text-label-md text-gray-900 uppercase">Icebreaker</h4></div><p class="font-body-lg text-gray-900 font-semibold italic">"Ask about their favorite tech stack!"</p></div>
           </div>
-
-          <!-- Availability View (Hidden initially) -->
-          <div id="parlour-availability-view" style="display: none;">
+          <div id="parlour-availability-view" style="display:none;">
             <div class="ds-card bg-white p-6 rounded-xl border border-outline-variant">
               <h3 class="font-headline-md text-headline-md text-primary mb-4">Set Your Availability</h3>
               <p class="font-body-md text-on-surface-variant mb-6">Select the days you are free for a Parlour chat.</p>
               <div class="grid grid-cols-3 gap-3">
-                <button class="p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Mon</button>
-                <button class="p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Tue</button>
-                <button class="p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Wed</button>
-                <button class="p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Thu</button>
-                <button class="p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Fri</button>
-                <button class="p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Sat</button>
+                <button class="avail-btn p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Mon</button>
+                <button class="avail-btn p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Tue</button>
+                <button class="avail-btn p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Wed</button>
+                <button class="avail-btn p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Thu</button>
+                <button class="avail-btn p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Fri</button>
+                <button class="avail-btn p-3 border-2 border-outline-variant rounded-lg hover:border-primary transition-all font-label-md text-on-surface-variant hover:text-primary" onclick="this.classList.toggle('bg-primary');this.classList.toggle('text-white');this.classList.toggle('border-primary');this.classList.toggle('text-on-surface-variant');">Sat</button>
               </div>
-              <button class="mt-6 w-full primary-btn py-3 rounded-xl font-label-md text-label-md" onclick="showToast('Availability saved!', 'schedule')">Save Availability</button>
+              <button class="mt-6 w-full primary-btn py-3 rounded-xl font-label-md text-label-md" onclick="showToast('Availability saved!','schedule')">Save Availability</button>
             </div>
           </div>
-
         </div>
         <div class="w-full lg:w-2/3 ds-card bg-white rounded-xl flex flex-col h-[600px] overflow-hidden border border-outline-variant">
           <div class="p-4 bg-surface-container-high border-b border-outline-variant flex justify-between items-center"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">chat</span><span class="font-label-md text-label-md text-on-surface">Village Thread</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Low-Data Mode Active</span></div>
           <div class="flex-grow overflow-y-auto p-6 space-y-4 bg-surface-container-lowest" id="chat-body"><div class="flex flex-col items-start max-w-[80%]"><div class="chat-bubble-received p-4 rounded-xl rounded-tl-none"><p class="font-body-md">Hi there! I saw we both have an interest in low-latency architectures.</p></div><span class="mt-1 font-label-sm text-[10px] text-on-surface-variant">10:42 AM</span></div><div class="flex flex-col items-end max-w-[80%] ml-auto"><div class="chat-bubble-sent p-4 rounded-xl rounded-tr-none"><p class="font-body-md">Absolutely. I'm currently working on a Rust-based edge node.</p></div><span class="mt-1 font-label-sm text-[10px] text-on-surface-variant">10:45 AM</span></div></div>
-          <div class="p-4 bg-surface-container border-t-2 border-primary flex items-center gap-3"><button class="w-10 h-10 flex items-center justify-center text-primary hover:bg-primary-fixed-dim/20 rounded-full transition-transform active:scale-95"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">mic</span></button><div class="flex-grow"><input id="chat-input" class="w-full bg-surface-container-lowest border-2 border-outline-variant focus:border-primary px-4 py-2 font-body-md outline-none transition-all" placeholder="Type a message..." type="text"/></div><button onclick="sendChatMessage()" class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-lg transition-transform active:scale-95"><span class="material-symbols-outlined">send</span></button></div>
+          <div class="p-4 bg-surface-container border-t-2 border-primary flex items-center gap-3"><button class="w-10 h-10 flex items-center justify-center text-primary hover:bg-primary-fixed-dim/20 rounded-full transition-transform active:scale-95"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">mic</span></button><div class="flex-grow"><input id="chat-input" class="w-full bg-surface-container-lowest border-2 border-outline-variant focus:border-primary px-4 py-2 font-body-md outline-none transition-all" placeholder="Type a message..." type="text" onkeydown="if(event.key==='Enter')sendChatMessage()"/></div><button onclick="sendChatMessage()" class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-lg transition-transform active:scale-95"><span class="material-symbols-outlined">send</span></button></div>
         </div>
       </div>
     </main>
   </section>
 
-  <!-- SHOUTOUT WALL PAGE -->
-  <section id="page-wall" class="page-section">
+  <!-- ==================== SHOUTOUT WALL ==================== -->
+  <section id="page-wall" class="page-section" style="display:none;">
     <main class="pt-24 px-margin-mobile md:px-margin-desktop max-w-[1120px] mx-auto pb-32">
       <section class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6"><div class="flex-1"><h2 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-deep-purple mb-2">📣 Wall</h2><p class="font-body-md text-body-md text-on-surface-variant max-w-xl">Celebrate brilliance. Earn Umoja Credits.</p></div><div class="relative w-full md:w-80"><input id="wall-search" class="w-full pl-10 pr-4 py-3 bg-surface border-b-2 border-primary focus:border-vibrant-pink outline-none font-body-md" placeholder="Search the wall..." type="text"/><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span></div></section>
       <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12"><div class="md:col-span-2 ds-card bg-pink-50 p-6 flex items-center justify-between overflow-hidden relative group border-2 border-pink-400"><div class="relative z-10"><h3 class="font-headline-md text-headline-md text-pink-700 mb-2">Post a Shoutout</h3><p class="font-body-md text-body-md mb-4 text-pink-900/70">Tag a colleague.</p><button class="primary-btn ds-btn-primary font-label-md text-label-md px-6 py-3 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center gap-2" onclick="openShoutoutModal()"><span class="material-symbols-outlined">campaign</span>CREATE POST (+10 UMOJA)</button></div></div><div class="bg-deep-purple p-6 border-2 border-primary text-white flex flex-col justify-center"><span class="font-label-sm text-label-sm uppercase tracking-widest text-primary-fixed-dim">Wall Pulse</span><div class="flex items-baseline gap-2 mt-2"><span class="font-headline-xl text-headline-xl">1,248</span><span class="font-body-md text-body-md opacity-80">Cheers Today</span></div></div></section>
@@ -228,18 +292,18 @@ tailwind.config = {
     </main>
   </section>
 
-  <!-- OPPORTUNITY BOARD PAGE -->
-  <section id="page-board" class="page-section">
+  <!-- ==================== OPPORTUNITY BOARD ==================== -->
+  <section id="page-board" class="page-section" style="display:none;">
     <main class="mt-20 mb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-      <section class="mb-8"><div class="flex justify-between items-center mb-6"><h2 class="font-headline-lg text-headline-lg text-primary">💼 Opportunity Board</h2><button onclick="navigate('directory')" class="font-label-md text-label-md text-vibrant-pink underline cursor-pointer flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">person_search</span> Ask/Offer Directory</button></div><div class="relative w-full mb-6"><div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-primary"><span class="material-symbols-outlined">search</span></div><input id="board-search" class="w-full pl-12 pr-4 py-4 bg-surface-container-lowest border-2 border-primary rounded-xl focus:ring-0 focus:border-vibrant-pink font-body-md text-body-md placeholder:text-on-surface-variant transition-all" placeholder="Search opportunities..." type="text"/></div><div id="board-filters" class="flex gap-2 overflow-x-auto pb-2"><button class="board-filter flex-shrink-0 px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md brutalist-border" data-filter="jobs" onclick="setBoardFilter(this)">Jobs</button><button class="board-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed-dim/20 transition-all border border-outline-variant" data-filter="internships" onclick="setBoardFilter(this)">Internships</button></div></section>
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6"><div class="md:col-span-8 group relative overflow-hidden rounded-xl border-2 border-primary bg-surface-container-lowest p-6 flex flex-col gap-4"><div class="absolute top-4 right-4 z-10"><span class="bg-vibrant-pink text-white text-[10px] uppercase tracking-widest px-3 py-1 font-bold rounded-full">New</span></div><div class="flex items-start gap-4"><div class="ds-img-placeholder w-16 h-16 rounded-lg">[L]</div><div><h3 class="font-headline-md text-headline-md text-primary">Senior Full-Stack Engineer</h3><p class="font-body-md text-on-surface-variant">VillageTech Global • Lagos (Remote)</p></div></div><p class="text-body-md text-on-surface line-clamp-3">Lead the development of our decentralized social platform...</p><div class="mt-4 p-8 rounded-lg bg-lavender-base border-2 border-dashed border-primary flex flex-col items-center text-center gap-4 relative overflow-hidden" id="premium-gate"><div class="absolute inset-0 bg-white/40 backdrop-blur-[2px] pointer-events-none"></div><span class="material-symbols-outlined text-primary text-4xl relative">lock</span><h4 class="font-headline-md text-headline-md text-on-surface relative">Unlock Full Details</h4><button onclick="unlockPremium()" class="premium-gradient text-on-secondary px-8 py-3 rounded-full font-label-md text-label-md brutalist-border relative active:scale-95 transition-all">Unlock for 10 Umoja Credits</button></div></div><div class="md:col-span-4 ds-card bg-green-50 border-2 border-green-400 rounded-xl p-6 flex flex-col justify-between"><div><span class="bg-green-200 text-green-800 text-[10px] uppercase font-bold px-3 py-1 rounded-full">Closing Soon</span><h3 class="font-headline-md text-headline-md text-primary mt-4">STEM Fellowship 2024</h3><p class="font-label-sm text-label-sm text-error mt-4 font-bold flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> Ends in 48 hours</p></div><button id="apply-fellowship-btn" onclick="applyJob(this)" class="mt-6 border-2 border-primary text-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary-fixed-dim/20 transition-all text-center">Apply Now</button></div></div>
+      <section class="mb-8"><div class="flex justify-between items-center mb-6"><h2 class="font-headline-lg text-headline-lg text-primary">💼 Opportunity Board</h2><button onclick="navigate('directory')" class="font-label-md text-label-md text-vibrant-pink underline cursor-pointer flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">person_search</span> Ask/Offer Directory</button></div><div class="relative w-full mb-6"><div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-primary"><span class="material-symbols-outlined">search</span></div><input id="board-search" class="w-full pl-12 pr-4 py-4 bg-surface-container-lowest border-2 border-primary rounded-xl focus:ring-0 focus:border-vibrant-pink font-body-md text-body-md placeholder:text-on-surface-variant transition-all" placeholder="Search opportunities..." type="text"/></div><div id="board-filters" class="flex gap-2 overflow-x-auto pb-2"><button class="board-filter flex-shrink-0 px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md" data-filter="jobs" onclick="setBoardFilter(this)">Jobs</button><button class="board-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed-dim/20 transition-all border border-outline-variant" data-filter="internships" onclick="setBoardFilter(this)">Internships</button><button class="board-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed-dim/20 transition-all border border-outline-variant" data-filter="fellowships" onclick="setBoardFilter(this)">Fellowships</button></div></section>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6"><div class="md:col-span-8 group relative overflow-hidden rounded-xl border-2 border-primary bg-surface-container-lowest p-6 flex flex-col gap-4"><div class="absolute top-4 right-4 z-10"><span class="bg-vibrant-pink text-white text-[10px] uppercase tracking-widest px-3 py-1 font-bold rounded-full">New</span></div><div class="flex items-start gap-4"><div class="ds-img-placeholder w-16 h-16 rounded-lg bg-primary-fixed-dim flex items-center justify-center text-primary font-bold">VT</div><div><h3 class="font-headline-md text-headline-md text-primary">Senior Full-Stack Engineer</h3><p class="font-body-md text-on-surface-variant">VillageTech Global • Lagos (Remote)</p></div></div><p class="text-body-md text-on-surface line-clamp-3">Lead the development of our decentralized social platform...</p><div class="mt-4 p-8 rounded-lg bg-lavender-base border-2 border-dashed border-primary flex flex-col items-center text-center gap-4 relative overflow-hidden" id="premium-gate"><div class="absolute inset-0 bg-white/40 backdrop-blur-[2px] pointer-events-none"></div><span class="material-symbols-outlined text-primary text-4xl relative">lock</span><h4 class="font-headline-md text-headline-md text-on-surface relative">Unlock Full Details</h4><button onclick="unlockPremium()" class="premium-gradient text-on-secondary px-8 py-3 rounded-full font-label-md text-label-md relative active:scale-95 transition-all">Unlock for 10 Umoja Credits</button></div></div><div class="md:col-span-4 ds-card bg-green-50 border-2 border-green-400 rounded-xl p-6 flex flex-col justify-between"><div><span class="bg-green-200 text-green-800 text-[10px] uppercase font-bold px-3 py-1 rounded-full">Closing Soon</span><h3 class="font-headline-md text-headline-md text-primary mt-4">STEM Fellowship 2024</h3><p class="font-label-sm text-label-sm text-error mt-4 font-bold flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> Ends in 48 hours</p></div><button onclick="applyJob(this)" class="mt-6 border-2 border-primary text-primary px-4 py-2 rounded-full font-label-md text-label-md hover:bg-primary-fixed-dim/20 transition-all text-center">Apply Now</button></div></div>
     </main>
   </section>
 
-  <!-- ASK/OFFER DIRECTORY PAGE -->
-  <section id="page-directory" class="page-section">
+  <!-- ==================== ASK/OFFER DIRECTORY ==================== -->
+  <section id="page-directory" class="page-section" style="display:none;">
     <main class="mt-20 mb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-      <section class="mb-8"><div class="flex justify-between items-center mb-6"><div><h2 class="font-headline-lg text-headline-lg text-primary">🤝 Ask/Offer Directory</h2><p class="font-body-md text-on-surface-variant">The village talent map.</p></div><button onclick="navigate('board')" class="font-label-md text-label-md text-vibrant-pink underline cursor-pointer flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">work</span> Job Board</button></div><div class="flex gap-2 mb-6"><button class="dir-filter flex-shrink-0 px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md brutalist-border" data-filter="all" onclick="setDirectoryFilter(this)">All Alumni</button><button class="dir-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md border border-outline-variant" data-filter="offers" onclick="setDirectoryFilter(this)">Looking to Offer</button><button class="dir-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md border border-outline-variant" data-filter="asks" onclick="setDirectoryFilter(this)">Looking for Help</button></div><div class="relative w-full"><div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-primary"><span class="material-symbols-outlined">search</span></div><input id="directory-search" class="w-full pl-12 pr-4 py-4 bg-surface-container-lowest border-2 border-primary rounded-xl focus:border-vibrant-pink font-body-md outline-none transition-all" placeholder="Search by keyword (e.g., React, Mentoring)..." type="text"/></div></section>
+      <section class="mb-8"><div class="flex justify-between items-center mb-6"><div><h2 class="font-headline-lg text-headline-lg text-primary">🤝 Ask/Offer Directory</h2><p class="font-body-md text-on-surface-variant">The village talent map.</p></div><button onclick="navigate('board')" class="font-label-md text-label-md text-vibrant-pink underline cursor-pointer flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">work</span> Job Board</button></div><div class="flex gap-2 mb-6"><button class="dir-filter flex-shrink-0 px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md" data-filter="all" onclick="setDirectoryFilter(this)">All Alumni</button><button class="dir-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md border border-outline-variant" data-filter="offers" onclick="setDirectoryFilter(this)">Looking to Offer</button><button class="dir-filter flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md border border-outline-variant" data-filter="asks" onclick="setDirectoryFilter(this)">Looking for Help</button></div><div class="relative w-full"><div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-primary"><span class="material-symbols-outlined">search</span></div><input id="directory-search" class="w-full pl-12 pr-4 py-4 bg-surface-container-lowest border-2 border-primary rounded-xl focus:border-vibrant-pink font-body-md outline-none transition-all" placeholder="Search by keyword..." type="text"/></div></section>
       <div id="directory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="dir-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col" data-offers="React, Node.js, System Design" data-asks="Rust, DevOps Pipelines"><div class="flex items-center gap-4 mb-4"><div class="w-14 h-14 rounded-full border-2 border-vibrant-pink overflow-hidden bg-lavender-base ds-hide"><img class="w-full h-full object-cover" alt="Amina" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v"/></div><div class="ds-img-placeholder w-14 h-14 rounded-full">[P]</div><div><h3 class="font-headline-md text-headline-md text-primary">Amina K.</h3><p class="font-label-sm text-label-sm text-on-surface-variant">Cohort 4 • Fullstack Dev</p></div></div><div class="mb-3"><p class="font-label-sm text-label-sm text-primary font-bold mb-1 uppercase">Offers:</p><div class="flex flex-wrap gap-1"><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded">React</span><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded">Node.js</span></div></div><div class="mb-4"><p class="font-label-sm text-label-sm text-vibrant-pink font-bold mb-1 uppercase">Asks:</p><div class="flex flex-wrap gap-1"><span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-2 py-0.5 rounded">Rust</span><span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-2 py-0.5 rounded">DevOps</span></div></div><div class="mt-auto flex justify-between items-center"><span class="text-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">payments</span> 450 UC</span><button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md text-label-md brutalist-lift" onclick="connectAlumni(this)">Connect</button></div></div>
         <div class="dir-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col" data-offers="UI/UX, Figma" data-asks="Backend Architecture"><div class="flex items-center gap-4 mb-4"><div class="w-14 h-14 rounded-full border-2 border-vibrant-pink overflow-hidden bg-lavender-base ds-hide"><img class="w-full h-full object-cover" alt="Chipo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqV3feiBTWB6R4q4g6y8gIvOblW5GFjaR8Wz8ow1e3X30hqtbsow1uCuEYp7PDvWHnQ6dVYhjIuwV2m6ZFvJ7E1HKugEWLN49FORKIHZ_CZH9rf6wxPbmh-05hP5qoYJpG3Ff_ESTq4cYdq-q14yutfEQrB5P48nAOHH-EMMsdUbXBfFTq1fDCN2KOjBD0BvjykGTZ-yyj3HRLhfuN50da0HMpGb0zVFb0g4l2qZPKQ8iL2Q1nON6ZOhkcbjbGgGYokpQm37q9w1Qa"/></div><div class="ds-img-placeholder w-14 h-14 rounded-full">[P]</div><div><h3 class="font-headline-md text-headline-md text-primary">Chipo M.</h3><p class="font-label-sm text-label-sm text-on-surface-variant">Cohort 2 • UI/UX Lead</p></div></div><div class="mb-3"><p class="font-label-sm text-label-sm text-primary font-bold mb-1 uppercase">Offers:</p><div class="flex flex-wrap gap-1"><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded">UI/UX</span><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded">Figma</span></div></div><div class="mb-4"><p class="font-label-sm text-label-sm text-vibrant-pink font-bold mb-1 uppercase">Asks:</p><div class="flex flex-wrap gap-1"><span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-2 py-0.5 rounded">Backend Arch</span></div></div><div class="mt-auto flex justify-between items-center"><span class="text-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">payments</span> 820 UC</span><button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md text-label-md brutalist-lift" onclick="connectAlumni(this)">Connect</button></div></div>
@@ -247,19 +311,19 @@ tailwind.config = {
     </main>
   </section>
 
-  <!-- GUILDS & COUNCILS PAGE -->
-  <section id="page-guilds" class="page-section">
+  <!-- ==================== GUILDS & COUNCILS ==================== -->
+  <section id="page-guilds" class="page-section" style="display:none;">
     <main class="pt-24 pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-      <section class="mb-12"><h2 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-4 text-primary">Village Guilds & Councils</h2><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter"><div class="bg-secondary-fixed p-6 border-2 border-primary rounded-xl flex flex-col justify-between"><div><span class="material-symbols-outlined text-secondary text-4xl mb-4" style="font-variation-settings:'FILL'1;">how_to_reg</span><h3 class="font-headline-md text-headline-md text-on-secondary-fixed-variant mb-2">Lead a Guild</h3><p class="font-body-md text-body-md text-on-surface-variant">Q4 steward nominations are open.</p></div><button id="nominate-btn" onclick="nominateSteward(this)" class="mt-6 bg-gradient-to-r from-primary-container to-vibrant-pink text-white font-label-md text-label-md py-3 px-6 rounded-lg font-bold uppercase tracking-wide brutalist-lift">Nominate Steward</button></div><div class="ds-card bg-surface-container p-6 border border-primary/20 rounded-xl flex flex-col justify-between"><div><h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-4">Village Pulse</div><div class="flex items-baseline gap-2"><span class="text-4xl font-bold text-primary">12</span><span class="text-body-md text-on-surface-variant">Active Councils</span></div></div></div></div></section>
+      <section class="mb-12"><h2 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-4 text-primary">Village Guilds & Councils</h2><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter"><div class="bg-secondary-fixed p-6 border-2 border-primary rounded-xl flex flex-col justify-between"><div><span class="material-symbols-outlined text-secondary text-4xl mb-4" style="font-variation-settings:'FILL'1;">how_to_reg</span><h3 class="font-headline-md text-headline-md text-on-secondary-fixed-variant mb-2">Lead a Guild</h3><p class="font-body-md text-body-md text-on-surface-variant">Q4 steward nominations are open.</p></div><button onclick="nominateSteward(this)" class="mt-6 bg-gradient-to-r from-primary-container to-vibrant-pink text-white font-label-md text-label-md py-3 px-6 rounded-lg font-bold uppercase tracking-wide brutalist-lift">Nominate Steward</button></div><div class="ds-card bg-surface-container p-6 border border-primary/20 rounded-xl flex flex-col justify-between"><div><h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-4">Village Pulse</h3><div class="flex items-baseline gap-2"><span class="text-4xl font-bold text-primary">12</span><span class="text-body-md text-on-surface-variant">Active Councils</span></div></div></div></div></section>
       <section class="mb-16"><div class="flex items-center justify-between mb-8"><h2 class="font-headline-lg text-headline-lg text-primary">Special Interest Guilds</h2></div><div class="grid grid-cols-1 md:grid-cols-12 gap-gutter"><div class="md:col-span-8 ds-card bg-white border border-outline-variant rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-primary transition-colors"><div class="p-8 flex-1 flex flex-col justify-between"><div><div class="flex justify-between items-start mb-4"><h3 class="font-headline-md text-headline-md text-primary">Backend Devs</h3><span class="bg-primary-container text-on-primary-container px-2 py-1 rounded font-label-sm text-label-sm">High Growth</span></div><p class="text-body-md font-body-md text-on-surface-variant mb-4">Architecting scalable futures.</p></div><div class="flex items-center justify-between"><span class="text-label-md font-label-md text-on-surface">1.2k Members</span><button onclick="joinGuild(this, 'backend')" class="bg-primary text-white font-label-md text-label-md py-2 px-6 rounded hover:bg-deep-purple transition-all brutalist-lift">Join Guild</button></div></div></div><div class="md:col-span-4 ds-card bg-white border border-outline-variant rounded-xl p-8 flex flex-col justify-between hover:border-primary transition-colors"><div><div class="w-12 h-12 bg-secondary-fixed rounded flex items-center justify-center text-secondary mb-6"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">rocket_launch</span></div><h3 class="font-headline-md text-headline-md text-primary mb-3">Tech Founders</h3><p class="text-body-md font-body-md text-on-surface-variant mb-6">From MVP to Series A.</p></div><button onclick="joinGuild(this, 'founders')" class="w-full border-2 border-primary text-primary font-label-md text-label-md py-2 px-6 rounded hover:bg-primary/5 transition-all">Join Guild</button></div></div></section>
-      <section class="mb-16"><div class="bg-on-tertiary-fixed text-white rounded-2xl p-8 md:p-12 overflow-hidden relative"><div class="relative z-10"><div class="flex items-center gap-3 mb-6"><span class="material-symbols-outlined text-secondary-fixed">gavel</span><h2 class="font-headline-lg text-headline-lg">Active Councils</h2></div><div class="space-y-4"><div class="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-white/10 transition-colors"><div class="max-w-xl"><div class="flex items-center gap-2 mb-2"><span class="text-label-sm font-label-sm text-primary-fixed-dim uppercase tracking-widest">Village Infrastructure</span><span class="text-white/40">•</span><span class="text-label-sm font-label-sm text-secondary-fixed">Closes in 2 days</span></div><h4 class="font-headline-md text-headline-md mb-2">Umoja Credit Rebalancing Q1</h4></div><div class="flex items-center gap-4"><button id="vote-council-btn" onclick="voteNow(this)" class="bg-secondary-fixed text-on-secondary-fixed-variant font-label-md text-label-md py-3 px-8 rounded-lg font-bold hover:bg-white transition-all brutalist-lift">Vote Now</button></div></div></div></div></div></section>
+      <section class="mb-16"><div class="bg-on-tertiary-fixed text-white rounded-2xl p-8 md:p-12 overflow-hidden relative"><div class="relative z-10"><div class="flex items-center gap-3 mb-6"><span class="material-symbols-outlined text-secondary-fixed">gavel</span><h2 class="font-headline-lg text-headline-lg">Active Councils</h2></div><div class="space-y-4"><div class="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-white/10 transition-colors"><div class="max-w-xl"><div class="flex items-center gap-2 mb-2"><span class="text-label-sm font-label-sm text-primary-fixed-dim uppercase tracking-widest">Village Infrastructure</span><span class="text-white/40">•</span><span class="text-label-sm font-label-sm text-secondary-fixed">Closes in 2 days</span></div><h4 class="font-headline-md text-headline-md mb-2">Umoja Credit Rebalancing Q1</h4></div><div class="flex items-center gap-4"><button onclick="voteNow(this)" class="bg-secondary-fixed text-on-secondary-fixed-variant font-label-md text-label-md py-3 px-8 rounded-lg font-bold hover:bg-white transition-all brutalist-lift">Vote Now</button></div></div></div></div></div></section>
     </main>
   </section>
 
-  <!-- USER PROFILE & UMOJA HISTORY PAGE -->
-  <section id="page-profile" class="page-section">
+  <!-- ==================== USER PROFILE ==================== -->
+  <section id="page-profile" class="page-section" style="display:none;">
     <main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-[1120px] mx-auto min-h-screen">
-      <section class="mb-8"><div class="ds-card bg-white border-2 border-primary rounded-xl p-8 flex flex-col md:flex-row items-center gap-8"><div class="w-24 h-24 rounded-full border-4 border-vibrant-pink overflow-hidden bg-lavender-base flex-shrink-0"><img class="w-full h-full object-cover ds-hide" alt="Amina" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v"/></div><div class="ds-img-placeholder w-24 h-24 rounded-full flex-shrink-0">[ YOU ]</div><div class="flex-1 text-center md:text-left"><h2 class="font-headline-xl text-headline-xl text-primary">Amina Koroma</h2><p class="font-body-lg text-on-surface-variant mb-2">Cohort 4 • Fullstack Developer</p><div class="flex flex-wrap gap-2 justify-center md:justify-start"><span class="bg-amber-200 text-amber-900 font-label-sm text-xs px-3 py-1 rounded-full border border-amber-400">🍫 Chocolate</span><span class="bg-green-200 text-green-900 font-label-sm text-xs px-3 py-1 rounded-full border border-green-400">🍃 Mint</span></div></div><div class="text-center bg-surface-container p-6 rounded-xl border-2 border-primary"><span class="material-symbols-outlined text-vibrant-pink text-3xl" style="font-variation-settings:'FILL'1;">payments</span><p class="font-headline-xl text-headline-xl text-primary" id="profile-umoja">450</p><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Umoja Credits</p></div></div></section>
+      <section class="mb-8"><div class="ds-card bg-white border-2 border-primary rounded-xl p-8 flex flex-col md:flex-row items-center gap-8"><div class="w-24 h-24 rounded-full border-4 border-vibrant-pink overflow-hidden bg-lavender-base flex-shrink-0"><img class="w-full h-full object-cover ds-hide" alt="Amina" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v"/></div><div class="ds-img-placeholder w-24 h-24 rounded-full flex-shrink-0">[ YOU ]</div><div class="flex-1 text-center md:text-left"><h2 class="font-headline-xl text-headline-xl text-primary" id="profile-name">Amina Koroma</h2><p class="font-body-lg text-on-surface-variant mb-1" id="profile-role-cohort">Cohort 4 • Fullstack Developer</p><p class="font-label-md text-label-md text-primary font-bold" id="profile-alumni-id"></p><div class="flex flex-wrap gap-2 justify-center md:justify-start mt-2"><span class="bg-amber-200 text-amber-900 font-label-sm text-xs px-3 py-1 rounded-full border border-amber-400">🍫 Chocolate</span><span class="bg-green-200 text-green-900 font-label-sm text-xs px-3 py-1 rounded-full border border-green-400">🍃 Mint</span></div></div><div class="text-center bg-surface-container p-6 rounded-xl border-2 border-primary"><span class="material-symbols-outlined text-vibrant-pink text-3xl" style="font-variation-settings:'FILL'1;">payments</span><p class="font-headline-xl text-headline-xl text-primary" id="profile-umoja">450</p><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Umoja Credits</p></div></div></section>
       <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <div class="ds-card bg-white border-2 border-primary rounded-xl p-6"><h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4 flex items-center gap-2"><span class="material-symbols-outlined">handshake</span> What I Offer</h3><div id="offers-tags" class="flex flex-wrap gap-2 mb-4"><span class="bg-primary-fixed-dim text-primary text-[11px] px-3 py-1 rounded">React</span><span class="bg-primary-fixed-dim text-primary text-[11px] px-3 py-1 rounded">Node.js</span></div><textarea id="profile-offers" class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none min-h-[80px] font-body-md text-body-md transition-all" placeholder="Update your offerings (comma separated)..."></textarea><button onclick="updateOffers()" class="mt-2 w-full py-2 bg-primary text-white font-bold rounded-lg brutalist-lift active:scale-95 transition-transform">Update Offers</button></div>
         <div class="ds-card bg-white border-2 border-primary rounded-xl p-6"><h3 class="font-label-md text-label-md text-vibrant-pink uppercase tracking-widest mb-4 flex items-center gap-2"><span class="material-symbols-outlined">help_center</span> What I Ask</h3><div id="asks-tags" class="flex flex-wrap gap-2 mb-4"><span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-3 py-1 rounded">Rust</span><span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-3 py-1 rounded">DevOps</span></div><textarea id="profile-asks" class="w-full bg-surface-container border-2 border-data-saver-border p-3 focus:border-primary outline-none min-h-[80px] font-body-md text-body-md transition-all" placeholder="Update your asks (comma separated)..."></textarea><button onclick="updateAsks()" class="mt-2 w-full py-2 bg-vibrant-pink text-white font-bold rounded-lg brutalist-lift active:scale-95 transition-transform">Update Asks</button></div>
@@ -269,146 +333,26 @@ tailwind.config = {
     </main>
   </section>
 
-  <!-- PARTNER PORTAL PAGE (VET A HIRE) -->
-  <section id="page-partner" class="page-section">
+  <!-- ==================== PARTNER PORTAL ==================== -->
+  <section id="page-partner" class="page-section" style="display:none;">
     <main class="pt-16 pb-24">
-      <div class="gradient-hero ds-gradient-hero px-margin-mobile md:px-margin-desktop py-20 md:py-24 flex flex-col items-center text-center text-white relative overflow-hidden"><div class="relative z-10 max-w-container-max"><span class="material-symbols-outlined text-5xl mb-4">business_center</span><h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-6 tracking-tight">Vet & Hire Top Talent</h1><p class="font-body-lg text-body-lg mb-10 max-w-2xl mx-auto opacity-90">Browse anonymized, highly-rated profiles by specialization. Request introductions only when you're ready.</p><button id="partner-subscribe-btn" onclick="subscribePartner(this)" class="primary-btn ds-btn-primary px-8 py-4 rounded-xl font-label-md text-label-md shadow-lg">Subscribe for Full Access</button></div></div>
-      
+      <div class="gradient-hero ds-gradient-hero px-margin-mobile md:px-margin-desktop py-20 md:py-24 flex flex-col items-center text-center text-white relative overflow-hidden"><div class="relative z-10 max-w-container-max"><span class="material-symbols-outlined text-5xl mb-4">business_center</span><h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-6 tracking-tight">Vet & Hire Top Talent</h1><p class="font-body-lg text-body-lg mb-10 max-w-2xl mx-auto opacity-90">Browse anonymized, highly-rated profiles by specialization. Request introductions only when you're ready.</p><button onclick="subscribePartner(this)" class="primary-btn ds-btn-primary px-8 py-4 rounded-xl font-label-md text-label-md shadow-lg">Subscribe for Full Access</button></div></div>
       <section class="px-margin-mobile md:px-margin-desktop py-16 max-w-container-max mx-auto"><h2 class="font-headline-lg text-headline-lg text-on-background mb-8 text-center">Why Partner with the Village?</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-gutter"><div class="ds-card bg-white p-8 rounded-xl border-2 border-primary text-center"><span class="material-symbols-outlined text-primary text-4xl mb-4">verified</span><h3 class="font-headline-md text-headline-md text-primary mb-2">Vetted Talent</h3><p class="font-body-md text-on-surface-variant">Every profile is verified through our CodeQueens alumni network.</p></div><div class="ds-card bg-white p-8 rounded-xl border-2 border-primary text-center"><span class="material-symbols-outlined text-vibrant-pink text-4xl mb-4">handshake</span><h3 class="font-headline-md text-headline-md text-primary mb-2">Ethical Sourcing</h3><p class="font-body-md text-on-surface-variant">Support community-driven growth, not extractive recruitment.</p></div><div class="ds-card bg-white p-8 rounded-xl border-2 border-primary text-center"><span class="material-symbols-outlined text-secondary text-4xl mb-4">speed</span><h3 class="font-headline-md text-headline-md text-primary mb-2">High Retention</h3><p class="font-body-md text-on-surface-variant">Hire professionals backed by a village of mutual support.</p></div></div></section>
-
-      <!-- VET A HIRE SECTION -->
       <section class="px-margin-mobile md:px-margin-desktop pb-16 max-w-container-max mx-auto">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-            <div>
-                <h2 class="font-headline-lg text-headline-lg text-on-background mb-2">Browse Talent</h2>
-                <p class="font-body-md text-on-surface-variant">Filter by specialization to find your perfect match.</p>
-            </div>
-            <select onchange="filterPartnerTalent(this.value)" class="bg-white border-2 border-primary p-3 rounded-lg font-label-md text-label-md text-primary outline-none focus:border-vibrant-pink cursor-pointer">
-                <option value="all">All Specializations</option>
-                <option value="fullstack">Fullstack Developer</option>
-                <option value="uiux">UI/UX Designer</option>
-                <option value="data">Data Scientist</option>
-                <option value="devops">DevOps Engineer</option>
-            </select>
-        </div>
-        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10"><div><h2 class="font-headline-lg text-headline-lg text-on-background mb-2">Browse Talent</h2><p class="font-body-md text-on-surface-variant">Filter by specialization.</p></div><select onchange="filterPartnerTalent(this.value)" class="bg-white border-2 border-primary p-3 rounded-lg font-label-md text-label-md text-primary outline-none focus:border-vibrant-pink cursor-pointer"><option value="all">All Specializations</option><option value="fullstack">Fullstack Developer</option><option value="uiux">UI/UX Designer</option><option value="data">Data Scientist</option><option value="devops">DevOps Engineer</option></select></div>
         <div id="partner-talent-grid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-            <!-- Profile 1 -->
-            <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="fullstack">
-               <div class="flex justify-between items-center mb-4">
-                  <span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">Fullstack Dev</span>
-                  <div class="flex text-yellow-500 text-lg tracking-wider">★★★★★</div>
-               </div>
-               <h3 class="font-headline-md text-headline-md text-primary mb-1">Vetted Talent #1042</h3>
-               <p class="font-body-md text-on-surface-variant mb-6 flex-grow">Specializing in React, Node.js, and scalable microservices architecture.</p>
-               <div class="flex gap-2 mt-auto">
-                  <button onclick="viewPortfolio()" class="flex-1 border-2 border-primary text-primary font-label-sm text-label-sm py-2 px-2 rounded-lg hover:bg-primary-fixed-dim/20 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">folder_open</span> Portfolio</button>
-                  <button onclick="requestIntro(this)" class="flex-1 bg-primary text-white font-label-sm text-label-sm py-2 px-2 rounded-lg brutalist-lift flex items-center justify-center gap-1">Vet & Hire</button>
-               </div>
-            </div>
-
-            <!-- Profile 2 -->
-            <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="uiux">
-               <div class="flex justify-between items-center mb-4">
-                  <span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">UI/UX Design</span>
-                  <div class="flex text-yellow-500 text-lg tracking-wider">★★★★☆</div>
-               </div>
-               <h3 class="font-headline-md text-headline-md text-primary mb-1">Vetted Talent #2387</h3>
-               <p class="font-body-md text-on-surface-variant mb-6 flex-grow">Expert in user research, Figma prototyping, and accessibility-first design.</p>
-               <div class="flex gap-2 mt-auto">
-                  <button onclick="viewPortfolio()" class="flex-1 border-2 border-primary text-primary font-label-sm text-label-sm py-2 px-2 rounded-lg hover:bg-primary-fixed-dim/20 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">folder_open</span> Portfolio</button>
-                  <button onclick="requestIntro(this)" class="flex-1 bg-primary text-white font-label-sm text-label-sm py-2 px-2 rounded-lg brutalist-lift flex items-center justify-center gap-1">Vet & Hire</button>
-               </div>
-            </div>
-
-            <!-- Profile 3 -->
-            <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="data">
-               <div class="flex justify-between items-center mb-4">
-                  <span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">Data Science</span>
-                  <div class="flex text-yellow-500 text-lg tracking-wider">★★★★★</div>
-               </div>
-               <h3 class="font-headline-md text-headline-md text-primary mb-1">Vetted Talent #8910</h3>
-               <p class="font-body-md text-on-surface-variant mb-6 flex-grow">Machine learning models, Python pipelines, and predictive analytics.</p>
-               <div class="flex gap-2 mt-auto">
-                  <button onclick="viewPortfolio()" class="flex-1 border-2 border-primary text-primary font-label-sm text-label-sm py-2 px-2 rounded-lg hover:bg-primary-fixed-dim/20 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">folder_open</span> Portfolio</button>
-                  <button onclick="requestIntro(this)" class="flex-1 bg-primary text-white font-label-sm text-label-sm py-2 px-2 rounded-lg brutalist-lift flex items-center justify-center gap-1">Vet & Hire</button>
-               </div>
-            </div>
-
-            <!-- Profile 4 -->
-            <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="fullstack">
-               <div class="flex justify-between items-center mb-4">
-                  <span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">Fullstack Dev</span>
-                  <div class="flex text-yellow-500 text-lg tracking-wider">★★★★☆</div>
-               </div>
-               <h3 class="font-headline-md text-headline-md text-primary mb-1">Vetted Talent #5521</h3>
-               <p class="font-body-md text-on-surface-variant mb-6 flex-grow">Vue.js, Django, and database optimization for high-traffic apps.</p>
-               <div class="flex gap-2 mt-auto">
-                  <button onclick="viewPortfolio()" class="flex-1 border-2 border-primary text-primary font-label-sm text-label-sm py-2 px-2 rounded-lg hover:bg-primary-fixed-dim/20 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">folder_open</span> Portfolio</button>
-                  <button onclick="requestIntro(this)" class="flex-1 bg-primary text-white font-label-sm text-label-sm py-2 px-2 rounded-lg brutalist-lift flex items-center justify-center gap-1">Vet & Hire</button>
-               </div>
-            </div>
-
-            <!-- Profile 5 -->
-            <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="devops">
-               <div class="flex justify-between items-center mb-4">
-                  <span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">DevOps</span>
-                  <div class="flex text-yellow-500 text-lg tracking-wider">★★★★★</div>
-               </div>
-               <h3 class="font-headline-md text-headline-md text-primary mb-1">Vetted Talent #3312</h3>
-               <p class="font-body-md text-on-surface-variant mb-6 flex-grow">AWS, Kubernetes, CI/CD pipelines, and infrastructure as code.</p>
-               <div class="flex gap-2 mt-auto">
-                  <button onclick="viewPortfolio()" class="flex-1 border-2 border-primary text-primary font-label-sm text-label-sm py-2 px-2 rounded-lg hover:bg-primary-fixed-dim/20 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">folder_open</span> Portfolio</button>
-                  <button onclick="requestIntro(this)" class="flex-1 bg-primary text-white font-label-sm text-label-sm py-2 px-2 rounded-lg brutalist-lift flex items-center justify-center gap-1">Vet & Hire</button>
-               </div>
-            </div>
-
-            <!-- Profile 6 -->
-            <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="uiux">
-               <div class="flex justify-between items-center mb-4">
-                  <span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">UI/UX Design</span>
-                  <div class="flex text-yellow-500 text-lg tracking-wider">★★★★★</div>
-               </div>
-               <h3 class="font-headline-md text-headline-md text-primary mb-1">Vetted Talent #7744</h3>
-               <p class="font-body-md text-on-surface-variant mb-6 flex-grow">Design systems, motion design, and cross-platform mobile UI.</p>
-               <div class="flex gap-2 mt-auto">
-                  <button onclick="viewPortfolio()" class="flex-1 border-2 border-primary text-primary font-label-sm text-label-sm py-2 px-2 rounded-lg hover:bg-primary-fixed-dim/20 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">folder_open</span> Portfolio</button>
-                  <button onclick="requestIntro(this)" class="flex-1 bg-primary text-white font-label-sm text-label-sm py-2 px-2 rounded-lg brutalist-lift flex items-center justify-center gap-1">Vet & Hire</button>
-               </div>
-            </div>
+          <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="fullstack"><div class="flex justify-between items-center mb-4"><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">Fullstack Dev</span><span class="flex items-center gap-1 text-primary font-label-sm text-label-sm"><span class="material-symbols-outlined text-sm">payments</span> 950 UC</span></div><h3 class="font-headline-md text-headline-md text-primary mb-1">Anonymous A</h3><p class="font-body-md text-body-md text-on-surface-variant mb-4">React, Node.js, System Design</p><button class="mt-auto w-full py-2 border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="requestIntroduction(this)">Request Introduction</button></div>
+          <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="uiux"><div class="flex justify-between items-center mb-4"><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">UI/UX</span><span class="flex items-center gap-1 text-primary font-label-sm text-label-sm"><span class="material-symbols-outlined text-sm">payments</span> 1200 UC</span></div><h3 class="font-headline-md text-headline-md text-primary mb-1">Anonymous B</h3><p class="font-body-md text-body-md text-on-surface-variant mb-4">Figma, User Research, Prototyping</p><button class="mt-auto w-full py-2 border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="requestIntroduction(this)">Request Introduction</button></div>
+          <div class="partner-card ds-card bg-white border-2 border-primary rounded-xl p-6 flex flex-col shadow-sm" data-role="data"><div class="flex justify-between items-center mb-4"><span class="bg-primary-fixed-dim text-primary text-[11px] px-2 py-0.5 rounded font-bold uppercase">Data Science</span><span class="flex items-center gap-1 text-primary font-label-sm text-label-sm"><span class="material-symbols-outlined text-sm">payments</span> 780 UC</span></div><h3 class="font-headline-md text-headline-md text-primary mb-1">Anonymous C</h3><p class="font-body-md text-body-md text-on-surface-variant mb-4">Python, ML Models, Data Viz</p><button class="mt-auto w-full py-2 border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-colors" onclick="requestIntroduction(this)">Request Introduction</button></div>
         </div>
       </section>
-
     </main>
   </section>
 
-</div><!-- end #app-container -->
-
-<!-- BOTTOM NAV BAR -->
-<nav id="bottom-nav" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 bg-surface-container border-t-2 border-primary" style="display:none;">
-  <a class="nav-link flex flex-col items-center justify-center text-on-surface-variant hover:bg-primary-fixed/30 p-2 rounded transition-all cursor-pointer" data-page="dashboard" onclick="navigate('dashboard')"><span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Home</span></a>
-  <a class="nav-link flex flex-col items-center justify-center text-on-surface-variant hover:bg-primary-fixed/30 p-2 rounded transition-all cursor-pointer" data-page="parlour" onclick="navigate('parlour')"><span class="material-symbols-outlined">icecream</span><span class="font-label-sm text-label-sm">Parlour</span></a>
-  <a class="nav-link flex flex-col items-center justify-center text-on-surface-variant hover:bg-primary-fixed/30 p-2 rounded transition-all cursor-pointer" data-page="wall" onclick="navigate('wall')"><span class="material-symbols-outlined">campaign</span><span class="font-label-sm text-label-sm">Wall</span></a>
-  <a class="nav-link flex flex-col items-center justify-center text-on-surface-variant hover:bg-primary-fixed/30 p-2 rounded transition-all cursor-pointer" data-page="board" onclick="navigate('board')"><span class="material-symbols-outlined">work</span><span class="font-label-sm text-label-sm">Board</span></a>
-  <a class="nav-link flex flex-col items-center justify-center text-on-surface-variant hover:bg-primary-fixed/30 p-2 rounded transition-all cursor-pointer" data-page="guilds" onclick="navigate('guilds')"><span class="material-symbols-outlined">groups</span><span class="font-label-sm text-label-sm">Guilds</span></a>
-</nav>
-
-<!-- UMOJA FLOATING TRACKER -->
-<div id="umoja-tracker" class="fixed bottom-20 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[400px] z-40" style="display:none;">
-  <div class="bg-on-background text-surface border-2 border-primary p-3 flex items-center justify-between rounded-xl shadow-2xl"><div class="flex items-center gap-3"><div class="bg-primary-container p-1.5 rounded-full"><span class="material-symbols-outlined text-white text-body-md">token</span></div><span class="font-label-md text-label-md">Umoja Balance</span></div><div class="font-headline-md text-headline-md text-vibrant-pink flex items-center gap-1"><span id="umoja-display">450</span><span class="font-label-sm text-label-sm text-white/70">UC</span></div></div>
 </div>
 
-<!-- FAB -->
-<button id="fab-button" class="fixed bottom-24 right-6 vibrant-gradient text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center brutalist-lift active:scale-90 transition-transform z-40 border-2 border-primary" style="display:none;" onclick="handleFAB()"><span class="material-symbols-outlined text-[32px]">add</span></button>
-
-<!-- SHOUTOUT MODAL -->
-<div id="shoutout-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4" style="display:none;">
-  <div class="absolute inset-0 bg-black/50" onclick="closeShoutoutModal()"></div>
-  <div class="relative bg-surface border-2 border-primary rounded-xl p-8 max-w-lg w-full z-10"><div class="flex justify-between items-center mb-6"><h3 class="font-headline-md text-headline-md text-primary">Post a Shoutout</h3><button onclick="closeShoutoutModal()" class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">close</span></button></div><textarea id="shoutout-text" class="w-full bg-surface-container-lowest border-2 border-primary p-4 focus:ring-0 focus:border-vibrant-pink outline-none min-h-[120px] font-body-md text-body-md mb-4" placeholder="Tag a sister and share her win!"></textarea><div class="flex justify-between items-center"><span class="font-label-sm text-label-sm text-on-surface-variant">+10 Umoja Credits for posting</span><button onclick="submitShoutout()" class="primary-btn ds-btn-primary px-6 py-3 rounded-xl font-label-md text-label-md">Post Shoutout</button></div></div>
-</div>
-
-<!-- TOAST NOTIFICATION -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[200] bg-on-background text-surface px-6 py-3 rounded-xl shadow-2xl font-label-md text-label-md flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none"><span class="material-symbols-outlined text-vibrant-pink" id="toast-icon">check_circle</span><span id="toast-text">Action completed!</span></div>
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
 <script src="script.js"></script>
 </body>

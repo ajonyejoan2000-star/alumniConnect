@@ -1,422 +1,529 @@
-// ==================== STATE ====================
-const AppState = {
-    currentPage: null, // MUST BE NULL
-    dataSaver: false,
-    umojaCredits: 450,
-    selectedFlavours: [],
-    guilds: { 'backend': false, 'founders': false }, 
-    user: {
-        name: 'Amina',
-        cohort: 'Cohort 4',
-        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAoAEFobyfMLd_s-4Kye84lyQH2dtfI-YiTzyOceOWem1HnRtT7c3u4DR5G-pK9qYPxPTYNUWr6NN4zrmPZrOzm7mCw9loOrn-HjX7jptbCIFQpBCmgrlyN-6DhVshDs4HeZ9ocdREVSdQ38i_CG4id3jM1Zr_LTsIKR7_uZ3ba3QkS03MO4sxa7TF4l22jBsf1z4j9VPOKDVSl-xjQtzvOM2F5MlV_DmX_sHwvHp70qQp9VOlslBEzaGCXoXfcITYdudipiR9g-94v'
-    }
-};
+// ============================================================
+// STATE
+// ============================================================
+let dataSaverActive = false;
+let currentPage = null;
+let pageHistory = [];
 
-// Pages that use the authenticated layout
-const AUTHED_PAGES = ['dashboard', 'parlour', 'wall', 'board', 'directory', 'guilds', 'profile'];
-const PUBLIC_PAGES = ['landing', 'partner'];
-const ONBOARDING_PAGES = ['onboarding'];
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navigate(page, pushHistory = true) {
+  // Hide all pages
+  document.querySelectorAll('.page-section').forEach(el => {
+    el.style.display = 'none';
+  });
 
-// ==================== ROUTER ====================
-function navigate(page) {
-    if (AppState.currentPage === page) return;
-    
-    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-    const target = document.getElementById('page-' + page);
-    if (target) target.classList.add('active');
-    
-    AppState.currentPage = page;
-    window.location.hash = page;
-    
-    updateLayout(page);
-    updateBottomNav(page);
-    window.scrollTo(0, 0);
+  // Show target page
+  const target = document.getElementById('page-' + page);
+  if (target) target.style.display = 'block';
+
+  // Hide all headers
+  document.querySelectorAll('.topbar').forEach(h => h.style.display = 'none');
+
+  // Determine which header to show
+  const publicPages = ['landing', 'partner', 'register'];
+  const onboardingPages = ['onboarding'];
+  const authedPages = ['dashboard', 'parlour', 'wall', 'board', 'directory', 'guilds', 'profile'];
+
+  if (publicPages.includes(page)) {
+    document.getElementById('topbar-public').style.display = 'flex';
+  } else if (onboardingPages.includes(page)) {
+    document.getElementById('topbar-onboarding').style.display = 'flex';
+  } else if (authedPages.includes(page)) {
+    document.getElementById('topbar-authed').style.display = 'flex';
+  }
+
+  // Track history for back navigation
+  if (pushHistory && currentPage !== page) {
+    pageHistory.push(currentPage || 'landing');
+    window.history.pushState({ page: page }, '', '#' + page);
+  }
+
+  currentPage = page;
+
+  // Update personalization if logged in
+  if (authedPages.includes(page)) {
+    personalizeDashboard();
+  }
+
+  // Scroll to top
+  window.scrollTo(0, 0);
 }
 
-function updateLayout(page) {
-    document.getElementById('topbar-public').style.display = 'none';
-    document.getElementById('topbar-onboarding').style.display = 'none';
-    document.getElementById('topbar-authed').style.display = 'none';
-    document.getElementById('bottom-nav').style.display = 'none';
-    document.getElementById('umoja-tracker').style.display = 'none';
-    document.getElementById('fab-button').style.display = 'none';
-    
-    if (PUBLIC_PAGES.includes(page)) {
-        document.getElementById('topbar-public').style.display = 'flex';
-    } else if (ONBOARDING_PAGES.includes(page)) {
-        document.getElementById('topbar-onboarding').style.display = 'flex';
-    } else if (AUTHED_PAGES.includes(page)) {
-        document.getElementById('topbar-authed').style.display = 'flex';
-        document.getElementById('bottom-nav').style.display = 'flex';
-        document.getElementById('umoja-tracker').style.display = 'block';
-        document.getElementById('fab-button').style.display = 'flex';
-    }
+function goBack() {
+  if (pageHistory.length > 0) {
+    const prevPage = pageHistory.pop();
+    navigate(prevPage, false);
+    window.history.back(); // sync browser history
+  } else {
+    navigate('dashboard', false);
+  }
 }
 
-function updateBottomNav(page) {
-    document.querySelectorAll('.nav-link').forEach(link => {
-        const linkPage = link.getAttribute('data-page');
-        if (linkPage === page) {
-            link.classList.remove('text-on-surface-variant');
-            link.classList.add('bg-primary-container', 'text-on-primary-container', 'rounded-full', 'translate-y-[-2px]');
-            link.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
-        } else {
-            link.classList.add('text-on-surface-variant');
-            link.classList.remove('bg-primary-container', 'text-on-primary-container', 'rounded-full', 'translate-y-[-2px]');
-            link.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
-        }
-    });
-}
-
-window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.replace('#', '') || 'landing';
-    if (document.getElementById('page-' + hash)) navigate(hash);
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.page) {
+    // Don't push to history again
+    pageHistory.pop(); // remove the current page from our stack
+    navigate(e.state.page, false);
+  } else {
+    navigate('landing', false);
+  }
 });
 
-// ==================== DATA SAVER TOGGLE ====================
-function toggleDataSaver() {
-    AppState.dataSaver = !AppState.dataSaver;
-    document.body.classList.toggle('data-saver-on', AppState.dataSaver);
-    document.querySelectorAll('.toggle-track').forEach(t => {
-        t.classList.toggle('active', AppState.dataSaver);
-        t.setAttribute('aria-checked', AppState.dataSaver);
+// ============================================================
+// INITIALIZATION
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Determine start page from URL hash or default to landing
+  const hash = window.location.hash.replace('#', '');
+  const validPages = ['landing','register','onboarding','dashboard','parlour','wall','board','directory','guilds','profile','partner'];
+  const startPage = validPages.includes(hash) ? hash : 'landing';
+  navigate(startPage, false);
+
+  // Flavour chip toggle selection
+  document.querySelectorAll('.flavour-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      this.classList.toggle('ring-4');
+      this.classList.toggle('ring-offset-2');
+      this.classList.toggle('scale-105');
+      this.classList.toggle('selected');
     });
-    showToast(AppState.dataSaver ? 'Data-Saver Mode: ON' : 'Data-Saver Mode: OFF', 'cloud_download');
+  });
+});
+
+// ============================================================
+// PERSONALIZATION
+// ============================================================
+function personalizeDashboard() {
+  const user = JSON.parse(localStorage.getItem('tv_user') || 'null');
+  if (!user) return;
+
+  const welcome = document.getElementById('dashboard-welcome');
+  if (welcome) welcome.textContent = `Welcome back, ${user.name.split(' ')[0]}!`;
+
+  const profileName = document.getElementById('profile-name');
+  if (profileName) profileName.textContent = user.name;
+
+  const profileRole = document.getElementById('profile-role-cohort');
+  if (profileRole) profileRole.textContent = `Cohort ${user.cohort} • ${user.role}`;
+
+  const profileId = document.getElementById('profile-alumni-id');
+  if (profileId) profileId.textContent = `Alumni ID: ${user.alumniId}`;
 }
 
-// ==================== FLAVOUR CHIP TOGGLE ====================
-function toggleChip(el) { 
-    el.classList.toggle('selected');
-    const nameEl = el.querySelector('.font-label-sm, .font-label-md');
-    const flavourName = nameEl ? nameEl.innerText.trim() : '';
-    
-    if (el.classList.contains('selected')) {
-        if (!AppState.selectedFlavours.includes(flavourName)) AppState.selectedFlavours.push(flavourName);
-    } else {
-        AppState.selectedFlavours = AppState.selectedFlavours.filter(f => f !== flavourName);
+// ============================================================
+// REGISTRATION & UNIQUE ID GENERATION
+// ============================================================
+function generateAlumniId() {
+  const year = new Date().getFullYear().toString().slice(-2);
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no confusing 0/O/1/I
+  let id = 'TV-' + year + '-';
+  for (let i = 0; i < 4; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  // Check for collisions in localStorage
+  const existingUsers = JSON.parse(localStorage.getItem('tv_all_users') || '[]');
+  while (existingUsers.some(u => u.alumniId === id)) {
+    id = 'TV-' + year + '-';
+    for (let i = 0; i < 4; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
     }
+  }
+  return id;
 }
 
-// ==================== PARLOUR TAB TOGGLE ====================
+function handleRegister(event) {
+  event.preventDefault();
+
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const cohort = document.getElementById('reg-cohort').value;
+  const role = document.getElementById('reg-role').value;
+  const password = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  const errorDiv = document.getElementById('reg-error');
+
+  // Validation
+  if (!name || !email || !cohort || !role || !password || !confirm) {
+    errorDiv.textContent = 'Please fill in all required fields.';
+    errorDiv.classList.remove('hidden');
+    return;
+  }
+
+  if (password.length < 6) {
+    errorDiv.textContent = 'Password must be at least 6 characters.';
+    errorDiv.classList.remove('hidden');
+    return;
+  }
+
+  if (password !== confirm) {
+    errorDiv.textContent = 'Passwords do not match.';
+    errorDiv.classList.remove('hidden');
+    return;
+  }
+
+  // Check if email already registered
+  const allUsers = JSON.parse(localStorage.getItem('tv_all_users') || '[]');
+  if (allUsers.some(u => u.email === email)) {
+    errorDiv.textContent = 'This email is already registered. Please sign in instead.';
+    errorDiv.classList.remove('hidden');
+    return;
+  }
+
+  // Generate unique ID
+  const alumniId = generateAlumniId();
+
+  // Create user object
+  const newUser = {
+    alumniId: alumniId,
+    name: name,
+    email: email,
+    cohort: cohort,
+    role: role,
+    password: password, // In production, this would be hashed
+    umojaCredits: 50, // Starting bonus
+    joinedDate: new Date().toISOString(),
+    offers: [],
+    asks: [],
+    flavours: []
+  };
+
+  // Save to localStorage
+  allUsers.push(newUser);
+  localStorage.setItem('tv_all_users', JSON.stringify(allUsers));
+  localStorage.setItem('tv_user', JSON.stringify(newUser)); // Current logged-in user
+
+  // Show success card
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('reg-success').style.display = 'block';
+  document.getElementById('generated-id').textContent = alumniId;
+
+  errorDiv.classList.add('hidden');
+  showToast(`Welcome, ${name.split(' ')[0]}! Your ID is ${alumniId}`, 'person_add');
+}
+
+// ============================================================
+// DATA SAVER TOGGLE
+// ============================================================
+function toggleDataSaver() {
+  dataSaverActive = !dataSaverActive;
+  document.body.classList.toggle('data-saver-mode', dataSaverActive);
+
+  // Update ALL toggle tracks across all headers
+  document.querySelectorAll('.toggle-track[data-toggle="data-saver"]').forEach(track => {
+    track.classList.toggle('active', dataSaverActive);
+    track.setAttribute('aria-checked', dataSaverActive);
+  });
+
+  showToast(
+    dataSaverActive ? 'Data Saver Mode ON — images hidden' : 'Data Saver Mode OFF — images visible',
+    'cloud_download'
+  );
+}
+
+// ============================================================
+// TOAST NOTIFICATION SYSTEM
+// ============================================================
+function showToast(message, icon = 'info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'flex items-center gap-3 bg-surface border-2 border-primary p-4 rounded-xl shadow-lg transition-all transform translate-x-full pointer-events-auto';
+  toast.innerHTML = `
+    <span class="material-symbols-outlined text-primary">${icon}</span>
+    <span class="font-label-sm text-label-sm text-on-surface">${message}</span>
+  `;
+  container.appendChild(toast);
+
+  // Animate in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-x-full');
+    });
+  });
+
+  // Animate out and remove
+  setTimeout(() => {
+    toast.classList.add('translate-x-full');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// ============================================================
+// ICECREAM PARLOUR
+// ============================================================
 function toggleParlourTab(tab) {
-    const btnF = document.getElementById('toggle-flavours');
-    const btnA = document.getElementById('toggle-availability');
-    const viewF = document.getElementById('parlour-flavours-view');
-    const viewA = document.getElementById('parlour-availability-view');
+  const flavoursView = document.getElementById('parlour-flavours-view');
+  const availabilityView = document.getElementById('parlour-availability-view');
+  const tabFlavours = document.getElementById('tab-flavours');
+  const tabAvailability = document.getElementById('tab-availability');
 
-    if (tab === 'flavours') {
-        btnF.classList.add('bg-primary','text-on-primary'); btnF.classList.remove('text-on-surface-variant');
-        btnA.classList.remove('bg-primary','text-on-primary'); btnA.classList.add('text-on-surface-variant');
-        viewF.style.display = 'block';
-        viewA.style.display = 'none';
-    } else {
-        btnA.classList.add('bg-primary','text-on-primary'); btnA.classList.remove('text-on-surface-variant');
-        btnF.classList.remove('bg-primary','text-on-primary'); btnF.classList.add('text-on-surface-variant');
-        viewF.style.display = 'none';
-        viewA.style.display = 'block';
-    }
+  if (tab === 'flavours') {
+    flavoursView.style.display = 'block';
+    availabilityView.style.display = 'none';
+    tabFlavours.classList.add('bg-primary', 'text-on-primary');
+    tabFlavours.classList.remove('text-on-surface-variant');
+    tabAvailability.classList.remove('bg-primary', 'text-on-primary');
+    tabAvailability.classList.add('text-on-surface-variant');
+  } else {
+    flavoursView.style.display = 'none';
+    availabilityView.style.display = 'block';
+    tabAvailability.classList.add('bg-primary', 'text-on-primary');
+    tabAvailability.classList.remove('text-on-surface-variant');
+    tabFlavours.classList.remove('bg-primary', 'text-on-primary');
+    tabFlavours.classList.add('text-on-surface-variant');
+  }
 }
 
-// ==================== CHAT ====================
 function sendChatMessage() {
-    const input = document.getElementById('chat-input');
-    const msg = input.value.trim();
-    if (!msg) return;
-    
-    const chatBody = document.getElementById('chat-body');
-    const newMsg = document.createElement('div');
-    newMsg.className = 'flex flex-col items-end max-w-[80%] ml-auto';
-    newMsg.innerHTML = `
-        <div class="chat-bubble-sent p-4 rounded-xl rounded-tr-none">
-            <p class="font-body-md">${escapeHtml(msg)}</p>
-        </div>
-        <span class="mt-1 font-label-sm text-[10px] text-on-surface-variant">Just now</span>
-    `;
-    chatBody.appendChild(newMsg);
-    input.value = '';
-    chatBody.scrollTop = chatBody.scrollHeight;
+  const input = document.getElementById('chat-input');
+  const body = document.getElementById('chat-body');
+  if (!input.value.trim()) return;
+
+  const msgHTML = `
+    <div class="flex flex-col items-end max-w-[80%] ml-auto">
+      <div class="chat-bubble-sent p-4 rounded-xl rounded-tr-none">
+        <p class="font-body-md">${escapeHTML(input.value)}</p>
+      </div>
+      <span class="mt-1 font-label-sm text-[10px] text-on-surface-variant">Just now</span>
+    </div>
+  `;
+  body.insertAdjacentHTML('beforeend', msgHTML);
+  input.value = '';
+  body.scrollTop = body.scrollHeight;
 }
 
-// ==================== SHOUTOUT WALL ====================
-function openShoutoutModal() { document.getElementById('shoutout-modal').style.display = 'flex'; }
-function closeShoutoutModal() { document.getElementById('shoutout-modal').style.display = 'none'; }
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 
-function submitShoutout() {
-    const text = document.getElementById('shoutout-text').value.trim();
-    if (!text) return;
-    
-    const feed = document.getElementById('wall-feed');
-    const newPost = document.createElement('article');
-    newPost.className = 'wall-post bg-surface border-2 border-primary p-5 md:p-6 hover:bg-surface-container transition-colors group';
-    newPost.innerHTML = `
-        <div class="flex items-start gap-4">
-            <div class="ds-img-placeholder w-12 h-12 rounded-full flex-shrink-0">[P]</div>
-            <div class="flex-1">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-label-md text-label-md"><span class="text-primary">${AppState.user.name}</span> posted</h4>
-                    <span class="font-label-sm text-label-sm text-on-surface-variant">Just now</span>
-                </div>
-                <p class="font-body-md text-body-lg text-on-surface border-l-4 border-primary-fixed-dim pl-4 py-1 italic mb-4">"${escapeHtml(text)}"</p>
-                <div class="flex items-center gap-6">
-                    <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-vibrant-pink transition-colors active:scale-90" onclick="likePost(this)">
-                        <span class="material-symbols-outlined text-[20px]">favorite</span>
-                        <span class="font-label-sm text-label-sm like-count">0</span>
-                    </button>
-                </div>
-            </div>
+// ============================================================
+// SHOUTOUT WALL
+// ============================================================
+function openShoutoutModal() {
+  const name = 'You';
+  const messages = [
+    'Just deployed my first production app! 🚀',
+    'Passed my AWS certification today! ☁️',
+    'Big shoutout to my mentor for the guidance! 💜',
+    'Landed my first tech interview! 🎉'
+  ];
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+
+  const feed = document.getElementById('wall-feed');
+  const postHTML = `
+    <article class="wall-post bg-surface border-2 border-primary p-5 md:p-6 hover:bg-surface-container transition-colors group">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-full border-2 border-vibrant-pink flex-shrink-0 bg-primary flex items-center justify-center text-white font-bold">Y</div>
+        <div class="flex-1">
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-label-md text-label-md"><span class="text-primary">${name}</span></h4>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">Just now</span>
+          </div>
+          <p class="font-body-md text-body-lg text-on-surface border-l-4 border-primary-fixed-dim pl-4 py-1 italic mb-4">"${msg}"</p>
+          <div class="flex items-center gap-6">
+            <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-vibrant-pink transition-colors active:scale-90" onclick="likePost(this)">
+              <span class="material-symbols-outlined text-[20px]">favorite</span>
+              <span class="font-label-sm text-label-sm like-count">0</span>
+            </button>
+            <button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors active:scale-90">
+              <span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+              <span class="font-label-sm text-label-sm">0</span>
+            </button>
+          </div>
         </div>
-    `;
-    feed.insertBefore(newPost, feed.firstChild);
-    
-    updateUmoja(10);
-    document.getElementById('shoutout-text').value = '';
-    closeShoutoutModal();
-    showToast('+10 Umoja Credits earned!', 'payments');
+      </div>
+    </article>
+  `;
+  feed.insertAdjacentHTML('afterbegin', postHTML);
+  showToast('+10 Umoja Credits earned!', 'campaign');
 }
 
 function likePost(btn) {
-    const countEl = btn.querySelector('.like-count');
-    let count = parseInt(countEl.textContent);
-    const icon = btn.querySelector('.material-symbols-outlined');
-    
-    if (btn.classList.contains('liked')) {
-        count--;
-        btn.classList.remove('liked');
-        icon.style.fontVariationSettings = "'FILL' 0";
-        btn.classList.remove('text-vibrant-pink');
-        btn.classList.add('text-on-surface-variant');
-    } else {
-        count++;
-        btn.classList.add('liked');
-        icon.style.fontVariationSettings = "'FILL' 1";
-        btn.classList.add('text-vibrant-pink');
-        btn.classList.remove('text-on-surface-variant');
-    }
-    countEl.textContent = count;
+  const countEl = btn.querySelector('.like-count');
+  let count = parseInt(countEl.textContent);
+  if (btn.classList.contains('liked')) {
+    count--;
+    btn.classList.remove('liked', 'text-vibrant-pink');
+    btn.classList.add('text-on-surface-variant');
+  } else {
+    count++;
+    btn.classList.add('liked', 'text-vibrant-pink');
+    btn.classList.remove('text-on-surface-variant');
+  }
+  countEl.textContent = count;
 }
 
-// ==================== OPPORTUNITY BOARD ====================
+// ============================================================
+// OPPORTUNITY BOARD
+// ============================================================
 function setBoardFilter(btn) {
-    document.querySelectorAll('.board-filter').forEach(b => {
-        b.classList.remove('bg-primary','text-on-primary','brutalist-border');
-        b.classList.add('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
-    });
-    btn.classList.add('bg-primary','text-on-primary','brutalist-border');
-    btn.classList.remove('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
+  document.querySelectorAll('.board-filter').forEach(b => {
+    b.classList.remove('bg-primary', 'text-on-primary');
+    b.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border', 'border-outline-variant');
+  });
+  btn.classList.add('bg-primary', 'text-on-primary');
+  btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant', 'border', 'border-outline-variant');
+  showToast('Filter: ' + btn.dataset.filter, 'filter_list');
 }
 
 function unlockPremium() {
-    if (AppState.umojaCredits >= 10) {
-        updateUmoja(-10);
-        document.getElementById('premium-gate').style.display = 'none';
-        showToast('Premium details unlocked! -10 UC', 'lock_open');
-    } else {
-        showToast('Not enough Umoja Credits!', 'error');
-    }
+  const gate = document.getElementById('premium-gate');
+  if (!gate) return;
+  gate.innerHTML = `
+    <div class="text-left w-full">
+      <h4 class="font-headline-md text-headline-md text-primary mb-2">Senior Full-Stack Engineer</h4>
+      <p class="font-body-md text-on-surface mb-2"><strong>Requirements:</strong> 5+ years React/Node.js experience.</p>
+      <p class="font-body-md text-on-surface mb-2"><strong>Salary:</strong> $80,000 - $120,000</p>
+      <p class="font-body-md text-on-surface mb-4"><strong>Benefits:</strong> Remote-first, health cover, conference budget.</p>
+      <button onclick="applyJob(this)" class="primary-btn px-6 py-2 rounded-lg font-label-md text-label-md">Apply Now</button>
+    </div>
+  `;
+  showToast('Unlocked for 10 Umoja Credits!', 'lock_open');
 }
 
 function applyJob(btn) {
-    btn.innerText = "Applied ✓";
-    btn.disabled = true;
-    btn.classList.remove('border-primary', 'text-primary', 'hover:bg-primary-fixed-dim/20');
-    btn.classList.add('border-outline-variant', 'text-on-surface-variant', 'opacity-60');
-    showToast('Application submitted!', 'send');
+  btn.textContent = 'Applied ✓';
+  btn.disabled = true;
+  btn.classList.add('opacity-50', 'cursor-not-allowed');
+  showToast('Application submitted!', 'check_circle');
 }
 
-// ==================== ASK/OFFER DIRECTORY ====================
+// ============================================================
+// DIRECTORY
+// ============================================================
 function setDirectoryFilter(btn) {
-    document.querySelectorAll('.dir-filter').forEach(b => {
-        b.classList.remove('bg-primary','text-on-primary','brutalist-border');
-        b.classList.add('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
-    });
-    btn.classList.add('bg-primary','text-on-primary','brutalist-border');
-    btn.classList.remove('bg-surface-container-high','text-on-surface-variant','border','border-outline-variant');
-    
-    const filter = btn.getAttribute('data-filter');
-    document.querySelectorAll('.dir-card').forEach(c => {
-        const offers = c.getAttribute('data-offers') || '';
-        const asks = c.getAttribute('data-asks') || '';
-        
-        if (filter === 'all') {
-            c.style.display = 'flex';
-        } else if (filter === 'offers') {
-            c.style.display = offers.trim() !== '' ? 'flex' : 'none'; 
-        } else if (filter === 'asks') {
-            c.style.display = asks.trim() !== '' ? 'flex' : 'none'; 
-        }
-    });
+  document.querySelectorAll('.dir-filter').forEach(b => {
+    b.classList.remove('bg-primary', 'text-on-primary');
+    b.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border', 'border-outline-variant');
+  });
+  btn.classList.add('bg-primary', 'text-on-primary');
+  btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant', 'border', 'border-outline-variant');
+
+  const filter = btn.dataset.filter;
+  document.querySelectorAll('.dir-card').forEach(card => {
+    if (filter === 'all') {
+      card.style.display = 'flex';
+    } else if (filter === 'offers') {
+      card.style.display = card.dataset.offers ? 'flex' : 'none';
+    } else if (filter === 'asks') {
+      card.style.display = card.dataset.asks ? 'flex' : 'none';
+    }
+  });
+  showToast('Showing: ' + btn.textContent.trim(), 'group');
 }
 
 function connectAlumni(btn) {
-    btn.innerText = "Connected";
-    btn.disabled = true;
-    btn.classList.remove('bg-primary');
-    btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
-    updateUmoja(5);
-    showToast('+5 Umoja for connecting!', 'handshake');
+  btn.textContent = 'Connected ✓';
+  btn.disabled = true;
+  btn.classList.remove('bg-primary');
+  btn.classList.add('bg-green-600', 'opacity-80', 'cursor-not-allowed');
+  showToast('Connection request sent!', 'handshake');
 }
 
-// ==================== GUILDS & COUNCILS ====================
-function joinGuild(btn, guildKey) {
-    AppState.guilds[guildKey] = !AppState.guilds[guildKey];
-    const isJoining = AppState.guilds[guildKey];
-    
-    if (isJoining) {
-        btn.innerText = "Leave Guild";
-        btn.classList.remove('bg-primary', 'hover:bg-deep-purple', 'border-primary', 'hover:bg-primary/5', 'text-white');
-        btn.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border-outline-variant');
-        showToast('Joined Guild!', 'check_circle');
-    } else {
-        btn.innerText = "Join Guild";
-        btn.classList.add('bg-primary', 'hover:bg-deep-purple', 'border-primary', 'hover:bg-primary/5', 'text-white');
-        btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant', 'border-outline-variant');
-        showToast('Left Guild.', 'remove_circle');
-    }
+// ============================================================
+// GUILDS & COUNCILS
+// ============================================================
+function joinGuild(btn, guildName) {
+  if (btn.textContent.trim() === 'Join Guild') {
+    btn.textContent = 'Leave Guild';
+    btn.classList.remove('bg-primary', 'text-white', 'hover:bg-deep-purple', 'bg-lavender-base', 'text-primary', 'hover:bg-primary', 'hover:text-white');
+    btn.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border-2', 'border-outline-variant');
+    showToast(`Joined ${guildName} guild!`, 'check_circle');
+  } else {
+    btn.textContent = 'Join Guild';
+    btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant', 'border-2', 'border-outline-variant');
+    btn.classList.add('bg-primary', 'text-white');
+    showToast(`Left ${guildName} guild.`, 'exit_to_app');
+  }
 }
 
 function nominateSteward(btn) {
-    btn.innerText = "Nominated ✓";
-    btn.disabled = true;
-    btn.classList.add('opacity-60');
-    showToast('Steward nomination submitted!', 'how_to_reg');
+  btn.textContent = 'Nominated ✓';
+  btn.disabled = true;
+  btn.classList.add('opacity-50', 'cursor-not-allowed');
+  showToast('Steward nomination submitted!', 'how_to_reg');
 }
 
 function voteNow(btn) {
-    btn.innerText = "Voted ✓";
-    btn.disabled = true;
-    btn.classList.remove('hover:bg-white');
-    btn.classList.add('opacity-60');
-    updateUmoja(5);
-    showToast('+5 Umoja for voting!', 'gavel');
+  btn.textContent = 'Voted ✓';
+  btn.disabled = true;
+  btn.classList.add('opacity-80', 'cursor-not-allowed');
+  showToast('Vote cast successfully!', 'gavel');
 }
 
-// ==================== USER PROFILE ====================
+// ============================================================
+// PROFILE
+// ============================================================
 function updateOffers() {
-    const textarea = document.getElementById('profile-offers');
-    const text = textarea.value.trim();
-    if (!text) return;
-    
-    const container = document.getElementById('offers-tags');
-    const tags = text.split(',').map(t => t.trim()).filter(t => t);
-    container.innerHTML = tags.map(t => `<span class="bg-primary-fixed-dim text-primary text-[11px] px-3 py-1 rounded">${t}</span>`).join('');
-    textarea.value = '';
-    showToast('Offers updated!', 'handshake');
+  const textarea = document.getElementById('profile-offers');
+  const tagsContainer = document.getElementById('offers-tags');
+  const newTags = textarea.value.split(',').map(t => t.trim()).filter(t => t);
+
+  if (newTags.length === 0) {
+    showToast('Enter at least one offering.', 'warning');
+    return;
+  }
+
+  tagsContainer.innerHTML = '';
+  newTags.forEach(tag => {
+    tagsContainer.innerHTML += `<span class="bg-primary-fixed-dim text-primary text-[11px] px-3 py-1 rounded">${escapeHTML(tag)}</span>`;
+  });
+  textarea.value = '';
+  showToast('Offers updated!', 'handshake');
 }
 
 function updateAsks() {
-    const textarea = document.getElementById('profile-asks');
-    const text = textarea.value.trim();
-    if (!text) return;
-    
-    const container = document.getElementById('asks-tags');
-    const tags = text.split(',').map(t => t.trim()).filter(t => t);
-    container.innerHTML = tags.map(t => `<span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-3 py-1 rounded">${t}</span>`).join('');
-    textarea.value = '';
-    showToast('Asks updated!', 'help_center');
+  const textarea = document.getElementById('profile-asks');
+  const tagsContainer = document.getElementById('asks-tags');
+  const newTags = textarea.value.split(',').map(t => t.trim()).filter(t => t);
+
+  if (newTags.length === 0) {
+    showToast('Enter at least one ask.', 'warning');
+    return;
+  }
+
+  tagsContainer.innerHTML = '';
+  newTags.forEach(tag => {
+    tagsContainer.innerHTML += `<span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[11px] px-3 py-1 rounded">${escapeHTML(tag)}</span>`;
+  });
+  textarea.value = '';
+  showToast('Asks updated!', 'help_center');
 }
 
 function logout() {
-    AppState.umojaCredits = 450;
-    document.getElementById('umoja-display').textContent = AppState.umojaCredits;
-    const p = document.getElementById('profile-umoja');
-    if(p) p.textContent = AppState.umojaCredits;
-    
-    if(document.getElementById('profile-offers')) document.getElementById('profile-offers').value = '';
-    if(document.getElementById('profile-asks')) document.getElementById('profile-asks').value = '';
-    
-    showToast('Logged out successfully', 'logout');
-    navigate('landing');
+  localStorage.removeItem('tv_user');
+  navigate('landing');
+  showToast('Logged out successfully.', 'logout');
 }
 
-// ==================== PARTNER PORTAL ====================
+// ============================================================
+// PARTNER PORTAL
+// ============================================================
 function subscribePartner(btn) {
-    btn.innerText = "Subscribed ✓";
-    btn.disabled = true;
-    btn.classList.add('opacity-60');
-    showToast('Partner Portal access granted!', 'business_center');
+  btn.textContent = 'Subscribed ✓';
+  btn.disabled = true;
+  btn.classList.add('opacity-80', 'cursor-not-allowed');
+  showToast('Partner subscription activated!', 'business_center');
 }
 
 function filterPartnerTalent(role) {
-    document.querySelectorAll('.partner-card').forEach(card => {
-        const cardRole = card.getAttribute('data-role');
-        if (role === 'all' || cardRole === role) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
-    });
+  document.querySelectorAll('.partner-card').forEach(card => {
+    if (role === 'all' || card.dataset.role === role) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
 }
 
-function viewPortfolio() {
-    showToast('Opening portfolio in new tab...', 'open_in_new');
+function requestIntroduction(btn) {
+  btn.textContent = 'Requested ✓';
+  btn.disabled = true;
+  btn.classList.add('opacity-80', 'cursor-not-allowed');
+  showToast('Introduction requested!', 'handshake');
 }
-
-function requestIntro(btn) {
-    btn.innerText = "Requested ✓";
-    btn.disabled = true;
-    btn.classList.remove('bg-primary', 'text-white');
-    btn.classList.add('bg-surface-container-high', 'text-on-surface-variant', 'border-outline-variant');
-    showToast('Intro request sent to alumni!', 'send');
-}
-
-// ==================== UMOJA CREDITS ====================
-function updateUmoja(amount) {
-    AppState.umojaCredits += amount;
-    document.getElementById('umoja-display').textContent = AppState.umojaCredits;
-    const p = document.getElementById('profile-umoja');
-    if(p) p.textContent = AppState.umojaCredits;
-}
-
-// ==================== FAB HANDLER ====================
-function handleFAB() {
-    if (AppState.currentPage === 'wall') openShoutoutModal();
-    else showToast('Create new content', 'add');
-}
-
-// ==================== TOAST NOTIFICATION ====================
-function showToast(message, icon = 'check_circle') {
-    const toast = document.getElementById('toast');
-    document.getElementById('toast-text').textContent = message;
-    document.getElementById('toast-icon').textContent = icon;
-    
-    toast.style.opacity = '1';
-    toast.style.pointerEvents = 'auto';
-    
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.pointerEvents = 'none';
-    }, 3000);
-}
-
-// ==================== UTILITY ====================
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// ==================== EVENT LISTENERS ====================
-document.addEventListener('DOMContentLoaded', () => {
-    const hash = window.location.hash.replace('#', '') || 'landing';
-    navigate(hash);
-
-    const chatInput = document.getElementById('chat-input');
-    if(chatInput) chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendChatMessage(); });
-
-    const wallSearch = document.getElementById('wall-search');
-    if(wallSearch) wallSearch.addEventListener('input', e => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.wall-post').forEach(p => {
-            p.style.display = p.innerText.toLowerCase().includes(term) ? 'block' : 'none';
-        });
-    });
-
-    const dirSearch = document.getElementById('directory-search');
-    if(dirSearch) dirSearch.addEventListener('input', e => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.dir-card').forEach(c => {
-            const text = (c.getAttribute('data-offers') + ' ' + c.getAttribute('data-asks')).toLowerCase();
-            c.style.display = text.includes(term) ? 'flex' : 'none';
-        });
-    });
-});

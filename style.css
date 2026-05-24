@@ -1,179 +1,240 @@
-/* ========== BASE STYLES ========== */
-body { min-height: 100dvh; }
-html { scroll-padding-top: 88px; }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+/* ============================================================
+   BASE & LAYOUT
+   ============================================================ */
+body {
+  overflow-x: hidden;
+}
 
-/* ========== DATA SAVER GLOBAL ========== */
-.data-saver-on .ds-hide { display: none !important; }
-.data-saver-on .ds-show { display: flex !important; }
-.data-saver-on img { display: none !important; }
-.data-saver-on * { border-radius: 0 !important; box-shadow: none !important; }
-.data-saver-on .ds-card {
-    border: 2px solid #000000 !important;
-    background: #FFFFFF !important;
+.page-section {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
 }
-.data-saver-on .ds-btn-primary {
-    background: #000000 !important;
-    color: #FFFFFF !important;
-    border: 2px solid #000000 !important;
-}
-.data-saver-on .ds-btn-secondary {
-    border: 2px solid #000000 !important;
-    color: #000000 !important;
-    background: transparent !important;
-}
-.data-saver-on .ds-gradient-hero {
-    background: #FFFFFF !important;
-    color: #000000 !important;
-    border-bottom: 2px solid #000 !important;
-}
-.ds-show { display: none !important; }
 
-/* ========== SHARED COMPONENT STYLES ========== */
-.gradient-hero {
-    background: linear-gradient(135deg, #4c0080 0%, #b40065 50%, #FF1493 100%);
-}
-.primary-btn {
-    background: linear-gradient(90deg, #6a0dad 0%, #FF1493 100%);
-    color: #FFFFFF !important;
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
-}
-.primary-btn:active { transform: scale(0.95); }
-.secondary-btn {
-    border: 2px solid #6a0dad;
-    transition: background 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
-}
-.secondary-btn:hover { background: rgba(106, 13, 173, 0.1); }
-.vibrant-gradient {
-    background: linear-gradient(90deg, #6A0DAD 0%, #FF1493 100%);
-}
-.premium-gradient {
-    background: linear-gradient(135deg, #6A0DAD 0%, #FF1493 100%);
-}
-.brutalist-lift { transition: all 0.2s ease; }
-.brutalist-lift:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 2px 2px 0px #6A0DAD;
-}
-.brutalist-border {
-    border: 2px solid #6A0DAD;
-    box-shadow: 2px 2px 0px #6A0DAD;
-}
-.brutalist-border:active {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0px #6A0DAD;
-}
-.pulse-card {
-    border: 1px solid #E0DCE6;
-    background: #FFFFFF;
-}
-.lift-effect:hover {
-    border: 2px solid #6A0DAD;
-    transform: translate(-2px, -2px);
-}
-.chat-bubble-received {
-    background-color: #f4ebf8;
-    border: 1px solid #cfc2d5;
-}
-.chat-bubble-sent {
-    background-color: #6a0dad;
-    color: #ffffff;
-}
-.main-gradient {
-    background: linear-gradient(135deg, #6a0dad 0%, #FF1493 100%);
-}
-.gradient-text {
-    background: linear-gradient(90deg, #6a0dad, #FF1493);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.hide-scrollbar::-webkit-scrollbar { display: none; }
-.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* ========== PAGE TRANSITION ========== */
-.page-section { display: none; }
-.page-section.active {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ========== DATA SAVER IMAGE PLACEHOLDER ========== */
-.ds-img-placeholder {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #000000;
-    background: #FFFFFF;
-    padding: 1rem;
-    text-align: center;
-    min-height: 60px;
-    font-size: 12px;
-    color: #666;
+/* ============================================================
+   GRADIENTS
+   ============================================================ */
+.gradient-hero {
+  background: linear-gradient(135deg, #4B097D 0%, #8333c6 50%, #FF1493 100%);
 }
-.data-saver-on .ds-img-placeholder { display: flex !important; }
 
-/* ========== ONBOARDING ========== */
-.flavour-chip { transition: all 0.2s ease; }
-.flavour-chip.selected {
-    background-color: #6a0dad !important;
-    color: #FFFFFF !important;
-    border-color: #6a0dad !important;
-    transform: scale(1.05);
-    box-shadow: 0 4px 14px rgba(106, 13, 173, 0.4);
+.ds-gradient-hero {
+  background: linear-gradient(135deg, #4c0080 0%, #b40065 100%);
 }
-.flavour-chip.selected .material-symbols-outlined { color: #FFFFFF !important; }
-.flavour-chip.selected span { color: #FFFFFF !important; }
 
-/* ========== TOGGLE SWITCH ========== */
+.vibrant-gradient {
+  background: linear-gradient(135deg, #FF1493 0%, #4B097D 100%);
+}
+
+.premium-gradient {
+  background: linear-gradient(135deg, #6a0dad 0%, #FF1493 100%);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.primary-btn {
+  background-color: #4c0080;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  background-color: #6a0dad;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(75, 9, 125, 0.3);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+.secondary-btn {
+  transition: all 0.2s ease;
+}
+
+/* ============================================================
+   BRUTALIST DESIGN ELEMENTS
+   ============================================================ */
+.brutalist-border {
+  border: 2px solid #1A161F;
+  box-shadow: 3px 3px 0px #1A161F;
+  transition: all 0.15s ease;
+}
+
+.brutalist-border:hover {
+  box-shadow: 1px 1px 0px #1A161F;
+}
+
+.brutalist-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brutalist-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 6px 6px 0px rgba(75, 9, 125, 0.15);
+}
+
+.brutalist-lift:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0px rgba(75, 9, 125, 0.15);
+}
+
+/* ============================================================
+   TOGGLE SWITCH (DATA SAVER)
+   ============================================================ */
 .toggle-track {
-    width: 40px; height: 20px;
-    background: #CCCCCC;
-    border-radius: 10px;
-    position: relative;
-    transition: background 0.3s;
-    cursor: pointer;
+  width: 40px;
+  height: 22px;
+  background-color: #cfc2d5;
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
 }
-.toggle-track.active { background: #6A0DAD; }
+
+.toggle-track.active {
+  background-color: #4c0080;
+}
+
 .toggle-knob {
-    width: 16px; height: 16px;
-    background: #FFFFFF;
-    border-radius: 50%;
-    position: absolute;
-    top: 2px; left: 2px;
-    transition: left 0.3s;
-}
-.toggle-track.active .toggle-knob { left: 22px; }
-
-/* ========== SCROLLBAR ========== */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #F4F1F8; }
-::-webkit-scrollbar-thumb { background: #6a0dad; border-radius: 4px; }
-
-/* ========== GLOBAL BUTTON HOVER EFFECTS ========== */
-button:not(:disabled):not(.toggle-track):not(.flavour-chip) {
-    transition: all 0.2s ease-in-out;
-}
-button:not(:disabled):not(.toggle-track):hover {
-    filter: brightness(1.08);
-    box-shadow: 0 4px 14px rgba(106, 13, 173, 0.25);
-    transform: translateY(-2px);
-}
-button:not(:disabled):not(.toggle-track):active {
-    filter: brightness(0.95);
-    box-shadow: 0 1px 4px rgba(106, 13, 173, 0.15);
-    transform: translateY(0);
-}
-.flavour-chip:not(.selected):hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* ========== ACCESSIBILITY ========== */
-@media (prefers-reduced-motion: reduce) {
-    .page-section.active { animation: none; }
-    .brutalist-lift, .primary-btn, .secondary-btn, .lift-effect, .toggle-knob, button, .flavour-chip { transition: none !important; }
+.toggle-track.active .toggle-knob {
+  transform: translateX(18px);
+}
+
+/* ============================================================
+   CHAT BUBBLES
+   ============================================================ */
+.chat-bubble-sent {
+  background-color: #6a0dad;
+  color: white;
+  border-bottom-right-radius: 0 !important;
+}
+
+.chat-bubble-received {
+  background-color: #f4ebf8;
+  color: #1e1a23;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* ============================================================
+   DATA SAVER MODE
+   ============================================================ */
+.data-saver-mode .ds-hide {
+  display: none !important;
+}
+
+.data-saver-mode .ds-img-placeholder {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background-color: #e8dfed;
+  border: 2px dashed #7e7384;
+  color: #4d4353;
+  font-weight: bold;
+  font-size: 11px;
+  border-radius: inherit;
+}
+
+.data-saver-mode .ds-gradient-hero {
+  background: linear-gradient(135deg, #3d0070 0%, #8d004e 100%);
+}
+
+.data-saver-mode .gradient-hero {
+  background: linear-gradient(135deg, #3d0070 0%, #8d004e 100%);
+}
+
+.ds-img-placeholder {
+  display: none;
+}
+
+/* ============================================================
+   PULSE CARD ANIMATION
+   ============================================================ */
+.pulse-card {
+  transition: all 0.3s ease;
+}
+
+.pulse-card:hover {
+  transform: scale(1.02);
+}
+
+/* ============================================================
+   LIFT EFFECT
+   ============================================================ */
+.lift-effect {
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lift-effect:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+}
+
+/* ============================================================
+   FLAVOUR CHIP SELECTED STATE
+   ============================================================ */
+.flavour-chip.selected {
+  outline: 3px solid #4c0080;
+  outline-offset: 2px;
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   TOAST CONTAINER
+   ============================================================ */
+#toast-container > div {
+  pointer-events: auto;
+  max-width: 360px;
+}
+
+/* ============================================================
+   FORM FOCUS STATES
+   ============================================================ */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+#chat-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#chat-body::-webkit-scrollbar-track {
+  background: #faf0fe;
+}
+
+#chat-body::-webkit-scrollbar-thumb {
+  background: #cfc2d5;
+  border-radius: 3px;
+}
+
+#chat-body::-webkit-scrollbar-thumb:hover {
+  background: #7e7384;
+}
+
+/* ============================================================
+   WALL POST LIKED STATE
+   ============================================================ */
+.wall-post button.liked .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
 }
