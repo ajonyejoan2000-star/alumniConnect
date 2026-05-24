@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         /* ===========================
-           GLOBAL RESET + VARIABLES (merged & fixed)
+           GLOBAL RESET + VARIABLES
         =========================== */
         * {
             margin: 0;
@@ -54,7 +54,7 @@
             overflow: hidden;
         }
 
-        /* ===== SIDEBAR (from style.css) ===== */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 260px;
             background: #fff;
@@ -149,59 +149,131 @@
             background: var(--bg);
         }
 
-        /* Top bar */
+        /* Top bar - COMPLETE with search bar */
         .top-bar {
             background: white;
-            padding: 16px 28px;
+            padding: 18px 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
+            flex-shrink: 0;
         }
-        .top-welcome h1 { font-size: 20px; font-weight: 800; }
-        .top-welcome p { font-size: 13px; color: var(--text-light); }
+        .top-welcome h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 2px;
+        }
+        .top-welcome p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 100px;
+            padding: 10px 18px;
+            transition: border-color var(--transition);
+        }
+        .search-bar:focus-within {
+            border-color: var(--purple);
+        }
+        .search-bar i {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            width: 200px;
+            font-family: inherit;
+            color: var(--text-dark);
+        }
         .notif-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
             background: var(--purple-pale);
             border: none;
-            border-radius: 50%;
-            width: 40px; height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple);
+            font-size: 18px;
+            cursor: pointer;
+            transition: background var(--transition);
             position: relative;
+        }
+        .notif-btn:hover {
+            background: var(--purple-mid);
         }
         .notif-dot {
             position: absolute;
-            top: 6px; right: 6px;
-            width: 8px; height: 8px;
-            background: #e74c3c;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
+            background: #e74c3c;
+            border: 2px solid #fff;
         }
 
         /* Quick bar */
         .quick-bar {
             display: flex;
             gap: 12px;
-            padding: 12px 28px;
+            padding: 16px 28px;
             background: white;
             border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            flex-shrink: 0;
         }
         .quick-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 100px;
             background: var(--bg);
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 13px;
+            border: 1.5px solid var(--border);
             cursor: pointer;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-mid);
+            transition: all var(--transition);
+            flex-shrink: 0;
         }
-        .quick-chip.active { background: var(--purple-pale); color: var(--purple); }
+        .quick-chip i {
+            font-size: 15px;
+            color: var(--purple);
+        }
+        .quick-chip:hover,
+        .quick-chip.active {
+            background: var(--purple-pale);
+            border-color: var(--purple);
+            color: var(--purple);
+        }
 
-        /* Feed area = mentorship wrapper */
+        /* Feed area */
         .mentor-feed.area {
             flex: 1;
             overflow-y: auto;
             padding: 24px 28px;
         }
 
-        /* ========= MENTORSHIP SPECIFIC STYLES (fixed) ========= */
+        /* Tabs */
         .tabs {
             display: flex;
             gap: 2rem;
@@ -218,7 +290,9 @@
             cursor: pointer;
             position: relative;
         }
-        .tab-btn.active { color: var(--purple); }
+        .tab-btn.active {
+            color: var(--purple);
+        }
         .tab-btn.active::after {
             content: '';
             position: absolute;
@@ -229,9 +303,14 @@
             background: var(--purple);
             border-radius: 3px;
         }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
 
+        /* Toolbar */
         .toolbar {
             display: flex;
             gap: 1rem;
@@ -248,6 +327,7 @@
             border-radius: 12px;
             border: 1.5px solid var(--border);
             font-family: inherit;
+            background: white;
         }
         .search-wrap svg {
             position: absolute;
@@ -261,10 +341,13 @@
             border-radius: 12px;
             border: 1.5px solid var(--border);
             background: white;
+            font-family: inherit;
         }
+
+        /* Mentor Grid */
         .mentor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.6rem;
         }
         .mentor-card {
@@ -273,6 +356,7 @@
             border: 1px solid var(--border);
             padding: 1.5rem;
             transition: all 0.2s;
+            cursor: pointer;
         }
         .mentor-card:hover {
             transform: translateY(-5px);
@@ -285,7 +369,8 @@
             margin-bottom: 1rem;
         }
         .mentor-avatar {
-            width: 56px; height: 56px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--purple-light), var(--purple));
             color: white;
@@ -294,17 +379,26 @@
             justify-content: center;
             font-weight: 700;
             font-size: 1.3rem;
+            flex-shrink: 0;
         }
-        .mentor-info h3 { font-size: 1.1rem; font-weight: 700; }
-        .role { font-size: 0.8rem; color: var(--text-light); }
+        .mentor-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .role {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
         .badge-role {
             font-size: 0.7rem;
-            padding: 2px 10px;
+            padding: 3px 10px;
             border-radius: 20px;
             background: var(--purple-pale);
             color: var(--purple);
             display: inline-block;
-            margin-top: 5px;
+            margin-top: 6px;
+            font-weight: 600;
         }
         .card-bio {
             font-size: 0.85rem;
@@ -316,7 +410,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
         .skill-tag {
             background: var(--purple-pale);
@@ -326,6 +420,8 @@
             font-weight: 500;
             color: var(--purple);
         }
+        
+        /* Buttons */
         .btn {
             border: none;
             border-radius: 10px;
@@ -339,57 +435,121 @@
             background: var(--purple);
             color: white;
         }
-        .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+        .btn-primary:hover {
+            background: var(--purple-dark);
+            transform: translateY(-1px);
+        }
         .btn-outline {
             background: transparent;
             border: 1.5px solid var(--purple);
             color: var(--purple);
         }
-        .btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+        .btn-outline:hover {
+            background: var(--purple-pale);
+        }
+        .btn-sm {
+            padding: 5px 14px;
+            font-size: 0.8rem;
+        }
 
+        /* Mentorship Items */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-dark);
+        }
+        .count-badge {
+            background: var(--purple-pale);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+        .mentorship-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
         .mentorship-item {
             background: white;
             border-radius: 18px;
             border: 1px solid var(--border);
             padding: 1.2rem;
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
+            transition: all 0.2s;
         }
-        .item-main { flex: 1; }
+        .mentorship-item:hover {
+            border-color: var(--purple-light);
+            box-shadow: var(--shadow-sm);
+        }
+        .item-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-light), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .item-main {
+            flex: 1;
+        }
+        .item-main h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .item-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
         .status-badge {
-            padding: 2px 12px;
+            display: inline-block;
+            padding: 3px 10px;
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 600;
         }
-        .status-active { background: #e0f2e9; color: #1e6f3f; }
-        .status-pending { background: #fff3e0; color: #b85c00; }
-        .progress-bar-wrap {
-            width: 100px;
-            height: 6px;
-            background: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
+        .status-active {
+            background: #e0f2e9;
+            color: #1e6f3f;
         }
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--purple);
-            width: 0%;
+        .status-pending {
+            background: #fff3e0;
+            color: #b85c00;
         }
+        .status-completed {
+            background: var(--purple-pale);
+            color: var(--purple);
+        }
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 3rem;
             color: var(--text-light);
         }
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
 
-        /* modal styles */
+        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
@@ -405,33 +565,78 @@
         }
         .modal {
             background: white;
-            border-radius: 28px;
+            border-radius: 24px;
             max-width: 500px;
             width: 90%;
-            padding: 1.8rem;
             max-height: 85vh;
             overflow-y: auto;
         }
-        .form-group { margin-bottom: 1rem; }
-        .form-label { font-weight: 600; display: block; margin-bottom: 6px; }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header h2 {
+            font-size: 1.2rem;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 1rem 1.5rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+            padding: 0 1.5rem;
+        }
+        .form-label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
         .form-control {
             width: 100%;
             padding: 10px 14px;
             border: 1.5px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
+            font-family: inherit;
         }
-        .star-rating .star {
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            padding: 0 1.5rem;
+        }
+        .star {
             font-size: 28px;
             cursor: pointer;
             color: #ccc;
             transition: 0.1s;
         }
-        .star.selected, .star.hovered { color: #f4c430; }
+        .star.selected,
+        .star.hovered {
+            color: #f4c430;
+        }
+
+        /* Toast */
         .toast-container {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         .toast {
             background: white;
@@ -439,12 +644,81 @@
             padding: 12px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-top: 8px;
+            font-size: 0.85rem;
+            animation: slideIn 0.3s ease;
         }
+        .toast.success {
+            border-left-color: var(--success);
+        }
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            background: #fff;
+            border-top: 1px solid var(--border);
+            padding: 12px 0 8px;
+            justify-content: space-around;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .mob-nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: color var(--transition);
+        }
+        .mob-nav-btn i {
+            font-size: 20px;
+        }
+        .mob-nav-btn.active,
+        .mob-nav-btn:hover {
+            color: var(--purple);
+        }
+
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .mentor-feed.area { padding: 16px; }
-            .mentorship-item { flex-direction: column; align-items: flex-start; }
+            .sidebar {
+                display: none;
+            }
+            .mobile-nav {
+                display: flex;
+            }
+            .mentor-feed.area {
+                padding: 16px;
+            }
+            .mentorship-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .mentor-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -498,7 +772,7 @@
     </aside>
 
     <div class="main">
-        <!-- Top bar - EXACT MATCH with home page -->
+        <!-- Top bar with search -->
         <div class="top-bar">
             <div class="top-welcome">
                 <h1>Good morning, <span id="welcomeName">Suzie</span>! 👑</h1>
@@ -516,7 +790,7 @@
             </div>
         </div>
 
-        <!-- Quick bar - EXACT MATCH with home page -->
+        <!-- Quick bar -->
         <div class="quick-bar">
             <div class="quick-chip">
                 <i class="bi bi-people-fill"></i> Community
@@ -541,37 +815,154 @@
                 <button class="tab-btn active" data-tab="find">Find a Mentor</button>
                 <button class="tab-btn" data-tab="mine">My Mentorships</button>
             </div>
+            
             <!-- TAB FIND -->
             <div class="tab-panel active" id="tab-find">
                 <div class="toolbar">
-                    <div class="search-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="mentorSearch" placeholder="Search mentors by name or skill..."></div>
-                    <select class="filter-select" id="roleFilter"><option value="">All Roles</option><option value="mentor">Mentors</option><option value="alumni">Alumni</option></select>
+                    <div class="search-wrap">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="mentorSearch" placeholder="Search mentors by name or skill...">
+                    </div>
+                    <select class="filter-select" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="mentor">Mentors</option>
+                        <option value="alumni">Alumni</option>
+                    </select>
                 </div>
-                <div class="mentor-grid" id="mentorGrid"><div class="skeleton-card" style="padding:1rem">Loading mentors...</div></div>
+                <div class="mentor-grid" id="mentorGrid">
+                    <div style="text-align: center; padding: 40px;">Loading mentors...</div>
+                </div>
             </div>
+            
             <!-- TAB MINE -->
             <div class="tab-panel" id="tab-mine">
-                <div class="section-title">As a Mentor <span class="count-badge" id="asMentorCount">0</span></div>
+                <div class="section-title">
+                    As a Mentor <span class="count-badge" id="asMentorCount">0</span>
+                </div>
                 <div id="asMentorList" class="mentorship-list"></div>
-                <div class="section-title">As a Mentee <span class="count-badge" id="asMenteeCount">0</span></div>
+                <div class="section-title">
+                    As a Mentee <span class="count-badge" id="asMenteeCount">0</span>
+                </div>
                 <div id="asMenteeList" class="mentorship-list"></div>
             </div>
         </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav">
+            <button class="mob-nav-btn" onclick="window.location.href='/v/home'">
+                <i class="bi bi-house-fill"></i> Home
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/community'">
+                <i class="bi bi-people-fill"></i> Community
+            </button>
+            <button class="mob-nav-btn active" onclick="window.location.href='/v/mentorship'">
+                <i class="bi bi-person-lines-fill"></i> Mentor
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/opportunities'">
+                <i class="bi bi-briefcase-fill"></i> Jobs
+            </button>
+            <button class="mob-nav-btn" onclick="window.location.href='/v/profile'">
+                <i class="bi bi-person-fill"></i> Profile
+            </button>
+        </nav>
     </div>
 </div>
 
 <!-- MODALS -->
-<div class="modal-overlay" id="requestModal"><div class="modal"><div class="modal-header"><h2>Request Mentorship</h2><button class="modal-close" onclick="closeModal('requestModal')">×</button></div><div class="form-group"><label class="form-label">Your Goals</label><input type="text" id="goalsInput" placeholder="e.g., System Design" class="form-control"></div><div class="form-group"><label class="form-label">Expertise you seek</label><input type="text" id="expertiseInput" placeholder="React, Leadership" class="form-control"></div><div class="form-group"><label class="form-label">Message</label><textarea id="requestMessage" class="form-control" rows="2"></textarea></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('requestModal')">Cancel</button><button class="btn btn-primary" id="submitRequestBtn" onclick="submitRequest()">Send Request</button></div></div></div>
+<div class="modal-overlay" id="requestModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Request Mentorship</h2>
+            <button class="modal-close" onclick="closeModal('requestModal')">×</button>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Your Goals</label>
+            <input type="text" id="goalsInput" placeholder="e.g., System Design" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Expertise you seek</label>
+            <input type="text" id="expertiseInput" placeholder="React, Leadership" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea id="requestMessage" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('requestModal')">Cancel</button>
+            <button class="btn btn-primary" id="submitRequestBtn" onclick="submitRequest()">Send Request</button>
+        </div>
+    </div>
+</div>
 
-<div class="modal-overlay" id="sessionModal"><div class="modal"><h2>Log Session</h2><input id="sessionTopic" placeholder="Topic" class="form-control"><input id="sessionDuration" placeholder="Duration (min)" class="form-control" type="number"><textarea id="sessionNotes" placeholder="Notes" class="form-control"></textarea><div style="display:flex; gap:10px; margin-top:16px"><button class="btn btn-outline" onclick="closeModal('sessionModal')">Cancel</button><button class="btn btn-primary" onclick="submitSession()">Log Session</button></div></div></div>
+<div class="modal-overlay" id="sessionModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Log Session</h2>
+            <button class="modal-close" onclick="closeModal('sessionModal')">×</button>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Topic</label>
+            <input id="sessionTopic" placeholder="Topic" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Duration (min)</label>
+            <input id="sessionDuration" placeholder="Duration" class="form-control" type="number">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea id="sessionNotes" placeholder="Notes" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('sessionModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="submitSession()">Log Session</button>
+        </div>
+    </div>
+</div>
 
-<div class="modal-overlay" id="completeModal"><div class="modal"><h2>Complete Mentorship</h2><div class="star-rating" id="starRating"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div><textarea id="completeFeedback" placeholder="Feedback" class="form-control"></textarea><div style="margin-top:16px"><button class="btn btn-outline" onclick="closeModal('completeModal')">Cancel</button><button class="btn btn-primary" onclick="submitComplete()">Complete</button></div></div></div>
+<div class="modal-overlay" id="completeModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Complete Mentorship</h2>
+            <button class="modal-close" onclick="closeModal('completeModal')">×</button>
+        </div>
+        <div class="star-rating" id="starRating">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+            <span class="star" data-val="4">★</span>
+            <span class="star" data-val="5">★</span>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Feedback</label>
+            <textarea id="completeFeedback" placeholder="Feedback" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('completeModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="submitComplete()">Complete</button>
+        </div>
+    </div>
+</div>
 
-<div class="modal-overlay" id="sessionsModal"><div class="modal"><h2>Session History</h2><div id="sessionsModalBody"></div><button class="btn btn-outline" onclick="closeModal('sessionsModal')">Close</button></div></div>
+<div class="modal-overlay" id="sessionsModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Session History</h2>
+            <button class="modal-close" onclick="closeModal('sessionsModal')">×</button>
+        </div>
+        <div id="sessionsModalBody" style="padding: 1rem;"></div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('sessionsModal')">Close</button>
+        </div>
+    </div>
+</div>
+
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-    // ======================= FULL MERGED MENTORSHIP LOGIC (fixed) =======================
+    // Mentorship Functionality
     let allMentors = [];
     let myMentorships = { asMentor: [], asMentee: [] };
     let activeRequestMentorId = null;
@@ -582,22 +973,36 @@
     function getToken() { return localStorage.getItem('token') || ''; }
     function initials(name) { return (name?.split(' ').map(w=>w[0]).join('').slice(0,2) || 'U').toUpperCase(); }
     function formatDate(d) { return new Date(d).toLocaleDateString(); }
-    function showToast(msg, type='info') { const container=document.getElementById('toastContainer'); const toast=document.createElement('div'); toast.className=`toast`; toast.innerHTML=msg; container.appendChild(toast); setTimeout(()=>toast.remove(),3000);}
-    function openModal(id){ document.getElementById(id).classList.add('open');}
-    function closeModal(id){ document.getElementById(id).classList.remove('open');}
-    function switchTab(tab){ document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab)); document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id===`tab-${tab}`)); if(tab==='mine') loadMyMentorships();}
+    
+    function showToast(msg, type='info') { 
+        const container = document.getElementById('toastContainer'); 
+        const toast = document.createElement('div'); 
+        toast.className = `toast ${type}`; 
+        toast.innerHTML = msg; 
+        container.appendChild(toast); 
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    
+    function switchTab(tab) { 
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); 
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`)); 
+        if (tab === 'mine') loadMyMentorships(); 
+    }
 
-    document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
 
-    // DEMO MENTORS (rich data)
+    // Demo Mentors
     const demoMentors = [
-        { _id:'m1', name:'Dr. Amara Okafor', role:'mentor', bio:'Senior SWE @ Google, ex-Meta. AI/ML expert. I help engineers break into FAANG.', skills:['Python','System Design','Leadership','ML'], email:'amara@demo.com' },
+        { _id:'m1', name:'Dr. Amara Okafor', role:'mentor', bio:'Senior SWE @ Google. AI/ML expert. I help engineers break into FAANG.', skills:['Python','System Design','Leadership','ML'], email:'amara@demo.com' },
         { _id:'m2', name:'Kwame Mensah', role:'alumni', bio:'Product Leader @ Stripe. Former founder. Passionate about product strategy.', skills:['Product Strategy','User Research','Agile','Startups'], email:'kwame@demo.com' },
         { _id:'m3', name:'Fatima Al-Hassan', role:'mentor', bio:'VC Investor & ex-Goldman. Mentoring founders on fundraising.', skills:['Finance','Fundraising','Pitching','Excel'], email:'fatima@demo.com' },
         { _id:'m4', name:'Emmanuel Osei', role:'alumni', bio:'Senior UX Designer @ Microsoft. Design systems expert.', skills:['Figma','UI/UX','Accessibility'], email:'emmanuel@demo.com' },
     ];
 
-    async function loadMentors() {
+    function loadMentors() {
         allMentors = [...demoMentors];
         renderMentors(allMentors);
     }
@@ -607,18 +1012,32 @@
         if(!list.length){ grid.innerHTML='<div class="empty-state">No mentors found</div>'; return; }
         grid.innerHTML = list.map(m => `
             <div class="mentor-card">
-                <div class="card-top"><div class="mentor-avatar">${initials(m.name)}</div><div class="mentor-info"><h3>${m.name}</h3><div class="role">${m.email}</div><span class="badge-role">${m.role}</span></div></div>
-                <p class="card-bio">${m.bio}</p><div class="skills-wrap">${(m.skills||[]).map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+                <div class="card-top">
+                    <div class="mentor-avatar">${initials(m.name)}</div>
+                    <div class="mentor-info">
+                        <h3>${m.name}</h3>
+                        <div class="role">${m.email}</div>
+                        <span class="badge-role">${m.role}</span>
+                    </div>
+                </div>
+                <p class="card-bio">${m.bio}</p>
+                <div class="skills-wrap">${(m.skills||[]).map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
                 <button class="btn btn-primary btn-sm" onclick="openRequestModal('${m._id}','${m.name}')">Request Mentorship</button>
             </div>
         `).join('');
     }
 
-    function filterMentors(){ const q=document.getElementById('mentorSearch').value.toLowerCase(); const role=document.getElementById('roleFilter').value; const filtered=allMentors.filter(m=>(!q||m.name.toLowerCase().includes(q)||(m.skills||[]).some(s=>s.toLowerCase().includes(q))) && (!role||m.role===role)); renderMentors(filtered);}
-    document.getElementById('mentorSearch').addEventListener('input',filterMentors); document.getElementById('roleFilter').addEventListener('change',filterMentors);
+    function filterMentors() { 
+        const q = document.getElementById('mentorSearch').value.toLowerCase(); 
+        const role = document.getElementById('roleFilter').value; 
+        const filtered = allMentors.filter(m => (!q || m.name.toLowerCase().includes(q) || (m.skills||[]).some(s => s.toLowerCase().includes(q))) && (!role || m.role === role)); 
+        renderMentors(filtered);
+    }
+    
+    document.getElementById('mentorSearch').addEventListener('input', filterMentors); 
+    document.getElementById('roleFilter').addEventListener('change', filterMentors);
 
-    // Demo mentorships (rich)
-    function getDemoMyMentorships(){
+    function getDemoMyMentorships() {
         return {
             asMentor: [{ _id:'ms1', mentee:{name:'Abena Darko',email:'abena@demo.com'}, status:'active', goals:['Land first tech job','Coding skills'], sessions:[{topic:'Resume Review',duration:45,notes:'Polished CV',date:new Date()}], startDate:new Date() }],
             asMentee: [{ _id:'ms2', mentor:{name:'Dr. Amara Okafor',email:'amara@demo.com'}, status:'active', goals:['System design mastery'], sessions:[], startDate:new Date() },
@@ -626,41 +1045,167 @@
         };
     }
 
-    async function loadMyMentorships(){ myMentorships = getDemoMyMentorships(); renderMyMentorships(); }
-    function renderMyMentorships(){
+    function loadMyMentorships() { 
+        myMentorships = getDemoMyMentorships(); 
+        renderMyMentorships(); 
+    }
+    
+    function renderMyMentorships() {
         document.getElementById('asMentorCount').innerText = myMentorships.asMentor.length;
         document.getElementById('asMenteeCount').innerText = myMentorships.asMentee.length;
+        
         const mentorContainer = document.getElementById('asMentorList');
-        if(myMentorships.asMentor.length===0) mentorContainer.innerHTML='<div class="empty-state">🎓 No mentees yet</div>';
-        else mentorContainer.innerHTML = myMentorships.asMentor.map(m=>`<div class="mentorship-item"><div class="item-avatar">${initials(m.mentee?.name)}</div><div class="item-main"><h4>${m.mentee?.name}</h4><div class="item-meta">Since ${formatDate(m.startDate)}</div><div class="skills-wrap">${(m.goals||[]).map(g=>`<span class="skill-tag">${g}</span>`).join('')}</div><div><span class="status-badge status-${m.status}">${m.status}</span></div></div><div><button class="btn btn-outline btn-sm" onclick="openSessionModal('${m._id}')">Log Session</button> <button class="btn btn-primary btn-sm" onclick="openCompleteModal('${m._id}')">Complete</button></div></div>`).join('');
+        if(myMentorships.asMentor.length === 0) {
+            mentorContainer.innerHTML = '<div class="empty-state">🎓 No mentees yet</div>';
+        } else {
+            mentorContainer.innerHTML = myMentorships.asMentor.map(m => `
+                <div class="mentorship-item">
+                    <div class="item-avatar">${initials(m.mentee?.name)}</div>
+                    <div class="item-main">
+                        <h4>${m.mentee?.name}</h4>
+                        <div class="item-meta">Since ${formatDate(m.startDate)}</div>
+                        <div class="skills-wrap">${(m.goals||[]).map(g => `<span class="skill-tag">${g}</span>`).join('')}</div>
+                        <span class="status-badge status-${m.status}">${m.status}</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-outline btn-sm" onclick="openSessionModal('${m._id}')">Log Session</button>
+                        <button class="btn btn-primary btn-sm" onclick="openCompleteModal('${m._id}')">Complete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
         
         const menteeContainer = document.getElementById('asMenteeList');
-        if(myMentorships.asMentee.length===0) menteeContainer.innerHTML='<div class="empty-state"><div class="empty-icon">🌱</div><p>No mentors yet</p><button class="btn btn-primary" onclick="switchTab(\'find\')">Find a Mentor</button></div>';
-        else menteeContainer.innerHTML = myMentorships.asMentee.map(m=>`<div class="mentorship-item"><div class="item-avatar">${initials(m.mentor?.name)}</div><div class="item-main"><h4>${m.mentor?.name}</h4><div>${(m.goals||[]).map(g=>`<span class="skill-tag">${g}</span>`).join('')}</div><span class="status-badge status-${m.status}">${m.status}</span> ${m.rating?`⭐ ${m.rating}`:''}</div><div><button class="btn btn-outline btn-sm" onclick="viewSessions('${m._id}','${m.mentor?.name}')">Sessions</button></div></div>`).join('');
+        if(myMentorships.asMentee.length === 0) {
+            menteeContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🌱</div><p>No mentors yet</p><button class="btn btn-primary" onclick="switchTab(\'find\')">Find a Mentor</button></div>';
+        } else {
+            menteeContainer.innerHTML = myMentorships.asMentee.map(m => `
+                <div class="mentorship-item">
+                    <div class="item-avatar">${initials(m.mentor?.name)}</div>
+                    <div class="item-main">
+                        <h4>${m.mentor?.name}</h4>
+                        <div class="skills-wrap">${(m.goals||[]).map(g => `<span class="skill-tag">${g}</span>`).join('')}</div>
+                        <span class="status-badge status-${m.status}">${m.status}</span>
+                        ${m.rating ? `<span style="margin-left:8px">⭐ ${m.rating}</span>` : ''}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-outline btn-sm" onclick="viewSessions('${m._id}','${m.mentor?.name}')">Sessions</button>
+                    </div>
+                </div>
+            `).join('');
+        }
     }
 
-    function openRequestModal(mentorId, mentorName){ activeRequestMentorId=mentorId; document.getElementById('goalsInput').value=''; document.getElementById('expertiseInput').value=''; document.getElementById('requestMessage').value=''; openModal('requestModal');}
-    async function submitRequest(){ showToast(`✨ Mentorship request sent to mentor!`, 'success'); closeModal('requestModal'); }
-    function openSessionModal(msId){ activeSessionMentorshipId=msId; document.getElementById('sessionTopic').value=''; document.getElementById('sessionDuration').value=''; openModal('sessionModal');}
-    async function submitSession(){ const topic=document.getElementById('sessionTopic').value.trim(); const dur=document.getElementById('sessionDuration').value; if(!topic||!dur){ showToast('Please fill topic and duration','error'); return; } showToast(`Session "${topic}" logged successfully!`,'success'); closeModal('sessionModal'); loadMyMentorships();}
-    function openCompleteModal(msId){ activeCompleteMentorshipId=msId; selectedRating=0; document.querySelectorAll('#starRating .star').forEach(s=>s.classList.remove('selected')); document.getElementById('completeFeedback').value=''; openModal('completeModal');}
-    async function submitComplete(){ if(selectedRating===0){ showToast('Select a rating','error'); return; } showToast(`Mentorship completed! Rating: ${selectedRating}⭐`,'success'); closeModal('completeModal'); loadMyMentorships();}
-    function viewSessions(msId, personName){ const mentorship = [...myMentorships.asMentor,...myMentorships.asMentee].find(m=>m._id===msId); const bodyDiv=document.getElementById('sessionsModalBody'); if(!mentorship?.sessions?.length) bodyDiv.innerHTML='<p class="empty-state">No sessions yet.</p>'; else bodyDiv.innerHTML=mentorship.sessions.map(s=>`<div><strong>${s.topic}</strong> (${s.duration}min)<br><small>${formatDate(s.date)}</small><p>${s.notes||''}</p></div><hr>`).join(''); openModal('sessionsModal');}
+    function openRequestModal(mentorId, mentorName) { 
+        activeRequestMentorId = mentorId; 
+        document.getElementById('goalsInput').value = ''; 
+        document.getElementById('expertiseInput').value = ''; 
+        document.getElementById('requestMessage').value = ''; 
+        openModal('requestModal');
+    }
     
-    // star rating init
-    function initStars(){ const stars=document.querySelectorAll('#starRating .star'); stars.forEach(star=>{ star.addEventListener('mouseenter',()=>{ const val=parseInt(star.dataset.val); stars.forEach(s=>s.classList.toggle('hovered',parseInt(s.dataset.val)<=val)); }); star.addEventListener('mouseleave',()=>stars.forEach(s=>s.classList.remove('hovered'))); star.addEventListener('click',()=>{ selectedRating=parseInt(star.dataset.val); stars.forEach(s=>s.classList.toggle('selected',parseInt(s.dataset.val)<=selectedRating)); }); }); }
+    function submitRequest() { 
+        showToast(`✨ Mentorship request sent to mentor!`, 'success'); 
+        closeModal('requestModal'); 
+    }
     
-    // logout & user display
+    function openSessionModal(msId) { 
+        activeSessionMentorshipId = msId; 
+        document.getElementById('sessionTopic').value = ''; 
+        document.getElementById('sessionDuration').value = ''; 
+        document.getElementById('sessionNotes').value = ''; 
+        openModal('sessionModal');
+    }
+    
+    function submitSession() { 
+        const topic = document.getElementById('sessionTopic').value.trim(); 
+        const dur = document.getElementById('sessionDuration').value; 
+        if(!topic || !dur) { 
+            showToast('Please fill topic and duration', 'error'); 
+            return; 
+        } 
+        showToast(`Session "${topic}" logged successfully!`, 'success'); 
+        closeModal('sessionModal'); 
+        loadMyMentorships(); 
+    }
+    
+    function openCompleteModal(msId) { 
+        activeCompleteMentorshipId = msId; 
+        selectedRating = 0; 
+        document.querySelectorAll('#starRating .star').forEach(s => s.classList.remove('selected')); 
+        document.getElementById('completeFeedback').value = ''; 
+        openModal('completeModal');
+    }
+    
+    function submitComplete() { 
+        if(selectedRating === 0) { 
+            showToast('Select a rating', 'error'); 
+            return; 
+        } 
+        showToast(`Mentorship completed! Rating: ${selectedRating}⭐`, 'success'); 
+        closeModal('completeModal'); 
+        loadMyMentorships(); 
+    }
+    
+    function viewSessions(msId, personName) { 
+        const mentorship = [...myMentorships.asMentor, ...myMentorships.asMentee].find(m => m._id === msId); 
+        const bodyDiv = document.getElementById('sessionsModalBody'); 
+        if(!mentorship?.sessions?.length) {
+            bodyDiv.innerHTML = '<p class="empty-state">No sessions yet.</p>';
+        } else {
+            bodyDiv.innerHTML = mentorship.sessions.map(s => `
+                <div style="padding: 12px 0; border-bottom: 1px solid var(--border);">
+                    <strong>${s.topic}</strong> (${s.duration}min)<br>
+                    <small>${formatDate(s.date)}</small>
+                    <p style="margin-top: 4px; color: var(--text-mid);">${s.notes || ''}</p>
+                </div>
+            `).join('');
+        }
+        openModal('sessionsModal');
+    }
+    
+    // Star rating init
+    function initStars() { 
+        const stars = document.querySelectorAll('#starRating .star'); 
+        stars.forEach(star => { 
+            star.addEventListener('mouseenter', () => { 
+                const val = parseInt(star.dataset.val); 
+                stars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.val) <= val)); 
+            }); 
+            star.addEventListener('mouseleave', () => stars.forEach(s => s.classList.remove('hovered'))); 
+            star.addEventListener('click', () => { 
+                selectedRating = parseInt(star.dataset.val); 
+                stars.forEach(s => s.classList.toggle('selected', parseInt(s.dataset.val) <= selectedRating)); 
+            }); 
+        }); 
+    }
+    
+    // User display
     const name = localStorage.getItem('userName') || 'Suzie';
     document.getElementById('welcomeName').innerText = name;
     document.getElementById('sidebarName').innerText = name;
     document.getElementById('sidebarAvatar').innerText = name.charAt(0).toUpperCase();
-    window.logout = function(){ localStorage.clear(); window.location.href='/login'; };
     
-    // manual override for global functions
-    window.openRequestModal = openRequestModal; window.submitRequest = submitRequest; window.openSessionModal = openSessionModal; window.submitSession = submitSession; window.openCompleteModal = openCompleteModal; window.submitComplete = submitComplete; window.viewSessions = viewSessions; window.closeModal = closeModal; window.switchTab = switchTab;
+    window.logout = function() { 
+        localStorage.clear(); 
+        window.location.href = '/login'; 
+    };
     
-    loadMentors(); loadMyMentorships(); initStars();
+    // Make functions global
+    window.openRequestModal = openRequestModal;
+    window.submitRequest = submitRequest;
+    window.openSessionModal = openSessionModal;
+    window.submitSession = submitSession;
+    window.openCompleteModal = openCompleteModal;
+    window.submitComplete = submitComplete;
+    window.viewSessions = viewSessions;
+    window.closeModal = closeModal;
+    window.switchTab = switchTab;
+    
+    // Initialize
+    loadMentors();
+    loadMyMentorships();
+    initStars();
 </script>
 </body>
 </html>
