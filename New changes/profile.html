@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body{
+    background: #f4f7fb;
+    padding: 40px;
+}
+.profile-container{
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.profile-card{
+    width: 350px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.cover-photo{
+    height: 120px;
+    background: #4f46e5;
+}
+.profile-image-wrapper{
+    display: flex;
+    justify-content: center;
+    margin-top: -60px;
+}
+.profile-image-wrapper img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid white;
+    object-fit: cover;
+}
+.profile-info{
+    padding: 20px;
+    text-align: center;
+}
+.profile-info h2{
+    margin-bottom: 10px;
+}
+.profile-info p{
+    margin-bottom: 10px;
+    color: #555;
+}
+.edit-section{
+    flex: 1;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.edit-section h2{
+    margin-bottom: 20px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+input, textarea{
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+textarea{
+    height:100px;
+    resize: none;
+}
+button{
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+button:hover{
+    background: #4338ca;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <!-- LEFT CONTAINER -->
+      <div class="profile-card">
+        <div class="cover-photo"></div>
+        <div class="profile-image-wrapper">
+          <img src="prof.jfif" alt="" id="profileImage" />
+        </div>
+        <div class="profile-info">
+          <h2 id="displayName">Loading....</h2>
+          <p id="displayEmail"></p>
+          <p id="displayBio">No bio added yet</p>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="edit-section">
+        <h2>Edit Profile</h2>
+        <form action="" id="profileForm">
+          <input type="text" id="name" placeholder="Full Name" />
+
+          <input type="email" id="email" placeholder="Email" />
+
+          <textarea id="bio" placeholder="Write your Bio..."></textarea>
+
+          <input type="text" id="course" placeholder="Course /  Program" />
+
+          <input type="text" id="graduationYear" placeholder="graduationYear" />
+
+          <input type="text" id="position" placeholder="Position" />
+
+          <input type="text" id="company" placeholder="Company" />
+
+          <button type="submit">Update Profile</button>
+        </form>
+      </div>
+    </div>
+    <script>
+        //PROFILE
+const API_BASE = 'http://localhost:5000';
+
+let token = localStorage.getItem('token')||null;
+let userName = localStorage.getItem('userName')||null;
+let userId = localStorage.getItem('userId')||null;
+let editingId = null;
+let deletingId = null;
+
+async function loadProfile() {
+   try{
+const res = await fetch(`${API_BASE}/users/profile`,{
+    method:"GET",
+    headers:{
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${token}`
+    }
+});
+
+const data = await res.json();
+console.log("PROFILE RESPONSE:", data);
+const user = data.result;
+
+
+// Populate profile fields
+document.getElementById("displayName").textContent = user.name;
+document.getElementById("displayEmail").textContent = user.email;
+document.getElementById("displayBio").textContent = user.bio || "No bio added yet.";
+
+//populate form fields
+document.getElementById("name").value = user.FullName|| "";
+document.getElementById("email").value = user.email|| "";
+document.getElementById("bio").value = user.bio || "";
+document.getElementById("course").value = user.course || "";
+document.getElementById("graduationYear").value = user.graduationYear || "";
+document.getElementById("company").value = user.company || "";
+document.getElementById("position").value = user.position || "";
+
+res.status === 200 ? alert(data.message) : alert("Failed to load profile");
+
+   }catch (error) {
+    console.error("Load profile error:", error);
+    res.status(500).json({message:"Error while fetching User Profile", error:error.message})
+  }
+}
+//UPDATE PROFILE
+document.getElementById("profileForm").addEventListener("submit", updateProfile);
+async function updateProfile(e) {
+    e.preventDefault();
+
+try{
+    const bio = document.getElementById("bio").value;
+    const email = document.getElementById("email").value;
+    const name = document.getElementById("name").value;
+    const course = document.getElementById("course").value;
+    const graduationYear = document.getElementById("graduationYear").value;
+    const company = document.getElementById("company").value;
+    const position = document.getElementById("position").value;
+
+    const res = await fetch(`${API_BASE}/users/profile`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            name,
+        email,
+            bio,
+            course,
+            graduationYear,
+            company,
+            position
+
+           
+        })
+    });
+
+    const data = await res.json();
+    console.log("UPDATE PROFILE RESPONSE:", data);
+
+    if (!res.ok) {
+        alert(data.message);
+        return;
+    }
+
+    alert("Profile updated!");
+    loadProfile();
+}catch(error){
+    //console.error("Update profile error:", error);
+    alert("Error while updating profile: " + error.message);
+}
+}
+    </script>
+  </body>
+</html>
