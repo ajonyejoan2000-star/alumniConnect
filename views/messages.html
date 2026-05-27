@@ -8,31 +8,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/style.css"/>
   <style>
-    .messages-wrapper {
+    /* Messages page specific styles - extending main theme */
+    .messages-container {
+      flex: 1;
       display: flex;
-      height: 100vh;
       overflow: hidden;
+      background: var(--bg);
     }
+    
     /* Conversation list panel */
     .conv-panel {
-      width: 300px;
+      width: 320px;
       flex-shrink: 0;
       background: #fff;
-      border-right: 1px solid var(--border);
+      border-right: 1.5px solid var(--border);
       display: flex;
       flex-direction: column;
     }
+    
     .conv-panel-header {
       padding: 20px 18px 14px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1.5px solid var(--border);
     }
+    
     .conv-panel-header h5 {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .conv-list { flex: 1; overflow-y: auto; }
+    
+    .conv-panel-header h5 i {
+      color: var(--purple);
+      font-size: 20px;
+    }
+    
+    .conv-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
     .conv-item {
       display: flex;
       align-items: center;
@@ -40,35 +58,73 @@
       padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       cursor: pointer;
-      transition: background var(--transition);
+      transition: all var(--transition);
     }
-    .conv-item:hover { background: var(--purple-pale); }
+    
+    .conv-item:hover {
+      background: var(--purple-pale);
+    }
+    
     .conv-item.active {
       background: var(--purple-pale);
       border-left: 3px solid var(--purple);
     }
+    
     .conv-av {
-      width: 42px; height: 42px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: var(--purple);
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
       color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
       flex-shrink: 0;
     }
-    .conv-info { flex: 1; overflow: hidden; }
-    .conv-name { font-weight: 700; font-size: 14px; color: var(--text-dark); }
-    .conv-preview {
-      font-size: 12px; color: var(--text-light);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    
+    .conv-info {
+      flex: 1;
+      overflow: hidden;
     }
+    
+    .conv-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    
+    .conv-preview {
+      font-size: 12px;
+      color: var(--text-light);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .conv-time {
+      font-size: 10px;
+      color: var(--text-light);
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    
     .conv-empty {
-      padding: 32px 18px;
+      padding: 40px 18px;
       text-align: center;
       color: var(--text-light);
       font-size: 14px;
     }
-
+    
+    .conv-empty i {
+      font-size: 48px;
+      color: var(--purple-mid);
+      margin-bottom: 12px;
+      display: block;
+    }
+    
     /* Chat area */
     .chat-panel {
       flex: 1;
@@ -76,24 +132,40 @@
       flex-direction: column;
       background: var(--bg);
     }
+    
     .chat-header {
       background: #fff;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1.5px solid var(--border);
       padding: 16px 24px;
       display: flex;
       align-items: center;
       gap: 14px;
     }
+    
     .chat-header .chat-av {
-      width: 40px; height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: var(--purple);
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
       color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
     }
-    .chat-header-info .chat-name { font-weight: 700; font-size: 15px; }
-    .chat-header-info .chat-status { font-size: 12px; color: var(--text-light); }
+    
+    .chat-header-info .chat-name {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-dark);
+    }
+    
+    .chat-header-info .chat-status {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    
     .chat-empty-state {
       flex: 1;
       display: flex;
@@ -101,59 +173,93 @@
       align-items: center;
       justify-content: center;
       color: var(--text-light);
-      gap: 12px;
+      gap: 16px;
     }
-    .chat-empty-state i { font-size: 48px; color: var(--purple-mid); }
-    .chat-empty-state p { font-size: 15px; font-weight: 600; }
-
-    /* Messages */
+    
+    .chat-empty-state i {
+      font-size: 64px;
+      color: var(--purple-mid);
+    }
+    
+    .chat-empty-state p {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-mid);
+    }
+    
+    .chat-empty-state small {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    
+    /* Messages box */
     .messages-box {
       flex: 1;
       overflow-y: auto;
-      padding: 20px 24px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
-    .msg-row { display: flex; }
-    .msg-row.sent { justify-content: flex-end; }
-    .msg-row.received { justify-content: flex-start; }
+    
+    .msg-row {
+      display: flex;
+      width: 100%;
+    }
+    
+    .msg-row.sent {
+      justify-content: flex-end;
+    }
+    
+    .msg-row.received {
+      justify-content: flex-start;
+    }
+    
     .msg-bubble {
-      padding: 10px 16px;
-      border-radius: 18px;
+      padding: 10px 18px;
+      border-radius: 20px;
       max-width: 65%;
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.5;
+      word-wrap: break-word;
     }
+    
     .msg-row.sent .msg-bubble {
       background: var(--purple);
       color: #fff;
       border-bottom-right-radius: 4px;
     }
+    
     .msg-row.received .msg-bubble {
       background: #fff;
       color: var(--text-dark);
       border: 1px solid var(--border);
       border-bottom-left-radius: 4px;
     }
-    .msg-time {
-      font-size: 11px;
+    
+    .msg-meta {
+      font-size: 10px;
       color: var(--text-light);
       margin-top: 4px;
-      text-align: right;
+      display: flex;
+      gap: 8px;
     }
-    .msg-row.received .msg-time { text-align: left; }
-
-    /* Input */
-    .message-input {
+    
+    .msg-row.sent .msg-meta {
+      justify-content: flex-end;
+    }
+    
+    /* Message input */
+    .message-input-area {
       background: #fff;
-      border-top: 1px solid var(--border);
+      border-top: 1.5px solid var(--border);
       padding: 16px 24px;
       display: flex;
       gap: 12px;
       align-items: center;
     }
-    .message-input input {
+    
+    .message-input-area input {
       flex: 1;
       border: 1.5px solid var(--border);
       border-radius: 100px;
@@ -162,42 +268,81 @@
       font-family: inherit;
       outline: none;
       color: var(--text-dark);
-      transition: border-color var(--transition);
+      transition: all var(--transition);
     }
-    .message-input input:focus { border-color: var(--purple); }
+    
+    .message-input-area input:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(123,44,191,0.1);
+    }
+    
     .send-btn {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: var(--purple);
       color: #fff;
       border: none;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 18px;
       cursor: pointer;
-      transition: background var(--transition);
+      transition: all var(--transition);
       flex-shrink: 0;
     }
-    .send-btn:hover { background: var(--purple-dark); }
-
+    
+    .send-btn:hover {
+      background: var(--purple-dark);
+      transform: scale(1.05);
+    }
+    
+    /* Search bar in conv panel */
+    .conv-search {
+      margin-top: 8px;
+    }
+    
+    .conv-search .search-bar {
+      background: var(--bg);
+      border-radius: 100px;
+      padding: 8px 14px;
+    }
+    
+    .conv-search .search-bar input {
+      font-size: 13px;
+      padding: 0;
+    }
+    
     @media (max-width: 768px) {
-      .conv-panel { width: 100%; display: none; }
-      .conv-panel.mobile-open { display: flex; }
+      .conv-panel {
+        width: 100%;
+        position: absolute;
+        left: -100%;
+        transition: left 0.3s ease;
+        z-index: 100;
+        height: calc(100vh - 60px);
+      }
+      .conv-panel.mobile-open {
+        left: 0;
+      }
+      .chat-panel {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="app">
-  <!-- ===== SIDEBAR COMPONENT ===== -->
+  <!-- ===== SIDEBAR COMPONENT (identical to home) ===== -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <i class="bi bi-mortarboard-fill"></i>
       AlumniConnect
     </div>
-
     <span class="sidebar-section-label">Main</span>
     <nav class="sidebar-menu">
-      <a href="/v/directory" class="sidebar-link">
+      <a href="/v/home" class="sidebar-link">
         <i class="bi bi-house-fill"></i> Home
       </a>
       <a href="/v/mentorship" class="sidebar-link">
@@ -213,17 +358,12 @@
         <i class="bi bi-chat-dots-fill"></i> Messages
       </a>
     </nav>
-
     <span class="sidebar-section-label">Account</span>
     <nav class="sidebar-menu">
       <a href="/v/profile" class="sidebar-link">
         <i class="bi bi-person-fill"></i> Profile
       </a>
-      <a href="/v/settings" class="sidebar-link">
-        <i class="bi bi-gear-fill"></i> Settings
-      </a>
     </nav>
-
     <div class="sidebar-footer">
       <div class="sidebar-user">
         <div class="s-avatar" id="sidebarAvatar">S</div>
@@ -238,173 +378,325 @@
     </div>
   </aside>
 
-  <!-- ===== MAIN CONTENT ===== -->
+  <!-- ── MAIN CONTENT ── -->
   <div class="main">
-
-  <!-- Conversation list -->
-  <div class="conv-panel" id="convPanel">
-    <div class="conv-panel-header">
-      <h5><i class="bi bi-chat-dots-fill" style="color:var(--purple);"></i> Messages</h5>
-      <div class="search-bar" style="border-radius:100px;">
-        <i class="bi bi-search"></i>
-        <input type="text" placeholder="Search conversations…" id="convSearch"
-          style="border:none;background:transparent;outline:none;font-size:13px;font-family:inherit;color:var(--text-dark);"/>
+    <!-- Top bar (identical to home) -->
+    <div class="top-bar">
+      <div class="top-welcome">
+        <h1>Good morning, <span id="welcomeName">Suzie</span>! 👑</h1>
+        <p>Connect with fellow alumni</p>
       </div>
-    </div>
-    <div class="conv-list" id="conversationsList">
-      <div class="conv-empty">Loading conversations…</div>
-    </div>
-  </div>
-
-  <!-- Chat area -->
-  <div class="chat-panel">
-
-    <!-- Empty state (before a convo is selected) -->
-    <div class="chat-empty-state" id="chatEmptyState">
-      <i class="bi bi-chat-square-dots"></i>
-      <p>Select a conversation to start messaging</p>
-    </div>
-
-    <!-- Active chat (hidden until convo selected) -->
-    <div id="activeChat" style="display:none; flex:1; flex-direction:column; display:none;">
-      <div class="chat-header" id="chatHeader">
-        <div class="chat-av" id="chatAv">?</div>
-        <div class="chat-header-info">
-          <div class="chat-name" id="chatName">Name</div>
-          <div class="chat-status">Alumni Member</div>
+      <div class="top-actions">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" id="globalSearch" placeholder="Search messages..."/>
         </div>
-      </div>
-      <div class="messages-box" id="messagesBox"></div>
-      <div class="message-input">
-        <input type="text" id="messageInput" placeholder="Type a message…"
-          onkeydown="if(event.key==='Enter') sendMessage()"/>
-        <button class="send-btn" onclick="sendMessage()">
-          <i class="bi bi-send-fill"></i>
+        <button class="notif-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notif-dot"></span>
         </button>
       </div>
     </div>
 
+    <!-- Quick bar -->
+    <div class="quick-bar">
+      <div class="quick-chip">
+        <i class="bi bi-people-fill"></i> Community
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-person-lines-fill"></i> Mentorship
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-calendar-event-fill"></i> Events
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-briefcase-fill"></i> Opportunities
+      </div>
+      <div class="quick-chip active">
+        <i class="bi bi-chat-dots-fill"></i> Messages
+      </div>
+    </div>
+
+    <!-- Messages Content -->
+    <div class="messages-container">
+      <!-- Conversation list panel -->
+      <div class="conv-panel" id="convPanel">
+        <div class="conv-panel-header">
+          <h5><i class="bi bi-chat-dots-fill"></i> Messages</h5>
+          <div class="conv-search">
+            <div class="search-bar">
+              <i class="bi bi-search"></i>
+              <input type="text" id="convSearch" placeholder="Search conversations..."/>
+            </div>
+          </div>
+        </div>
+        <div class="conv-list" id="conversationsList">
+          <div class="conv-empty">
+            <i class="bi bi-chat-square-dots"></i>
+            Loading conversations...
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat area -->
+      <div class="chat-panel">
+        <!-- Empty state (before a convo is selected) -->
+        <div class="chat-empty-state" id="chatEmptyState">
+          <i class="bi bi-chat-square-dots-fill"></i>
+          <p>Welcome to Messages</p>
+          <small>Select a conversation to start chatting</small>
+        </div>
+
+        <!-- Active chat (hidden until convo selected) -->
+        <div id="activeChat" style="display: none; flex: 1; flex-direction: column;">
+          <div class="chat-header" id="chatHeader">
+            <div class="chat-av" id="chatAv">?</div>
+            <div class="chat-header-info">
+              <div class="chat-name" id="chatName">Name</div>
+              <div class="chat-status" id="chatStatus">Alumni Member</div>
+            </div>
+          </div>
+          <div class="messages-box" id="messagesBox"></div>
+          <div class="message-input-area">
+            <input type="text" id="messageInput" placeholder="Type a message..." 
+              onkeypress="if(event.key === 'Enter') sendMessage()"/>
+            <button class="send-btn" onclick="sendMessage()">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<script src="js/main.js"></script>
 <script>
-  let token = localStorage.getItem('token');
-  let currentUserId = localStorage.getItem('userId');
+  // ======================== MESSAGES MOCK DATA & STATE ========================
+  const API_BASE = 'http://localhost:5000';
+  let token = localStorage.getItem('token') || 'mock-token';
+  let currentUserId = localStorage.getItem('userId') || 'current_user_123';
   let currentConversationId = null;
   let currentRecipientId = null;
-
-  // Decode token safely
-  function getTokenPayload() {
-    try { return JSON.parse(atob(token.split('.')[1])); }
-    catch { return {}; }
+  let currentRecipientName = '';
+  let currentRecipientInitial = '';
+  
+  // Mock conversations data (for demo when backend not available)
+  let mockConversations = [
+    {
+      _id: 'conv_1',
+      participants: [
+        { _id: 'user_1', name: 'Amara Kone', email: 'amara@example.com' },
+        { _id: currentUserId, name: 'Suzie', email: 'suzie@example.com' }
+      ],
+      lastMessage: { content: 'Hey! Are you coming to the networking event?', createdAt: new Date(Date.now() - 3600000).toISOString() },
+      updatedAt: new Date(Date.now() - 3600000).toISOString()
+    },
+    {
+      _id: 'conv_2',
+      participants: [
+        { _id: 'user_2', name: 'James Nkosi', email: 'james@example.com' },
+        { _id: currentUserId, name: 'Suzie', email: 'suzie@example.com' }
+      ],
+      lastMessage: { content: 'Thanks for the mentorship opportunity!', createdAt: new Date(Date.now() - 86400000).toISOString() },
+      updatedAt: new Date(Date.now() - 86400000).toISOString()
+    },
+    {
+      _id: 'conv_3',
+      participants: [
+        { _id: 'user_3', name: 'Priya Osei', email: 'priya@example.com' },
+        { _id: currentUserId, name: 'Suzie', email: 'suzie@example.com' }
+      ],
+      lastMessage: { content: 'Let me know when you\'re free to chat!', createdAt: new Date(Date.now() - 172800000).toISOString() },
+      updatedAt: new Date(Date.now() - 172800000).toISOString()
+    }
+  ];
+  
+  let mockMessages = {
+    'conv_1': [
+      { _id: 'msg_1', sender: 'user_1', content: 'Hey! Are you coming to the networking event?', createdAt: new Date(Date.now() - 3600000).toISOString() },
+      { _id: 'msg_2', sender: currentUserId, content: 'Yes, I\'ll be there! Looking forward to it.', createdAt: new Date(Date.now() - 3500000).toISOString() },
+      { _id: 'msg_3', sender: 'user_1', content: 'Great! See you then 👋', createdAt: new Date(Date.now() - 3400000).toISOString() }
+    ],
+    'conv_2': [
+      { _id: 'msg_4', sender: currentUserId, content: 'Thanks for the mentorship opportunity!', createdAt: new Date(Date.now() - 86400000).toISOString() },
+      { _id: 'msg_5', sender: 'user_2', content: 'You\'re welcome! Happy to help 😊', createdAt: new Date(Date.now() - 86000000).toISOString() }
+    ],
+    'conv_3': [
+      { _id: 'msg_6', sender: 'user_3', content: 'Let me know when you\'re free to chat!', createdAt: new Date(Date.now() - 172800000).toISOString() },
+      { _id: 'msg_7', sender: currentUserId, content: 'How about Thursday afternoon?', createdAt: new Date(Date.now() - 170000000).toISOString() }
+    ]
+  };
+  
+  // Helper functions
+  function formatTime(isoString) {
+    const d = new Date(isoString);
+    const now = new Date();
+    const diff = now - d;
+    const days = Math.floor(diff / 86400000);
+    
+    if (days === 0) {
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else if (days === 1) {
+      return 'Yesterday';
+    } else if (days < 7) {
+      return d.toLocaleDateString('en-GB', { weekday: 'short' });
+    } else {
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    }
   }
-
-  // ── LOAD CONVERSATIONS ──
+  
+  function getOtherParticipant(conversation) {
+    return conversation.participants.find(p => p._id !== currentUserId) || { name: 'Alumni', _id: 'unknown' };
+  }
+  
+  // Load conversations (mock or API)
   async function loadConversations() {
-    if (!token) { window.location.href = '/login'; return; }
+    const list = document.getElementById('conversationsList');
+    if (!list) return;
+    
+    // Try to fetch from API, fallback to mock
+    let conversations = [];
     try {
       const res = await fetch(`${API_BASE}/messages`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      const data = await res.json();
-      const list = document.getElementById('conversationsList');
-
-      if (!data.conversations || data.conversations.length === 0) {
-        list.innerHTML = '<div class="conv-empty">No conversations yet.</div>';
-        return;
+      if (res.ok) {
+        const data = await res.json();
+        conversations = data.conversations || [];
+      } else {
+        conversations = mockConversations;
       }
-
-      list.innerHTML = '';
-      data.conversations.forEach(conv => {
-        const myId = getTokenPayload().id;
-        const other = conv.participants?.find(p => p._id !== myId) || {};
-        const name  = other.name || 'Alumni';
-        const initial = name.charAt(0).toUpperCase();
-        const preview = conv.lastMessage?.content || 'No messages yet';
-
-        const item = document.createElement('div');
-        item.className = 'conv-item';
-        item.dataset.id = conv._id;
-        item.dataset.recipientId = other._id || '';
-        item.dataset.recipientName = name;
-        item.innerHTML = `
-          <div class="conv-av">${initial}</div>
-          <div class="conv-info">
-            <div class="conv-name">${name}</div>
-            <div class="conv-preview">${preview}</div>
-          </div>
-        `;
-        item.onclick = () => openConversation(conv._id, other._id, name, initial);
-        list.appendChild(item);
-      });
     } catch (err) {
-      console.error('loadConversations error:', err);
-      document.getElementById('conversationsList').innerHTML =
-        '<div class="conv-empty">Could not load conversations.</div>';
+      console.log('Using mock conversations data');
+      conversations = mockConversations;
+    }
+    
+    if (!conversations.length) {
+      list.innerHTML = '<div class="conv-empty"><i class="bi bi-inbox"></i>No conversations yet.<br/><small>Start messaging alumni!</small></div>';
+      return;
+    }
+    
+    list.innerHTML = '';
+    conversations.forEach(conv => {
+      const other = getOtherParticipant(conv);
+      const name = other.name || 'Alumni';
+      const initial = name.charAt(0).toUpperCase();
+      const preview = conv.lastMessage?.content || 'No messages yet';
+      const time = conv.lastMessage?.createdAt ? formatTime(conv.lastMessage.createdAt) : '';
+      
+      const item = document.createElement('div');
+      item.className = 'conv-item';
+      item.dataset.id = conv._id;
+      item.dataset.recipientId = other._id;
+      item.dataset.recipientName = name;
+      item.innerHTML = `
+        <div class="conv-av">${initial}</div>
+        <div class="conv-info">
+          <div class="conv-name">${escapeHtml(name)}</div>
+          <div class="conv-preview">${escapeHtml(preview)}</div>
+        </div>
+        ${time ? `<div class="conv-time">${time}</div>` : ''}
+      `;
+      item.onclick = () => openConversation(conv._id, other._id, name, initial);
+      list.appendChild(item);
+    });
+    
+    // Search functionality
+    const searchInput = document.getElementById('convSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const items = list.querySelectorAll('.conv-item');
+        items.forEach(item => {
+          const name = item.querySelector('.conv-name')?.textContent.toLowerCase() || '';
+          item.style.display = name.includes(term) ? 'flex' : 'none';
+        });
+      });
     }
   }
-
-  // ── OPEN CONVERSATION ──
+  
+  // Open conversation
   async function openConversation(convId, recipientId, name, initial) {
     currentConversationId = convId;
     currentRecipientId = recipientId;
-
-    // Mark active
+    currentRecipientName = name;
+    currentRecipientInitial = initial;
+    
+    // Update active state
     document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
-    document.querySelector(`[data-id="${convId}"]`)?.classList.add('active');
-
+    const activeItem = document.querySelector(`.conv-item[data-id="${convId}"]`);
+    if (activeItem) activeItem.classList.add('active');
+    
     // Show chat panel
-    document.getElementById('chatEmptyState').style.display = 'none';
+    const emptyState = document.getElementById('chatEmptyState');
     const activeChat = document.getElementById('activeChat');
-    activeChat.style.display  = 'flex';
-    activeChat.style.flexDirection = 'column';
-    activeChat.style.flex = '1';
-
-    document.getElementById('chatAv').textContent   = initial;
-    document.getElementById('chatName').textContent = name;
-
+    
+    if (emptyState) emptyState.style.display = 'none';
+    if (activeChat) {
+      activeChat.style.display = 'flex';
+      activeChat.style.flexDirection = 'column';
+      activeChat.style.flex = '1';
+    }
+    
+    // Update header
+    const chatAv = document.getElementById('chatAv');
+    const chatName = document.getElementById('chatName');
+    if (chatAv) chatAv.textContent = initial;
+    if (chatName) chatName.textContent = name;
+    
     await loadMessages(convId);
   }
-
-  // ── LOAD MESSAGES ──
+  
+  // Load messages
   async function loadMessages(convId) {
+    const box = document.getElementById('messagesBox');
+    if (!box) return;
+    
+    let messages = [];
     try {
       const res = await fetch(`${API_BASE}/messages/conversation/${convId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      const data = await res.json();
-      const box  = document.getElementById('messagesBox');
-      box.innerHTML = '';
-
-      const myId = getTokenPayload().id;
-      (data.messages || []).forEach(msg => {
-        const isSent = msg.sender === myId || msg.sender?._id === myId;
-        const time = new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-
-        const row = document.createElement('div');
-        row.className = `msg-row ${isSent ? 'sent' : 'received'}`;
-        row.innerHTML = `
-          <div>
-            <div class="msg-bubble">${msg.content}</div>
-            <div class="msg-time">${time}</div>
-          </div>
-        `;
-        box.appendChild(row);
-      });
-
-      box.scrollTop = box.scrollHeight;
+      if (res.ok) {
+        const data = await res.json();
+        messages = data.messages || [];
+      } else {
+        messages = mockMessages[convId] || [];
+      }
     } catch (err) {
-      console.error('loadMessages error:', err);
+      messages = mockMessages[convId] || [];
     }
+    
+    box.innerHTML = '';
+    if (!messages.length) {
+      box.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">No messages yet. Start the conversation!</div>';
+      return;
+    }
+    
+    messages.forEach(msg => {
+      const isSent = msg.sender === currentUserId || msg.sender?._id === currentUserId;
+      const time = formatTime(msg.createdAt || Date.now());
+      
+      const row = document.createElement('div');
+      row.className = `msg-row ${isSent ? 'sent' : 'received'}`;
+      row.innerHTML = `
+        <div>
+          <div class="msg-bubble">${escapeHtml(msg.content)}</div>
+          <div class="msg-meta"><span>${time}</span>${isSent ? '<span>✓✓</span>' : ''}</div>
+        </div>
+      `;
+      box.appendChild(row);
+    });
+    
+    box.scrollTop = box.scrollHeight;
   }
-
-  // ── SEND MESSAGE ──
+  
+  // Send message
   async function sendMessage() {
-    const input   = document.getElementById('messageInput');
-    const content = input.value.trim();
-    if (!content || !currentConversationId) return;
-
+    const input = document.getElementById('messageInput');
+    const content = input?.value.trim();
+    if (!content || !currentConversationId || !currentRecipientId) return;
+    
     try {
       const res = await fetch(`${API_BASE}/messages/send`, {
         method: 'POST',
@@ -414,20 +706,92 @@
         },
         body: JSON.stringify({ recipientId: currentRecipientId, content })
       });
+      
       if (res.ok) {
         input.value = '';
         await loadMessages(currentConversationId);
+        
+        // Update conversation preview
+        const convItem = document.querySelector(`.conv-item[data-id="${currentConversationId}"]`);
+        if (convItem) {
+          const previewSpan = convItem.querySelector('.conv-preview');
+          if (previewSpan) previewSpan.textContent = content;
+        }
+      } else {
+        // Mock send
+        if (!mockMessages[currentConversationId]) mockMessages[currentConversationId] = [];
+        mockMessages[currentConversationId].push({
+          _id: 'msg_' + Date.now(),
+          sender: currentUserId,
+          content: content,
+          createdAt: new Date().toISOString()
+        });
+        input.value = '';
+        await loadMessages(currentConversationId);
+        
+        // Update mock conversation preview
+        const conv = mockConversations.find(c => c._id === currentConversationId);
+        if (conv) conv.lastMessage = { content: content, createdAt: new Date().toISOString() };
+        loadConversations();
       }
     } catch (err) {
-      console.error('sendMessage error:', err);
+      console.log('Using mock send');
+      if (!mockMessages[currentConversationId]) mockMessages[currentConversationId] = [];
+      mockMessages[currentConversationId].push({
+        _id: 'msg_' + Date.now(),
+        sender: currentUserId,
+        content: content,
+        createdAt: new Date().toISOString()
+      });
+      input.value = '';
+      await loadMessages(currentConversationId);
+      
+      const conv = mockConversations.find(c => c._id === currentConversationId);
+      if (conv) conv.lastMessage = { content: content, createdAt: new Date().toISOString() };
+      loadConversations();
     }
   }
-
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
+  function logout() {
+    localStorage.clear();
+    alert('Logged out successfully');
+    window.location.href = '/login';
+  }
+  
+  // Initialize user info
+  const storedName = localStorage.getItem('userName') || 'Suzie';
+  const initial = storedName.charAt(0).toUpperCase();
+  const welcomeNameSpan = document.getElementById('welcomeName');
+  const sidebarNameSpan = document.getElementById('sidebarName');
+  const sidebarAvatarSpan = document.getElementById('sidebarAvatar');
+  
+  if (welcomeNameSpan) welcomeNameSpan.innerText = storedName;
+  if (sidebarNameSpan) sidebarNameSpan.innerText = storedName;
+  if (sidebarAvatarSpan) sidebarAvatarSpan.innerText = initial;
+  
+  // Global search in top bar
+  const globalSearch = document.getElementById('globalSearch');
+  if (globalSearch) {
+    globalSearch.addEventListener('input', (e) => {
+      const convSearch = document.getElementById('convSearch');
+      if (convSearch) convSearch.value = e.target.value;
+      const searchEvent = new Event('input');
+      if (convSearch) convSearch.dispatchEvent(searchEvent);
+    });
+  }
+  
+  // Load conversations on page load
   loadConversations();
 </script>
-
-  </div><!-- /.main -->
-</div><!-- /.app -->
-
 </body>
 </html>

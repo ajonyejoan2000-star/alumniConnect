@@ -2,28 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Events — AlumniConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AlumniConnect — Events</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/style.css"/>
   <style>
-    .page-wrap { max-width: 1060px; margin: 0 auto; padding: 40px 24px; }
-    .page-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 28px;
+    /* Events page additional styles (extending the main theme) */
+    .events-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 32px;
     }
-    .page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; }
-    .page-header p  { font-size: 14px; color: var(--text-light); margin-top: 4px; }
-
-    /* Filter bar */
+    .events-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .events-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .events-header h1 i {
+      color: var(--purple);
+      font-size: 28px;
+    }
     .filter-bar {
       background: #fff;
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       padding: 20px;
       margin-bottom: 28px;
-      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
     }
     .filter-bar input,
     .filter-bar select {
@@ -32,194 +52,576 @@
       padding: 10px 14px;
       font-size: 14px;
       font-family: inherit;
-      color: var(--text-dark);
       outline: none;
-      flex: 1; min-width: 160px;
-      transition: border-color var(--transition);
+      flex: 1;
+      min-width: 160px;
+      background: #fff;
     }
     .filter-bar input:focus,
     .filter-bar select:focus { border-color: var(--purple); }
-
-    /* Event grid */
     .events-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
     }
     .event-card {
       background: #fff;
-      border: 1.5px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      transition: box-shadow var(--transition);
+      transition: all 0.3s ease;
+      border: 1.5px solid var(--border);
     }
-    .event-card:hover { box-shadow: var(--shadow); }
-
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: var(--purple-light);
+    }
     .event-banner {
       height: 140px;
       background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-light) 100%);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 48px;
+      position: relative;
     }
+    .event-banner i { font-size: 56px; opacity: 0.9; }
     .event-body { padding: 20px; }
     .event-date-pill {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       background: var(--purple-pale);
       color: var(--purple);
       border-radius: 100px;
       padding: 4px 12px;
-      font-size: 12px; font-weight: 700;
-      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
     }
-    .event-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .event-location { font-size: 13px; color: var(--text-light); margin-bottom: 10px; }
-    .event-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; margin-bottom: 14px; }
-    .event-attendees { font-size: 13px; color: var(--text-light); margin-bottom: 14px; }
-
-    .rsvp-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .event-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+      line-height: 1.4;
+    }
+    .event-location {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .event-desc {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .event-attendees {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rsvp-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
     .rsvp-btn {
       flex: 1;
       padding: 8px 10px;
       border-radius: var(--radius-sm);
       border: 1.5px solid var(--border);
       background: #fff;
-      font-size: 12px; font-weight: 700;
-      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
-      transition: all var(--transition);
-      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-    .rsvp-btn.going     { border-color: #16a34a; color: #16a34a; }
-    .rsvp-btn.going:hover, .rsvp-btn.going.active     { background: #16a34a; color: #fff; }
-    .rsvp-btn.interested{ border-color: var(--purple); color: var(--purple); }
-    .rsvp-btn.interested:hover, .rsvp-btn.interested.active { background: var(--purple); color: #fff; }
+    .rsvp-btn.going { border-color: #16a34a; color: #16a34a; }
+    .rsvp-btn.going.active, .rsvp-btn.going:hover { background: #16a34a; color: white; border-color: #16a34a; }
+    .rsvp-btn.interested { border-color: var(--purple); color: var(--purple); }
+    .rsvp-btn.interested.active, .rsvp-btn.interested:hover { background: var(--purple); color: white; border-color: var(--purple); }
     .rsvp-btn.not-going { border-color: #dc2626; color: #dc2626; }
-    .rsvp-btn.not-going:hover, .rsvp-btn.not-going.active   { background: #dc2626; color: #fff; }
-
+    .rsvp-btn.not-going.active, .rsvp-btn.not-going:hover { background: #dc2626; color: white; border-color: #dc2626; }
     .empty-state {
-      text-align: center; padding: 60px 24px; color: var(--text-light);
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text-light);
       grid-column: 1 / -1;
     }
-    .empty-state i { font-size: 48px; display: block; margin-bottom: 12px; color: var(--purple-mid); }
+    .empty-state i { font-size: 56px; margin-bottom: 16px; color: var(--purple-mid); }
+    /* Modal Styles */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s ease;
+      z-index: 1000;
+    }
+    .overlay.active { visibility: visible; opacity: 1; }
+    .modal {
+      background: white;
+      max-width: 600px;
+      width: 90%;
+      border-radius: 28px;
+      box-shadow: 0 30px 40px rgba(0,0,0,0.2);
+      padding: 28px 30px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .modal-title-group .modal-eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--purple); font-weight: 700; }
+    .modal-title { font-size: 24px; font-weight: 800; margin-top: 4px; color: var(--text-dark); }
+    .close-btn { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .close-btn:hover { background: var(--purple-pale); color: var(--purple); }
+    .modal-form .form-group { margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group label { font-weight: 700; font-size: 13px; display: block; margin-bottom: 6px; color: var(--text-dark); }
+    .req { color: #dc2626; }
+    .modal-form input, .modal-form select, .modal-form textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: 0.2s;
+    }
+    .modal-form input:focus, .modal-form select:focus, .modal-form textarea:focus { border-color: var(--purple); }
+    .upload-area { border: 2px dashed var(--border); border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; }
+    .upload-area:hover { border-color: var(--purple); background: var(--purple-pale); }
+    #image-preview { max-width: 100%; max-height: 120px; margin-top: 12px; border-radius: 12px; display: none; object-fit: cover; }
+    .toggle-group { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+    .toggle-opt { display: flex; align-items: center; gap: 8px; }
+    .toggle-opt input { width: auto; margin: 0; }
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+    .btn { padding: 10px 24px; border-radius: 40px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; transition: 0.2s; }
+    .btn-ghost { background: #f1f5f9; color: var(--text-dark); }
+    .btn-ghost:hover { background: var(--border); }
+    .btn-primary { background: var(--purple); color: white; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .success-state { text-align: center; padding: 30px 0; display: none; }
+    .success-state.active { display: block; }
+    .modal-form.hide { display: none; }
+    .spinner { width: 16px; height: 16px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin 0.8s linear infinite; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 768px) {
+      .events-container { padding: 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .events-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
-<div class="page-wrap">
-  <div class="page-header">
-    <div>
-      <h1>Events</h1>
-      <p>Networking, workshops &amp; community events</p>
+<div class="app">
+  <!-- ===== SIDEBAR COMPONENT (identical to home) ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="bi bi-mortarboard-fill"></i>
+      AlumniConnect
     </div>
-      <button class="btn-purple" onclick="createEvents()">
-      <i class="bi bi-calendar-plus"></i> Create Event
+    <span class="sidebar-section-label">Main</span>
+    <nav class="sidebar-menu">
+      <a href="/v/home" class="sidebar-link">
+        <i class="bi bi-house-fill"></i> Home
+      </a>
+      <a href="/v/mentorship" class="sidebar-link">
+        <i class="bi bi-person-lines-fill"></i> Mentorship
+      </a>
+      <a href="/v/events" class="sidebar-link active">
+        <i class="bi bi-calendar-event-fill"></i> Events
+      </a>
+      <a href="/v/opportunities" class="sidebar-link">
+        <i class="bi bi-briefcase-fill"></i> Opportunities
+      </a>
+      <a href="/v/messages" class="sidebar-link">
+        <i class="bi bi-chat-dots-fill"></i> Messages
+      </a>
+    </nav>
+    <span class="sidebar-section-label">Account</span>
+    <nav class="sidebar-menu">
+      <a href="/v/profile" class="sidebar-link">
+        <i class="bi bi-person-fill"></i> Profile
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="s-avatar" id="sidebarAvatar">S</div>
+        <div class="s-info">
+          <div class="s-name" id="sidebarName">Suzie</div>
+          <div class="s-role">Alumni Member</div>
+        </div>
+        <button class="s-logout" title="Log out" onclick="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
 
-  </div>
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main">
+    <!-- Top bar (identical to home) -->
+    <div class="top-bar">
+      <div class="top-welcome">
+        <h1>Good morning, <span id="welcomeName">Suzie</span>! 👑</h1>
+        <p>Discover and connect through events</p>
+      </div>
+      <div class="top-actions">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" id="topSearchInput" placeholder="Search events..."/>
+        </div>
+        <button class="notif-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notif-dot"></span>
+        </button>
+      </div>
+    </div>
 
-  <!-- Filters -->
-  <div class="filter-bar">
-    <input type="text" id="eventSearch" placeholder="Search events…"/>
-    <select id="eventTypeFilter">
-      <option value="">All Types</option>
-      <option value="Networking">Networking</option>
-      <option value="Workshop">Workshop</option>
-      <option value="Seminar">Seminar</option>
-      <option value="Social">Social</option>
-      <option value="Sisterhood Friday">Sisterhood Friday</option>
-    </select>
-    <button class="btn-purple" onclick="filterEvents()" style="flex:none;">
-      <i class="bi bi-funnel"></i> Filter
-    </button>
-  </div>
+    <!-- Quick bar -->
+    <div class="quick-bar">
+      <div class="quick-chip">
+        <i class="bi bi-people-fill"></i> Community
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-person-lines-fill"></i> Mentorship
+      </div>
+      <div class="quick-chip active">
+        <i class="bi bi-calendar-event-fill"></i> Events
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-briefcase-fill"></i> Opportunities
+      </div>
+      <div class="quick-chip">
+        <i class="bi bi-trophy-fill"></i> Achievements
+      </div>
+    </div>
 
-  <!-- Grid -->
-  <div class="events-grid" id="eventsList">
-    <div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading events…</div>
+    <!-- Events Page Content -->
+    <div class="events-container">
+      <div class="events-header">
+        <h1><i class="bi bi-calendar-event-fill"></i> Upcoming Events</h1>
+        <button class="btn-purple" onclick="openModal()">
+          <i class="bi bi-calendar-plus"></i> Create Event
+        </button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <input type="text" id="eventSearch" placeholder="Search events by title or description..."/>
+        <select id="eventTypeFilter">
+          <option value="">All Types</option>
+          <option value="Networking">Networking</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Seminar">Seminar</option>
+          <option value="Social">Social</option>
+          <option value="Sisterhood Friday">Sisterhood Friday</option>
+        </select>
+        <button class="btn-purple" onclick="applyFilters()" style="flex:none;">
+          <i class="bi bi-funnel"></i> Filter
+        </button>
+        <button class="btn-outline" onclick="resetFilters()" style="flex:none;">
+          <i class="bi bi-arrow-repeat"></i> Reset
+        </button>
+      </div>
+
+      <!-- Events Grid -->
+      <div class="events-grid" id="eventsList">
+        <div class="empty-state"><i class="bi bi-hourglass-split"></i><br/>Loading events...</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<script src="js/main.js"></script>
-<script>
-  let token = localStorage.getItem('token');
-
-  async function filterEvents() {
-    const search = document.getElementById('eventSearch').value;
-    const type   = document.getElementById('eventTypeFilter').value;
-
-    let url = `${API_BASE}/events?`;
-    if (search) url += `search=${encodeURIComponent(search)}&`;
-    if (type)   url += `type=${encodeURIComponent(type)}&`;
-
-    const grid = document.getElementById('eventsList');
-    grid.innerHTML = '<div class="empty-state"><i class="bi bi-hourglass-split"></i> Loading…</div>';
-
-    try {
-      const res  = await fetch(url);
-      const data = await res.json();
-      const events = data.events || data || [];
-      grid.innerHTML = '';
-
-      if (!events.length) {
-        grid.innerHTML = '<div class="empty-state"><i class="bi bi-calendar-x"></i> No events found.</div>';
-        return;
-      }
-
-      events.forEach(ev => {
-        const d    = new Date(ev.date);
-        const dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
-        const timeStr = ev.time || d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-        const desc = ev.description ? ev.description.substring(0, 100) + '…' : 'Details coming soon.';
-        const attendCount = Array.isArray(ev.attendees) ? ev.attendees.length : 0;
-
-        const card = document.createElement('div');
-        card.className = 'event-card';
-        card.innerHTML = `
-          <div class="event-banner"><i class="bi bi-calendar-event"></i></div>
-          <div class="event-body">
-            <div class="event-date-pill">
-              <i class="bi bi-clock"></i> ${dateStr} · ${timeStr}
-            </div>
-            <div class="event-title">${ev.title}</div>
-            <div class="event-location"><i class="bi bi-geo-alt"></i> ${ev.location || 'Online'}</div>
-            <div class="event-desc">${desc}</div>
-            <div class="event-attendees"><i class="bi bi-people"></i> ${attendCount} attending</div>
-            <div class="rsvp-bar">
-              <button class="rsvp-btn going"      onclick="rsvpEvent('${ev._id}', 'going',      this)"><i class="bi bi-check-circle"></i> Going</button>
-              <button class="rsvp-btn interested" onclick="rsvpEvent('${ev._id}', 'interested', this)"><i class="bi bi-star"></i> Interested</button>
-              <button class="rsvp-btn not-going"  onclick="rsvpEvent('${ev._id}', 'not_going',  this)"><i class="bi bi-x-circle"></i> Can't go</button>
-            </div>
-            <button class="btn-outline" style="width:100%;justify-content:center;"
-              onclick="viewEvent('${ev._id}')">View Details</button>
+<!-- Create Event Modal -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <span class="modal-eyebrow">AlumniConnect</span>
+        <h2 class="modal-title">Create New Event</h2>
+      </div>
+      <button class="close-btn" onclick="closeModal()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form class="modal-form" id="eventForm" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label>Event Title <span class="req">*</span></label>
+        <input type="text" id="title" placeholder="e.g. Annual Networking Mixer 2026" required/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Type <span class="req">*</span></label>
+          <select id="eventType" required>
+            <option value="" disabled selected>Select type</option>
+            <option value="Networking">Networking</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Social">Social</option>
+            <option value="Sisterhood Friday">Sisterhood Friday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Location <span class="req">*</span></label>
+          <input type="text" id="location" placeholder="Venue or Online" required/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date & Time <span class="req">*</span></label>
+          <input type="datetime-local" id="date" required/>
+        </div>
+        <div class="form-group">
+          <label>End Date & Time</label>
+          <input type="datetime-local" id="endDate"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description <span class="req">*</span></label>
+        <textarea id="description" placeholder="Tell alumni what this event is about…" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Cover Image</label>
+        <div class="upload-area" onclick="document.getElementById('coverImg').click()">
+          <input type="file" id="coverImg" accept="image/*" style="display:none" onchange="previewImage(event)"/>
+          <i class="bi bi-cloud-upload" style="font-size: 32px; color: var(--purple);"></i>
+          <p><strong>Click to upload</strong> or drag & drop</p>
+          <p class="upload-hint" style="font-size: 11px; color: var(--text-light); margin-top: 6px;">PNG, JPG, WEBP up to 5MB</p>
+          <img id="image-preview" alt="Preview"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Visibility</label>
+        <div class="toggle-group">
+          <div class="toggle-opt">
+            <input type="radio" name="visibility" id="vis-public" value="public" checked/>
+            <label for="vis-public"><i class="bi bi-globe2"></i> Public</label>
           </div>
-        `;
-        grid.appendChild(card);
-      });
-    } catch (err) {
-      console.error('filterEvents error:', err);
-      grid.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i> Could not load events. Is the server running?</div>';
+          <div class="toggle-opt">
+            <input type="radio" name="visibility" id="vis-members" value="members"/>
+            <label for="vis-members"><i class="bi bi-people"></i> Members Only</label>
+          </div>
+          <div class="toggle-opt">
+            <input type="radio" name="visibility" id="vis-private" value="private"/>
+            <label for="vis-private"><i class="bi bi-lock"></i> Private</label>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          <span class="spinner" id="spinner" style="display:none"></span>
+          <i class="bi bi-calendar-plus"></i> Create Event
+        </button>
+      </div>
+    </form>
+    <div class="success-state" id="successState">
+      <i class="bi bi-check-circle-fill" style="font-size: 56px; color: #16a34a;"></i>
+      <p class="success-title" style="font-size: 20px; font-weight: 800; margin: 12px 0;">Event Created! 🎉</p>
+      <p class="success-msg" style="color: var(--text-mid); margin-bottom: 20px;">Your event has been published and alumni will be notified.</p>
+      <button class="btn btn-primary" onclick="resetModal()">
+        <i class="bi bi-plus-lg"></i> Create Another
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ======================== MOCK EVENTS DATA ========================
+  let eventsDB = [
+    { _id: '1', title: 'Annual Networking Mixer 2026', type: 'Networking', location: 'Kampala Serena Hotel', date: new Date(Date.now() + 86400000).toISOString(), description: 'Connect with industry leaders, expand your professional network, and enjoy an evening of meaningful conversations. Don\'t miss this opportunity to meet fellow alumni!', attendees: ['currentUser'], createdAt: new Date().toISOString() },
+    { _id: '2', title: 'Sisterhood Friday', type: 'Sisterhood Friday', location: 'Virtual (Zoom)', date: new Date(Date.now() + 172800000).toISOString(), description: 'Celebrating women in tech and leadership. Special guest speakers, panel discussions, and networking sessions designed to empower.', attendees: [] },
+    { _id: '3', title: 'AI & Future Workshop', type: 'Workshop', location: 'Innovation Hub, Nairobi', date: new Date(Date.now() + 259200000).toISOString(), description: 'Hands-on workshop covering AI tools, prompt engineering, and practical applications for professionals across industries.', attendees: [] },
+    { _id: '4', title: 'Tech Seminar: Cybersecurity Trends', type: 'Seminar', location: 'Online', date: new Date(Date.now() + 345600000).toISOString(), description: 'Learn about the latest cybersecurity threats and how to protect your organization.', attendees: [] }
+  ];
+  
+  let userRsvps = JSON.parse(localStorage.getItem('userRsvps') || '{}');
+
+  // Helper functions
+  function formatDate(isoString) {
+    const d = new Date(isoString);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  function formatTime(isoString) {
+    return new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; }); }
+
+  function renderEvents(eventsArray) {
+    const grid = document.getElementById('eventsList');
+    if (!eventsArray.length) {
+      grid.innerHTML = '<div class="empty-state"><i class="bi bi-calendar-x"></i><br/><strong>No events found</strong><br/><span style="font-size: 13px;">Create your first event or adjust filters</span></div>';
+      return;
+    }
+    grid.innerHTML = '';
+    eventsArray.forEach(ev => {
+      const dateStr = formatDate(ev.date);
+      const timeStr = formatTime(ev.date);
+      const desc = ev.description?.substring(0, 100) + (ev.description?.length > 100 ? '…' : '') || 'Join us for this amazing event.';
+      const attendCount = ev.attendees?.length || 0;
+      const activeGoing = userRsvps[ev._id] === 'going' ? 'active' : '';
+      const activeInterested = userRsvps[ev._id] === 'interested' ? 'active' : '';
+      const activeNot = userRsvps[ev._id] === 'not_going' ? 'active' : '';
+      
+      const card = document.createElement('div');
+      card.className = 'event-card';
+      card.innerHTML = `
+        <div class="event-banner"><i class="bi bi-calendar-event"></i></div>
+        <div class="event-body">
+          <div class="event-date-pill"><i class="bi bi-clock"></i> ${dateStr} · ${timeStr}</div>
+          <div class="event-title">${escapeHtml(ev.title)}</div>
+          <div class="event-location"><i class="bi bi-geo-alt-fill"></i> ${escapeHtml(ev.location || 'Online')}</div>
+          <div class="event-desc">${escapeHtml(desc)}</div>
+          <div class="event-attendees"><i class="bi bi-people-fill"></i> ${attendCount} ${attendCount === 1 ? 'person attending' : 'people attending'}</div>
+          <div class="rsvp-bar">
+            <button class="rsvp-btn going ${activeGoing}" onclick="rsvpEvent('${ev._id}', 'going', this)"><i class="bi bi-check-circle"></i> Going</button>
+            <button class="rsvp-btn interested ${activeInterested}" onclick="rsvpEvent('${ev._id}', 'interested', this)"><i class="bi bi-star"></i> Interested</button>
+            <button class="rsvp-btn not-going ${activeNot}" onclick="rsvpEvent('${ev._id}', 'not_going', this)"><i class="bi bi-x-circle"></i> Can't go</button>
+          </div>
+          <button class="btn-outline" style="width:100%;" onclick="viewEventDetails('${ev._id}')"><i class="bi bi-info-circle"></i> View Details</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function applyFilters() {
+    const search = document.getElementById('eventSearch').value.toLowerCase();
+    const type = document.getElementById('eventTypeFilter').value;
+    let filtered = [...eventsDB];
+    if (search) filtered = filtered.filter(ev => ev.title.toLowerCase().includes(search) || ev.description?.toLowerCase().includes(search));
+    if (type) filtered = filtered.filter(ev => ev.type === type);
+    renderEvents(filtered);
+  }
+  
+  function resetFilters() {
+    document.getElementById('eventSearch').value = '';
+    document.getElementById('eventTypeFilter').value = '';
+    document.getElementById('topSearchInput').value = '';
+    renderEvents(eventsDB);
+  }
+  
+  // Sync top search bar
+  document.getElementById('topSearchInput')?.addEventListener('input', function(e) {
+    document.getElementById('eventSearch').value = e.target.value;
+    applyFilters();
+  });
+  document.getElementById('eventSearch')?.addEventListener('keyup', function() { applyFilters(); });
+
+  function rsvpEvent(eventId, status, btn) {
+    const bar = btn.closest('.rsvp-bar');
+    const buttons = bar.querySelectorAll('.rsvp-btn');
+    userRsvps[eventId] = status;
+    localStorage.setItem('userRsvps', JSON.stringify(userRsvps));
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const ev = eventsDB.find(e => e._id === eventId);
+    if (ev) {
+      if (!ev.attendees) ev.attendees = [];
+      if (status === 'going' && !ev.attendees.includes('currentUser')) ev.attendees.push('currentUser');
+      else if (status !== 'going') ev.attendees = ev.attendees.filter(a => a !== 'currentUser');
+      renderEvents(eventsDB);
+    }
+    const msg = status === 'going' ? "You're going! 🎉" : status === 'interested' ? "You're interested!" : "Maybe next time!";
+    alert(msg);
+  }
+
+  function viewEventDetails(id) {
+    const ev = eventsDB.find(e => e._id === id);
+    if (ev) {
+      alert(`📅 ${ev.title}\n📍 ${ev.location}\n📆 ${formatDate(ev.date)} at ${formatTime(ev.date)}\n\n📝 ${ev.description}`);
     }
   }
 
-  async function rsvpEvent(eventId, status, btn) {
-    const bar     = btn.closest('.rsvp-bar');
-    const buttons = bar.querySelectorAll('.rsvp-btn');
-    try {
-      const res = await fetch(`${API_BASE}/events/${eventId}/rsvp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ status })
-      });
-      if (res.ok) {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-    } catch (err) { console.error(err); }
+  // ======================== MODAL LOGIC ========================
+  const overlay = document.getElementById('overlay');
+  function openModal() { overlay.classList.add('active'); document.getElementById('eventForm').reset(); document.getElementById('successState').classList.remove('active'); document.getElementById('eventForm').classList.remove('hide'); document.getElementById('image-preview').style.display = 'none'; document.getElementById('image-preview').src = ''; }
+  function closeModal() { overlay.classList.remove('active'); }
+  function handleOverlayClick(e) { if (e.target === overlay) closeModal(); }
+  function previewImage(event) { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { const preview = document.getElementById('image-preview'); preview.src = e.target.result; preview.style.display = 'block'; }; reader.readAsDataURL(file); } }
+  
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'inline-block';
+    submitBtn.disabled = true;
+    
+    setTimeout(() => {
+      const newEvent = {
+        _id: Date.now().toString(),
+        title: document.getElementById('title').value,
+        type: document.getElementById('eventType').value,
+        location: document.getElementById('location').value,
+        date: new Date(document.getElementById('date').value).toISOString(),
+        description: document.getElementById('description').value,
+        attendees: [],
+        createdAt: new Date().toISOString()
+      };
+      eventsDB.unshift(newEvent);
+      spinner.style.display = 'none';
+      submitBtn.disabled = false;
+      document.getElementById('eventForm').classList.add('hide');
+      document.getElementById('successState').classList.add('active');
+      renderEvents(eventsDB);
+    }, 800);
+  }
+  
+  function resetModal() {
+    document.getElementById('eventForm').reset();
+    document.getElementById('successState').classList.remove('active');
+    document.getElementById('eventForm').classList.remove('hide');
+    document.getElementById('image-preview').style.display = 'none';
+    closeModal();
+    renderEvents(eventsDB);
   }
 
-  function viewEvent(id) { window.location.href = `/v/events?id=${id}`; }
-
-  filterEvents();
+  // ======================== LOGOUT & USER GREETING ========================
+  function logout() {
+    localStorage.clear();
+    alert('Logged out');
+    window.location.href = '/login';
+  }
+  
+  const storedName = localStorage.getItem('userName') || 'Suzie';
+  const initial = storedName.charAt(0).toUpperCase();
+  document.getElementById('welcomeName').innerText = storedName;
+  document.getElementById('sidebarName').innerText = storedName;
+  document.getElementById('sidebarAvatar').innerText = initial;
+  
+  // Load initial events
+  renderEvents(eventsDB);
+  
+  // Keyboard close modal
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
-</div>
 </body>
 </html>
